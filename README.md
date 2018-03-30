@@ -5,7 +5,7 @@ SelfKey Javascript Library.
 ## Install
 
 ```bash
-$ npm install selfkeyjs
+$ npm install selfkey.js
 ```
 
 ## Usage
@@ -16,7 +16,7 @@ The Login with SelfKey strategy authenticates users using a nonce, signature and
 public key. Signature verification function is provided by selfkey.js
 
 ```js
-const selfkey = require('selfkeyjs')
+const selfkey = require('selfkey.js')
 const SelfKeyStrategy = require('passport-selfkey').Strategy
 
 passport.use(new SelfKeyStrategy((nonce, signature, pubKey, done) => {
