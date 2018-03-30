@@ -28,7 +28,6 @@
   ],
   "main": "./lib",
   "dependencies": {
-    "passport-strategy": "1.x.x",
     "ethereumjs-util": "^5.1.5",
     "nonce-generator": "^1.0.2"
   }
