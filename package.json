@@ -1,6 +1,6 @@
 {
   "name": "selfkey.js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "SelfKey Javascript Library",
   "keywords": [
     "passport",
@@ -26,7 +26,7 @@
       "url": "http://www.opensource.org/licenses/MIT"
     }
   ],
-  "main": "./lib",
+  "main": "./lib/selfkey.js",
   "dependencies": {
     "ethereumjs-util": "^5.1.5",
     "nonce-generator": "^1.0.2"
