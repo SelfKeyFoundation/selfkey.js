@@ -10,9 +10,17 @@ $ npm install selfkey.js
 
 ## Usage
 
+```	
+newChallenge(length)
+signChallenge(challenge, privKey)
+signChallengePromise(challenge, privKey)
+verifySignature(challenge, signature, pubKey)
+verifySignaturePromise(challenge, signature, pubKey)
+```
+
 #### Login with SelfKey
 
-The Login with SelfKey strategy authenticates users using a nonce, signature and public key. Signature verification function is provided by selfkey.js
+The Login with SelfKey strategy authenticates users using a challenge, signature and public key. Signature verification function is provided by selfkey.js
 
 ```js
 const selfkey = require('selfkey.js')
@@ -21,16 +29,15 @@ const SelfKeyStrategy = require('passport-selfkey').Strategy
 /**
  * Login with SelfKey Passport Config
  */
-passport.use(new SelfKeyStrategy((nonce, signature, pubKey, done) => {
-  User.findOne({nonce: nonce}, (err, user) => {
-    if (err) return done(err)
-    if (!user) return done(null, false, {msg: 'Nonce not found'})
-    var match = selfkey.verifySignature(nonce, signature, pubKey)
+passport.use(new SelfKeyStrategy((challenge, signature, pubKey, done) => {
+    var match = selfkey.verifySignature(challenge, signature, pubKey)
     if (match) return done(null, user)
     return done(null, false, {msg: 'Invalid Credentials'})
   })
 }))
 ```
+
+For more detailed usage examples please refer to the [passport-selfkey library](https://github.com/altninja/passport-selfkey)
 
 ## License
 
