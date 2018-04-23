@@ -1,6 +1,6 @@
 {
   "name": "selfkey.js",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "SelfKey Javascript Library",
   "keywords": [
     "passport",
