@@ -11,16 +11,17 @@ $ npm install selfkey.js
 ## Usage
 
 ```	
-newChallenge(length)
-signChallenge(challenge, privKey)
-signChallengePromise(challenge, privKey)
-verifySignature(challenge, signature, pubKey)
-verifySignaturePromise(challenge, signature, pubKey)
+createNonce(length)
+createSignature(nonce, privKey)
+createSignaturePromise(nonce, privKey)
+verifySignature(nonce, signature, pubKey)
+verifySignaturePromise(nonce, signature, pubKey)
+didResolver(did)
 ```
 
 #### Login with SelfKey
 
-The Login with SelfKey strategy authenticates users using a challenge, signature and public key. Signature verification function is provided by selfkey.js
+The Login with SelfKey strategy authenticates users using a nonce, signature and public key. Signature verification function is provided by selfkey.js
 
 ```js
 const selfkey = require('selfkey.js')
@@ -29,11 +30,28 @@ const SelfKeyStrategy = require('passport-selfkey').Strategy
 /**
  * Login with SelfKey Passport Config
  */
-passport.use(new SelfKeyStrategy((challenge, signature, pubKey, done) => {
-    var match = selfkey.verifySignature(challenge, signature, pubKey)
-    if (match) return done(null, user)
-    return done(null, false, {msg: 'Invalid Credentials'})
-  })
+passport.use(new SelfKeyStrategy((req, nonce, signature, pubKey, done) => {
+	// if the signature verification succeeds
+	if (selfkey.verifySignature(nonce, signature, pubKey)) {
+		// find user with existing wallet
+		User.findOne({wallet: pubKey}, (err, existingUser) => {
+			if (err) return done(err) 
+			// if a wallet is found then add token to user object
+			if (existingUser) {
+				const token = generateToken()
+				User.update({wallet: pubKey}, {token: token}, (err, user) => {
+					if (err) return done(err)
+					return done(null, user)
+				})
+			} else {
+				// no user with this address
+				return done(null, false)
+			}
+		})
+	} else {
+		// verification fails
+		return done(null, false)
+	}
 }))
 ```
 
