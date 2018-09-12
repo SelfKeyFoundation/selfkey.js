@@ -1,9 +1,8 @@
 {
   "name": "selfkey.js",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "SelfKey Javascript Library",
   "keywords": [
-    "passport",
     "selfkey",
     "javascript"
   ],
@@ -29,8 +28,7 @@
   "dependencies": {
     "ethereumjs-util": "^5.1.5",
     "nonce-generator": "^1.0.2",
-    "selfkey-did-resolver": "^1.0.0",
-    "web3": "^1.0.0-beta.34"
+    "selfkey-did-resolver": "^1.0.0"
   },
   "scripts": {
     "test": "node test/test.js"
