@@ -1,6 +1,6 @@
 {
   "name": "selfkey.js",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "SelfKey Javascript Library",
   "keywords": [
     "selfkey",
@@ -18,6 +18,7 @@
   "bugs": {
     "url": "http://github.com/SelfKeyFoundation/selfkey.js/issues"
   },
+  "license": "GPL-3.0",
   "licenses": [
     {
       "type": "GPL-3.0",
