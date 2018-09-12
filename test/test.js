@@ -8,7 +8,10 @@ async function runTest() {
 		const nonce = await selfkey.createNonce(64)
 		const signature = await selfkey.createSignature(nonce, privateKey)
 		const verified = await selfkey.verifySignature(nonce, signature, publicKey)
-		return console.log(signature, verified)	
+		return console.log({
+			signature: signature, 
+			verified: verified
+		})	
 	} catch (e) {
 		return console.log(e)
 	}

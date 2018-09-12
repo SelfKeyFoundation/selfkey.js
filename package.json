@@ -1,6 +1,6 @@
 {
   "name": "selfkey.js",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "SelfKey Javascript Library",
   "keywords": [
     "passport",
@@ -19,11 +19,10 @@
   "bugs": {
     "url": "http://github.com/SelfKeyFoundation/selfkey.js/issues"
   },
-  "license": "MIT",
   "licenses": [
     {
-      "type": "MIT",
-      "url": "http://www.opensource.org/licenses/MIT"
+      "type": "GPL-3.0",
+      "url": "https://opensource.org/licenses/GPL-3.0"
     }
   ],
   "main": "./lib/selfkey.js",
@@ -32,5 +31,8 @@
     "nonce-generator": "^1.0.2",
     "selfkey-did-resolver": "^1.0.0",
     "web3": "^1.0.0-beta.34"
+  },
+  "scripts": {
+    "test": "node test/test.js"
   }
 }

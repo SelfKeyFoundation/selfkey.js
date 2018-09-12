@@ -12,12 +12,14 @@ $ npm install selfkey.js
 
 ```	
 createNonce(length)
-createSignature(nonce, privKey)
-createSignaturePromise(nonce, privKey)
-verifySignature(nonce, signature, pubKey)
-verifySignaturePromise(nonce, signature, pubKey)
+createSignature(nonce, privateKey)
+verifySignature(nonce, signature, publicKey)
 didResolver(did)
 ```
+
+#### SelfKey Marketplace
+
+The SelfKey Marketplace integration requires the signature verification function to prove ownership of an ethereum address.
 
 #### Login with SelfKey
 
@@ -55,10 +57,10 @@ passport.use(new SelfKeyStrategy((req, nonce, signature, pubKey, done) => {
 }))
 ```
 
-For more detailed usage examples please refer to the [passport-selfkey library](https://github.com/altninja/passport-selfkey)
+For more detailed usage example for Login with SelfKey please refer to the [passport-selfkey library](https://github.com/altninja/passport-selfkey)
 
 ## License
 
-[The MIT License](http://opensource.org/licenses/MIT)
+[The GPL-3.0 License](http://opensource.org/licenses/GPL-3.0)
 
 Copyright (c) 2018 SelfKey Foundation [https://selfkey.org/](https://selfkey.org/)
