@@ -1,6 +1,6 @@
 {
   "name": "selfkey.js",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "description": "SelfKey Javascript Library",
   "keywords": [
     "selfkey",
@@ -8,7 +8,7 @@
   ],
   "author": {
     "name": "SelfKey Foundation",
-    "email": "ben@selfkey.org",
+    "email": "help@selfkey.org",
     "url": "https://selfkey.org/"
   },
   "repository": {
@@ -28,8 +28,7 @@
   "main": "./lib/selfkey.js",
   "dependencies": {
     "ethereumjs-util": "^5.1.5",
-    "nonce-generator": "^1.0.2",
-    "selfkey-did-resolver": "^1.0.0"
+    "nonce-generator": "^1.0.2"
   },
   "scripts": {
     "test": "node test/test.js"
