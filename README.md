@@ -1,4 +1,4 @@
-# selfkey.js
+# selfkey-lib
 
 SelfKey Javascript Library
 
@@ -14,7 +14,6 @@ $ npm install selfkey.js
 createNonce(length)
 createSignature(nonce, privateKey)
 verifySignature(nonce, signature, publicKey)
-didResolver(did)
 ```
 
 #### SelfKey Marketplace
