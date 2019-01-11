@@ -1,6 +1,7 @@
 'use strict'
 
 const selfkey = require('../lib/selfkey.js')
+const jwt = require('jsonwebtoken')
 
 const pass = {
 	publicKey: '2b6a21dc440cebd4bb9b91b27014ace8aa91a0b9',
@@ -14,14 +15,16 @@ const fail = {
  
 async function runTest(keys) {
 	try {
-		const nonce = await selfkey.createNonce(64)
-		const signature = await selfkey.createSignature(nonce, keys.privateKey)
-		const verified = await selfkey.verifySignature(nonce, signature, keys.publicKey)
+		const token = selfkey.newJWT(keys.publicKey)
+		console.log(token)
+		const challenge = jwt.verify(token.jwt, 'SHHH').challenge
+		const signature = await selfkey.createSignature(challenge, keys.privateKey)
+		const verified = await selfkey.verifySignature(challenge, signature, keys.publicKey)
 		return console.info({
 			verified,
 			publicKey: keys.publicKey,
 			privateKey: keys.privateKey,
-			nonce,
+			challenge,
 			signature
 		})	
 	} catch (e) {
