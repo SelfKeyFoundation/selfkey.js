@@ -11,9 +11,14 @@ $ npm install selfkey.js
 ## Usage
 
 ```	
-createNonce(length)
-createSignature(nonce, privateKey)
-verifySignature(nonce, signature, publicKey)
+	newJWT(publicKey)
+	handleChallengeResponse(challenge, signature, publicKey)
+	serviceAuthMiddleware
+	jwtAuthMiddleware
+	createSignature(challenge, privateKey)
+	verifySignature(challenge, signature, publicKey)
+	denormalizeDocumentsSchema(typeSchema, value, documents, maxDepth)
+
 ```
 
 #### SelfKey Marketplace
@@ -22,7 +27,7 @@ The SelfKey Marketplace integration requires the signature verification function
 
 #### Login with SelfKey
 
-The Login with SelfKey strategy authenticates users using a nonce, signature and public key.
+The Login with SelfKey strategy authenticates users using a challenge, signature and public key.
 
 For more detailed usage for Login with SelfKey integration with PassportJS authentication please refer to the [passport-selfkey](https://github.com/SelfKeyFoundation/passport-selfkey) library
 
