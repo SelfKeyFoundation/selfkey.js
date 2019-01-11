@@ -2,6 +2,7 @@
 
 const selfkey = require('../lib/selfkey.js')
 const jwt = require('jsonwebtoken')
+const JWT_SECRET = process.env.SK_JWT_SECRET
 
 const pass = {
 	publicKey: '2b6a21dc440cebd4bb9b91b27014ace8aa91a0b9',
@@ -16,8 +17,7 @@ const fail = {
 async function runTest(keys) {
 	try {
 		const token = selfkey.newJWT(keys.publicKey)
-		console.log(token)
-		const challenge = jwt.verify(token.jwt, 'SHHH').challenge
+		const challenge = jwt.verify(token.jwt, JWT_SECRET).challenge
 		const signature = await selfkey.createSignature(challenge, keys.privateKey)
 		const verified = await selfkey.verifySignature(challenge, signature, keys.publicKey)
 		return console.info({
