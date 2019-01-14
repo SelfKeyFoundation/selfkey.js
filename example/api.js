@@ -1,6 +1,8 @@
 const express = require('express');
 const Users = require('./users');
 const Documents = require('./documents');
+const Templates = require('./templates');
+const Applications = require('./applications');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
@@ -215,12 +217,53 @@ const uploadFile = (req, res) => {
 	return res.json({ id: doc.id });
 };
 
+const getTemplates = (req, res) => {
+	res.json(
+		Templates.findAll().map(t => {
+			let tpl = { ...t };
+			delete tpl.identity_atrributes;
+			return tpl;
+		})
+	);
+};
+const getTemplateDetails = (req, res) => {
+	res.json(Templates.findById(req.params.id));
+};
+
+const getApplications = (req, res) => {
+	return res.json(
+		Applications.findAll().map(appl => {
+			let newAppl = {};
+			newAppl.id = appl.id;
+			newAppl.templateId = appl.templateId;
+			newAppl.status = appl.status;
+			return newAppl;
+		})
+	);
+};
+const getApplicationDetais = (req, res) => {
+	return res.json(Applications.findById(req.params.id));
+};
+const createApplication = (req, res) => {
+	let appl = req.body;
+	if (!appl.templateId || !Templates.findById(appl.templateId)) {
+		return res
+			.status(404)
+			.json({ code: 'template_not_exists', message: 'Requested template does not exists' });
+	}
+	appl.status = 'pending';
+	return res.json(Applications.create(appl));
+};
+
 router.get('/auth/challenge/:publicKey', generateChallenge);
 router.post('/auth/challenge', jwtAuthMiddleware, handleChallengeResponse);
-router.post('/users', jwtAuthMiddleware, serviceAuthMiddleware, upload.any(), createUser);
 router.get('/auth/token', jwtAuthMiddleware, serviceAuthMiddleware, getUserPayload);
+
+router.post('/users', jwtAuthMiddleware, serviceAuthMiddleware, upload.any(), createUser);
+
 router.options('/login', cors());
 router.post('/login', cors(), login);
+
 router.post(
 	'/files',
 	jwtAuthMiddleware,
@@ -229,6 +272,12 @@ router.post(
 	uploadFile
 );
 
+router.get('/templates', jwtAuthMiddleware, serviceAuthMiddleware, getTemplates);
+router.get('/templates/:id', jwtAuthMiddleware, serviceAuthMiddleware, getTemplateDetails);
+
+router.get('/applications', getApplications);
+router.get('/applications/:id', getApplicationDetais);
+router.post('/applications', createApplication);
 
 router.use((error, req, res, next) => {
 	console.error(error);
