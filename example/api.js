@@ -231,18 +231,30 @@ const getTemplateDetails = (req, res) => {
 };
 
 const getApplications = (req, res) => {
+	let publicKey = req.decodedAuth.sub;
 	return res.json(
-		Applications.findAll().map(appl => {
-			let newAppl = {};
-			newAppl.id = appl.id;
-			newAppl.templateId = appl.templateId;
-			newAppl.status = appl.status;
-			return newAppl;
-		})
+		Applications.findAll()
+			.filter(appl => appl.publicKey === publicKey)
+			.map(appl => {
+				let newAppl = {};
+				newAppl.id = appl.id;
+				newAppl.templateId = appl.templateId;
+				newAppl.status = appl.status;
+				return newAppl;
+			})
 	);
 };
 const getApplicationDetais = (req, res) => {
-	return res.json(Applications.findById(req.params.id));
+	let appl = Applications.findById(req.params.id);
+	if (!appl) return res.status(404).json({ code: 'not_found', message: 'Application not found' });
+	let publicKey = req.decodedAuth.sub;
+	if (appl.publicKey !== publicKey) {
+		return res.status(401).json({
+			code: 'forbidden',
+			message: "You don't have permissions to view this application"
+		});
+	}
+	return res.json(appl);
 };
 const createApplication = (req, res) => {
 	let appl = req.body;
@@ -251,6 +263,7 @@ const createApplication = (req, res) => {
 			.status(404)
 			.json({ code: 'template_not_exists', message: 'Requested template does not exists' });
 	}
+	appl.publicKey = req.decodedAuth.sub;
 	appl.status = 'pending';
 	return res.json(Applications.create(appl));
 };
@@ -275,9 +288,9 @@ router.post(
 router.get('/templates', jwtAuthMiddleware, serviceAuthMiddleware, getTemplates);
 router.get('/templates/:id', jwtAuthMiddleware, serviceAuthMiddleware, getTemplateDetails);
 
-router.get('/applications', getApplications);
-router.get('/applications/:id', getApplicationDetais);
-router.post('/applications', createApplication);
+router.get('/applications', jwtAuthMiddleware, serviceAuthMiddleware, getApplications);
+router.get('/applications/:id', jwtAuthMiddleware, serviceAuthMiddleware, getApplicationDetais);
+router.post('/applications', jwtAuthMiddleware, serviceAuthMiddleware, createApplication);
 
 router.use((error, req, res, next) => {
 	console.error(error);
