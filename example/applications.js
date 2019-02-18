@@ -14,6 +14,15 @@ exports.create = data => {
 	return application;
 };
 
+exports.update = data => {
+	if (!data.id || !byId[data.id]) {
+		return null;
+	}
+	let application = { ...byId[data.id], ...data };
+	byId[application.id] = application;
+	return application;
+};
+
 exports.delete = id => {
 	let application = byId[id];
 	if (!application) return false;

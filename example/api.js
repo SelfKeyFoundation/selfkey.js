@@ -264,8 +264,29 @@ const createApplication = (req, res) => {
 			.json({ code: 'template_not_exists', message: 'Requested template does not exists' });
 	}
 	appl.publicKey = req.decodedAuth.sub;
-	appl.status = 'pending';
+	appl.status = { id: 'pending', name: 'Pending' };
 	return res.json(Applications.create(appl));
+};
+
+const updateApplication = (req, res) => {
+	let newAppl = req.body;
+	let appl = Applications.findById(req.params.id);
+	if (appl.publicKey !== req.decodedAuth.sub || appl.publicKey !== newAppl.publicKey) {
+		return res.status(401).json({
+			code: 'access_denied',
+			message: 'You are not allowed to modify this application'
+		});
+	}
+	if (newAppl.id !== appl.id) {
+		return res
+			.status(400)
+			.json({ code: 'bad_request', message: 'Cannot modify application id' });
+	}
+	if (newAppl.templateId !== appl.templateId) {
+		return res.status(400).json({ code: 'bad_request', message: 'Cannot modify template id' });
+	}
+
+	return res.json(Applications.update(appl));
 };
 
 router.get('/auth/challenge/:publicKey', generateChallenge);
@@ -291,6 +312,7 @@ router.get('/templates/:id', jwtAuthMiddleware, serviceAuthMiddleware, getTempla
 router.get('/applications', jwtAuthMiddleware, serviceAuthMiddleware, getApplications);
 router.get('/applications/:id', jwtAuthMiddleware, serviceAuthMiddleware, getApplicationDetais);
 router.post('/applications', jwtAuthMiddleware, serviceAuthMiddleware, createApplication);
+router.post('/applications/:id', jwtAuthMiddleware, serviceAuthMiddleware, updateApplication);
 
 router.use((error, req, res, next) => {
 	console.error(error);

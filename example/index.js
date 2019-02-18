@@ -17,8 +17,12 @@ const Templates = require('./templates');
 Templates.create({
 	name: 'Example Template 1',
 	description: 'This template 1 is an example template with identity attributes',
-	identity_atrributes: [
-		'http://platform.selfkey.org/schema/attribute/bank-statement.json',
+	identity_attributes: [
+		{
+			id: '5c4e6edda58d2900401ba61b',
+			required: true,
+			schemaId: 'http://platform.selfkey.org/schema/attribute/bank-statement.json'
+		},
 		'http://platform.selfkey.org/schema/attribute/date-of-birth.json',
 		'http://platform.selfkey.org/schema/attribute/country-of-residency.json',
 		'http://platform.selfkey.org/schema/attribute/drivers-license.json',
@@ -43,8 +47,12 @@ Templates.create({
 Templates.create({
 	name: 'Example Template 2',
 	description: 'This template 2 is an example template with identity attributes',
-	identity_atrributes: [
-		'http://platform.selfkey.org/schema/attribute/bank-statement.json',
+	identity_attributes: [
+		{
+			id: '5c511c64c7315f003ecfe2dc',
+			required: true,
+			schemaId: 'http://platform.selfkey.org/schema/attribute/bank-statement.json'
+		},
 		'http://platform.selfkey.org/schema/attribute/date-of-birth.json',
 		'http://platform.selfkey.org/schema/attribute/country-of-residency.json',
 		'http://platform.selfkey.org/schema/attribute/drivers-license.json',
@@ -61,7 +69,7 @@ Templates.create({
 Templates.create({
 	name: 'Example Template 3',
 	description: 'This template 3 is an example template with identity attributes',
-	identity_atrributes: [
+	identity_attributes: [
 		'http://platform.selfkey.org/schema/attribute/national-id.json',
 		'http://platform.selfkey.org/schema/attribute/nationality.json',
 		'http://platform.selfkey.org/schema/attribute/passport.json',
