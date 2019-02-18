@@ -289,6 +289,27 @@ const updateApplication = (req, res) => {
 	return res.json(Applications.update(appl));
 };
 
+const updateApplicationPayment = (req, res) => {
+	let tx = req.body;
+	let appl = Applications.findById(req.params.id);
+	if (appl.publicKey !== req.decodedAuth.sub) {
+		return res.status(401).json({
+			code: 'access_denied',
+			message: 'You are not allowed to modify this application'
+		});
+	}
+	if (!tx.transactionHash) {
+		return res.status(400).json({
+			code: 'no_payment_details',
+			message: 'You should provide transaction hash'
+		});
+	}
+
+	appl.transactionHash = tx.transactionHash;
+
+	return res.json(Applications.update(appl));
+};
+
 router.get('/auth/challenge/:publicKey', generateChallenge);
 router.post('/auth/challenge', jwtAuthMiddleware, handleChallengeResponse);
 router.get('/auth/token', jwtAuthMiddleware, serviceAuthMiddleware, getUserPayload);
@@ -312,7 +333,8 @@ router.get('/templates/:id', jwtAuthMiddleware, serviceAuthMiddleware, getTempla
 router.get('/applications', jwtAuthMiddleware, serviceAuthMiddleware, getApplications);
 router.get('/applications/:id', jwtAuthMiddleware, serviceAuthMiddleware, getApplicationDetais);
 router.post('/applications', jwtAuthMiddleware, serviceAuthMiddleware, createApplication);
-router.post('/applications/:id', jwtAuthMiddleware, serviceAuthMiddleware, updateApplication);
+router.put('/applications/:id', jwtAuthMiddleware, serviceAuthMiddleware, updateApplication);
+router.put('/applications/:id/payment', jwtAuthMiddleware, serviceAuthMiddleware, updateApplicationPayment);
 
 router.use((error, req, res, next) => {
 	console.error(error);
