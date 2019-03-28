@@ -9,12 +9,154 @@ const crypto = require('crypto');
 const ethUtil = require('ethereumjs-util');
 const multer = require('multer');
 const upload = multer();
-const JWT_SECRET = 'SHHH';
+
 const PORT = process.env.PORT || 3331;
 const HOST = `http://localhost:${PORT}`;
 const cors = require('cors');
 
+const JWT_SECRET = 'SUPER LONG JWT SECRET';
+
 const { denormalizeDocumentsSchema } = require('./util');
+
+const CHALLENGE_TOKEN_NAME = 'IDW_CHALLANGE';
+
+const ACCESS_TOKEN_TYPE = 'IDW_ACCESS';
+
+// JWT parsing middlware, will parse and validate the token for a request
+const jwtAuthMiddleware = (req, res, next) => {
+	// Fetch authorization header
+	const auth = req.headers.authorization;
+
+	// Checkout it actually exists, fail the request otherwise
+	if (!auth) {
+		return res
+			.status(400)
+			.json({ code: 'token_missing', message: 'Missing authorization header' });
+	}
+
+	// verify that the authorization header is a Bearer token, fail otherwise
+	if (!auth.startsWith('Bearer ')) {
+		return res.status(400).json({
+			code: 'token_invalid',
+			message: 'Malformed authorization header'
+		});
+	}
+	// parse the authorization header and fetch the actual jwt token string
+	const tokenString = auth.replace(/^Bearer /, '');
+	try {
+		// verify and parse the token into a js object
+		let decoded = jwt.verify(tokenString, JWT_SECRET, { json: true });
+		// Add parsed token to the request context.
+		req.decodedAuth = decoded;
+
+		// verify that the token subject is a valid etherium public key
+		if (!ethUtil.isValidPublic(Buffer.from(req.decodedAuth.sub, 'hex'))) {
+			return res.status(400).json({
+				code: 'token_invalid',
+				message: 'Subject should contain a valid public key'
+			});
+		}
+
+		// continue the request to other handlers
+		next();
+	} catch (error) {
+		// fail with 401, token was invalid or expired or forged.
+		return res
+			.status(401)
+			.json({ code: 'token_invalid', message: 'Invalid authentication token' });
+	}
+};
+
+// For non challenge endpoints, verif
+const verifyAccessTokenMiddleware = (req, res, next) => {
+	// CHECK that the token provided is access token
+	if (req.decodedAuth.typ === ACCESS_TOKEN_TYPE && req.decodedAuth.nonce) {
+		return next();
+	}
+
+	// fail with 403 otherwise
+	return res.status(403).json({
+		code: 'token_invalid',
+		message: 'Only access token allowed'
+	});
+};
+
+const generateChallenge = (req, res) => {
+	// Get public key from url params
+	const publicKey = req.params.publicKey;
+
+	// Validate the public key
+	if (!publicKey || !ethUtil.isValidPublic(Buffer.from(publicKey, 'hex'))) {
+		return res.status(422).json({ code: 'invalid_key', message: 'Invalid public key' });
+	}
+	// generate a 48 bytes long hex string for nonce
+	const nonce = crypto.randomBytes(48).toString('hex');
+
+	// Generate challange JWT token
+	const jwtToken = jwt.sign({ nonce, typ: CHALLENGE_TOKEN_NAME }, JWT_SECRET, {
+		expiresIn: '30m',
+		subject: publicKey,
+		algorithm: 'HS256'
+	});
+
+	return res.json({ jwt: jwtToken });
+};
+
+const handleChallengeResponse = (req, res) => {
+	// fetch nonce and public key from token
+	const nonce = req.decodedAuth.nonce;
+	const publicKey = req.decodedAuth.sub;
+
+	if (!nonce) {
+		return res
+			.status(401)
+			.json({ code: 'invalid_auth_token', message: 'Invalid autentication token' });
+	}
+
+	// fetch signature from body
+	const { signature } = req.body || {};
+
+	if (!signature) {
+		return res.status(400).json({ code: 'no_signature', message: 'No signature provided' });
+	}
+
+	// calculate public key from provided signature and nonce
+	let calculatedPublicKey;
+	try {
+		// hash message
+		const msgHash = ethUtil.hashPersonalMessage(Buffer.from(nonce));
+		// parse hex rpc message to object containing dc signature
+		const sig = ethUtil.fromRpcSig(signature);
+		// recover public key
+		calculatedPublicKey = ethUtil.ecrecover(msgHash, sig.v, sig.r, sig.s).toString('hex');
+	} catch (err) {
+		return res
+			.status(401)
+			.json({ code: 'invalid_signature', message: 'Invalid signature provided' });
+	}
+
+	if (!calculatedPublicKey || !ethUtil.isValidPublic(Buffer.from(calculatedPublicKey, 'hex'))) {
+		return res
+			.status(401)
+			.json({ code: 'no_public_key', message: "Couldn't derive public key from signature" });
+	}
+	if (calculatedPublicKey !== publicKey) {
+		return res
+			.status(401)
+			.json({ code: 'invalid_signature', message: 'Invalid signature provided' });
+	}
+	let token = jwt.sign(
+		{
+			typ: ACCESS_TOKEN_TYPE
+		},
+		JWT_SECRET,
+		{
+			expiresIn: '1h',
+			subject: publicKey
+		}
+	);
+	return res.json({ jwt: token });
+};
 
 const login = (req, res) => {
 	const { body } = req;
@@ -33,94 +175,6 @@ const login = (req, res) => {
 	}
 };
 
-const jwtAuthMiddleware = (req, res, next) => {
-	let auth = req.headers.authorization;
-	if (!auth) {
-		return res
-			.status(400)
-			.json({ code: 'no_auth_token', message: 'Invalid request. No authentication token' });
-	}
-	if (!auth.startsWith('Bearer ')) {
-		return res.status(400).json({
-			code: 'invalid_auth_token',
-			message: 'Subject should contain a valid public key'
-		});
-	}
-	auth = auth.replace(/^Bearer /, '');
-	try {
-		let decoded = jwt.verify(auth, JWT_SECRET);
-		req.decodedAuth = decoded;
-		if (!ethUtil.isValidPublic(Buffer.from(req.decodedAuth.sub, 'hex'))) {
-			return res.status(400).json({
-				code: 'invalid_auth_token',
-				message: 'Subject should contain a valid public key'
-			});
-		}
-		next();
-	} catch (error) {
-		return res
-			.status(401)
-			.json({ code: 'invalid_auth_token', message: 'Invalid autentication token' });
-	}
-};
-
-const serviceAuthMiddleware = (req, res, next) => {
-	if (req.decodedAuth.challenge) {
-		return res.status(400).json({
-			code: 'invalid_token',
-			message: 'Challenge token is ment only for challenge endpoint'
-		});
-	}
-	next();
-};
-
-const generateChallenge = (req, res) => {
-	let publicKey = req.params.publicKey;
-	if (!publicKey || !ethUtil.isValidPublic(Buffer.from(publicKey, 'hex'))) {
-		return res
-			.status(400)
-			.json({ code: 'invalid_public_key', message: 'Invalid public key provided' });
-	}
-	let challenge = crypto.randomBytes(48).toString('hex');
-	let jwtToken = jwt.sign({ challenge }, JWT_SECRET, { expiresIn: '5m', subject: publicKey });
-	return res.json({ jwt: jwtToken });
-};
-const handleChallengeResponse = (req, res) => {
-	let challenge = req.decodedAuth.challenge;
-	let publicKey = req.decodedAuth.sub;
-	if (!challenge) {
-		return res
-			.status(401)
-			.json({ code: 'invalid_auth_token', message: 'Invalid autentication token' });
-	}
-	let { signature } = req.body || {};
-	if (!signature) {
-		return res.status(400).json({ code: 'no_signature', message: 'No signature provided' });
-	}
-	let calculatedPublicKey;
-	try {
-		const msgHash = ethUtil.hashPersonalMessage(Buffer.from(challenge));
-		const sig = ethUtil.fromRpcSig(signature);
-		calculatedPublicKey = ethUtil.ecrecover(msgHash, sig.v, sig.r, sig.s).toString('hex');
-	} catch (err) {
-		return res
-			.status(401)
-			.json({ code: 'invalid_signature', message: 'Invalid signature provided' });
-	}
-
-	if (!calculatedPublicKey || !ethUtil.isValidPublic(Buffer.from(calculatedPublicKey, 'hex'))) {
-		return res
-			.status(401)
-			.json({ code: 'no_public_key', message: "Couldn't derive public key from signature" });
-	}
-	if (calculatedPublicKey !== publicKey) {
-		return res
-			.status(401)
-			.json({ code: 'invalid_signature', message: 'Invalid signature provided' });
-	}
-	let token = jwt.sign({}, JWT_SECRET, { expiresIn: '1h', subject: publicKey });
-	return res.json({ jwt: token });
-};
 const createUser = (req, res) => {
 	let attributes = req.body.attributes;
 
@@ -312,9 +366,9 @@ const updateApplicationPayment = (req, res) => {
 
 router.get('/auth/challenge/:publicKey', generateChallenge);
 router.post('/auth/challenge', jwtAuthMiddleware, handleChallengeResponse);
-router.get('/auth/token', jwtAuthMiddleware, serviceAuthMiddleware, getUserPayload);
+router.get('/auth/token', jwtAuthMiddleware, verifyAccessTokenMiddleware, getUserPayload);
 
-router.post('/users', jwtAuthMiddleware, serviceAuthMiddleware, upload.any(), createUser);
+router.post('/users', jwtAuthMiddleware, verifyAccessTokenMiddleware, upload.any(), createUser);
 
 router.options('/login', cors());
 router.post('/login', cors(), login);
@@ -322,19 +376,29 @@ router.post('/login', cors(), login);
 router.post(
 	'/files',
 	jwtAuthMiddleware,
-	serviceAuthMiddleware,
+	verifyAccessTokenMiddleware,
 	upload.single('document'),
 	uploadFile
 );
 
-router.get('/templates', jwtAuthMiddleware, serviceAuthMiddleware, getTemplates);
-router.get('/templates/:id', jwtAuthMiddleware, serviceAuthMiddleware, getTemplateDetails);
+router.get('/templates', jwtAuthMiddleware, verifyAccessTokenMiddleware, getTemplates);
+router.get('/templates/:id', jwtAuthMiddleware, verifyAccessTokenMiddleware, getTemplateDetails);
 
-router.get('/applications', jwtAuthMiddleware, serviceAuthMiddleware, getApplications);
-router.get('/applications/:id', jwtAuthMiddleware, serviceAuthMiddleware, getApplicationDetais);
-router.post('/applications', jwtAuthMiddleware, serviceAuthMiddleware, createApplication);
-router.put('/applications/:id', jwtAuthMiddleware, serviceAuthMiddleware, updateApplication);
-router.put('/applications/:id/payment', jwtAuthMiddleware, serviceAuthMiddleware, updateApplicationPayment);
+router.get('/applications', jwtAuthMiddleware, verifyAccessTokenMiddleware, getApplications);
+router.get(
+	'/applications/:id',
+	jwtAuthMiddleware,
+	verifyAccessTokenMiddleware,
+	getApplicationDetais
+);
+router.post('/applications', jwtAuthMiddleware, verifyAccessTokenMiddleware, createApplication);
+router.put('/applications/:id', jwtAuthMiddleware, verifyAccessTokenMiddleware, updateApplication);
+router.put(
+	'/applications/:id/payment',
+	jwtAuthMiddleware,
+	verifyAccessTokenMiddleware,
+	updateApplicationPayment
+);
 
 router.use((error, req, res, next) => {
 	console.error(error);
