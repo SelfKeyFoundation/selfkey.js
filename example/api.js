@@ -72,6 +72,11 @@ const jwtAuthMiddleware = tokenType => (req, res, next) => {
 	}
 };
 
+const validateAttributes = () => {
+	const errors = [];
+	return errors;
+};
+
 const generateChallenge = (req, res) => {
 	// Get public key from url params
 	const publicKey = req.params.publicKey;
@@ -122,7 +127,9 @@ const handleChallengeResponse = (req, res) => {
 		// parse hex rpc message to object containing dc signature
 		const sig = ethUtil.fromRpcSig(signature);
 		// recover address
-		recoveredAddress = ethUtik.bufferToHex(ethUtil.pubToAddress(ethUtil.ecrecover(msgHash, sig.v, sig.r, sig.s)));
+		recoveredAddress = ethUtik.bufferToHex(
+			ethUtil.pubToAddress(ethUtil.ecrecover(msgHash, sig.v, sig.r, sig.s))
+		);
 	} catch (err) {
 		return res
 			.status(401)
@@ -151,15 +158,44 @@ const handleChallengeResponse = (req, res) => {
 	return res.json({ jwt: token });
 };
 
+const uploadFile = (req, res) => {
+	// fetch file from request
+	const f = req.file;
+
+	if (!f) return res.status(400).json({ code: 'no_file', message: 'no file uploaded' });
+
+	// parse file info
+	let doc = {
+		mimeType: f.mimetype,
+		size: f.size,
+		content: f.buffer
+	};
+
+	// save the document to storage
+	doc = Documents.create(doc);
+
+	// respond with document id
+	return res.json({ id: doc.id });
+};
+
 const createUser = (req, res) => {
 	// fetch attributes from body
 	const attributes = req.body;
 
 	if (!attributes || !attributes.length) {
-		return res.status(400).json({ code: 'no_attributes', message: 'No attributes provided' });
+		return res.status(422).json({ code: 'no_attributes', message: 'No attributes provided' });
 	}
 
-	//  VALIDATE ATTRIBUTES HERE
+	// validate attributes
+	const errors = validateAttributes(attributes);
+
+	if (errors.length) {
+		return res.status(422).json({
+			code: 'invalid_attributes',
+			message: 'Validation errors occurred',
+			errors
+		});
+	}
 
 	// fetch public key from token
 	const publicKey = req.decodedAuth.sub;
@@ -183,9 +219,7 @@ const createUser = (req, res) => {
 
 	// send success empty respone
 	return res.status(201).send();
-}
-
-
+};
 
 // const createUser = (req, res) => {
 // 	let attributes = req.body.attributes;
@@ -256,27 +290,14 @@ const createUser = (req, res) => {
 // };
 
 
-const login = (req, res) => {
-	const { body } = req;
-	if (!body.token) {
-		return res.status(400).json({ redirectTo: '/failure.html?error=No+Token' });
-	}
-	try {
-		let decoded = jwt.verify(body.token, JWT_SECRET);
-		let user = Users.findById(+decoded.sub);
-		if (!user) {
-			return res.status(404).json({ redirectTo: '/failure.html?error=No+User' });
-		}
-		return res.json({ redirectTo: '/success.html' });
-	} catch (error) {
-		return res.satus(401).json({ redirectTo: `/failure.html?error=Invalid+Token` });
-	}
-};
-
 const getUserPayload = (req, res) => {
+	// fetch public key from token
 	let publicKey = req.decodedAuth.sub;
+
+	// fetch user from storage by public key
 	let user = Users.findByPublicKey(publicKey);
 
+	// fail if user does not exist
 	if (!user) {
 		return res.status(404).json({
 			code: 'user_does_not_exist',
@@ -284,30 +305,37 @@ const getUserPayload = (req, res) => {
 		});
 	}
 
+	// generate a toke for this user (in this example it's a jwt )
 	let userToken = jwt.sign({}, JWT_SECRET, { subject: '' + user.id });
 
 	return res.send({ token: userToken });
 };
 
-const uploadFile = (req, res) => {
-	// fetch file from request
-	const f = req.file;
 
-	if (!f) return res.status(400).json({ code: 'no_file', message: 'no file uploaded' });
-
-	// parse file info
-	let doc = {
-		mimeType: f.mimetype,
-		size: f.size,
-		content: f.buffer
-	};
-
-	// save the document to storage
-	doc = Documents.create(doc);
-
-	// respond with document id
-	return res.json({ id: doc.id });
+const login = (req, res) => {
+	const { body } = req;
+	// verify token in body
+	if (!body.token) {
+		return res.status(400).json({ redirectTo: '/failure.html?error=No+Token' });
+	}
+	try {
+		// verify and decode JWT token
+		let decoded = jwt.verify(body.token, JWT_SECRET);
+		let user = Users.findById(+decoded.sub);
+		// if requested user does not exist -- fail
+		if (!user) {
+			return res.status(404).json({ redirectTo: '/failure.html?error=No+User' });
+		}
+		// add user id to session
+		req.session.user_id = user.id;
+		// redirect to success
+		return res.json({ redirectTo: '/success.html' });
+	} catch (error) {
+		return res.satus(401).json({ redirectTo: `/failure.html?error=Invalid+Token` });
+	}
 };
+
+
 
 const getTemplates = (req, res) => {
 	res.json(
@@ -404,7 +432,7 @@ const updateApplicationPayment = (req, res) => {
 
 router.get('/auth/challenge/:publicKey', generateChallenge);
 router.post('/auth/challenge', jwtAuthMiddleware(CHALLENGE_TOKEN_TYPE), handleChallengeResponse);
-router.get('/auth/token', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), getUserPayload);
+router.get('/users/token', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), getUserPayload);
 
 // router.post('/users', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), upload.any(), createUser);
 router.post('/users', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), createUser);
@@ -412,7 +440,12 @@ router.post('/users', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), createUser);
 router.options('/login', cors());
 router.post('/login', cors(), login);
 
-router.post('/users/files', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), upload.single('document'), uploadFile);
+router.post(
+	'/users/files',
+	jwtAuthMiddleware(ACCESS_TOKEN_TYPE),
+	upload.single('document'),
+	uploadFile
+);
 router.post('/files', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), upload.single('document'), uploadFile);
 
 router.get('/templates', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), getTemplates);
