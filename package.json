@@ -28,6 +28,7 @@
 	"main": "./lib/selfkey.js",
 	"dependencies": {
 		"ethereumjs-util": "^5.1.5",
+		"express-session": "^1.15.6",
 		"jsonwebtoken": "^8.4.0",
 		"nonce-generator": "^1.0.2"
 	},

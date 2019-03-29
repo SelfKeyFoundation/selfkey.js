@@ -18,12 +18,12 @@ const JWT_SECRET = 'SUPER LONG JWT SECRET';
 
 const { denormalizeDocumentsSchema } = require('./util');
 
-const CHALLENGE_TOKEN_NAME = 'IDW_CHALLANGE';
+const CHALLENGE_TOKEN_TYPE = 'IDW_CHALLANGE';
 
 const ACCESS_TOKEN_TYPE = 'IDW_ACCESS';
 
 // JWT parsing middlware, will parse and validate the token for a request
-const jwtAuthMiddleware = (req, res, next) => {
+const jwtAuthMiddleware = tokenType => (req, res, next) => {
 	// Fetch authorization header
 	const auth = req.headers.authorization;
 
@@ -56,7 +56,12 @@ const jwtAuthMiddleware = (req, res, next) => {
 				message: 'Subject should contain a valid public key'
 			});
 		}
-
+		if (req.decodedAuth.typ !== tokenType) {
+			return res.status(403).json({
+				code: 'token_invalid',
+				message: 'Invalid token type'
+			});
+		}
 		// continue the request to other handlers
 		next();
 	} catch (error) {
@@ -65,20 +70,6 @@ const jwtAuthMiddleware = (req, res, next) => {
 			.status(401)
 			.json({ code: 'token_invalid', message: 'Invalid authentication token' });
 	}
-};
-
-// For non challenge endpoints, verif
-const verifyAccessTokenMiddleware = (req, res, next) => {
-	// CHECK that the token provided is access token
-	if (req.decodedAuth.typ === ACCESS_TOKEN_TYPE && req.decodedAuth.nonce) {
-		return next();
-	}
-
-	// fail with 403 otherwise
-	return res.status(403).json({
-		code: 'token_invalid',
-		message: 'Only access token allowed'
-	});
 };
 
 const generateChallenge = (req, res) => {
@@ -93,7 +84,7 @@ const generateChallenge = (req, res) => {
 	const nonce = crypto.randomBytes(48).toString('hex');
 
 	// Generate challange JWT token
-	const jwtToken = jwt.sign({ nonce, typ: CHALLENGE_TOKEN_NAME }, JWT_SECRET, {
+	const jwtToken = jwt.sign({ nonce, typ: CHALLENGE_TOKEN_TYPE }, JWT_SECRET, {
 		expiresIn: '30m',
 		subject: publicKey,
 		algorithm: 'HS256'
@@ -106,6 +97,9 @@ const handleChallengeResponse = (req, res) => {
 	// fetch nonce and public key from token
 	const nonce = req.decodedAuth.nonce;
 	const publicKey = req.decodedAuth.sub;
+
+	// calculate ethereum address from public key
+	const ethAddress = ethUtil.bufferToHex(ethUtil.pubToAddress(ethUtil.toBuffer(publicKey), true));
 
 	if (!nonce) {
 		return res
@@ -120,31 +114,29 @@ const handleChallengeResponse = (req, res) => {
 		return res.status(400).json({ code: 'no_signature', message: 'No signature provided' });
 	}
 
-	// calculate public key from provided signature and nonce
-	let calculatedPublicKey;
+	// calculate address from provided signature and nonce
+	let recoveredAddress;
 	try {
 		// hash message
-		const msgHash = ethUtil.hashPersonalMessage(Buffer.from(nonce));
+		const msgHash = ethUtil.hashPersonalMessage(ethUtil.toBuffer(nonce));
 		// parse hex rpc message to object containing dc signature
 		const sig = ethUtil.fromRpcSig(signature);
-		// recover public key
-		calculatedPublicKey = ethUtil.ecrecover(msgHash, sig.v, sig.r, sig.s).toString('hex');
+		// recover address
+		recoveredAddress = ethUtik.bufferToHex(ethUtil.pubToAddress(ethUtil.ecrecover(msgHash, sig.v, sig.r, sig.s)));
 	} catch (err) {
 		return res
 			.status(401)
 			.json({ code: 'invalid_signature', message: 'Invalid signature provided' });
 	}
 
-	if (!calculatedPublicKey || !ethUtil.isValidPublic(Buffer.from(calculatedPublicKey, 'hex'))) {
-		return res
-			.status(401)
-			.json({ code: 'no_public_key', message: "Couldn't derive public key from signature" });
-	}
-	if (calculatedPublicKey !== publicKey) {
+	// verify that the recovered address matches the one from challenge token
+	if (recoveredAddress !== ethAddress) {
 		return res
 			.status(401)
 			.json({ code: 'invalid_signature', message: 'Invalid signature provided' });
 	}
+
+	// generate access token
 	let token = jwt.sign(
 		{
 			typ: ACCESS_TOKEN_TYPE
@@ -155,8 +147,114 @@ const handleChallengeResponse = (req, res) => {
 			subject: publicKey
 		}
 	);
+
 	return res.json({ jwt: token });
 };
+
+const createUser = (req, res) => {
+	// fetch attributes from body
+	const attributes = req.body;
+
+	if (!attributes || !attributes.length) {
+		return res.status(400).json({ code: 'no_attributes', message: 'No attributes provided' });
+	}
+
+	//  VALIDATE ATTRIBUTES HERE
+
+	// fetch public key from token
+	const publicKey = req.decodedAuth.sub;
+
+	// update or create user by public key
+	let user = Users.findByPublicKey(publicKey);
+
+	if (user) {
+		console.log('updating user');
+		user = Users.update(user.id, { attributes });
+	} else {
+		user = Users.create({ attributes }, publicKey);
+	}
+
+	if (!user) {
+		return res.status(400).json({
+			code: 'could_not_create',
+			message: 'Could not create user'
+		});
+	}
+
+	// send success empty respone
+	return res.status(201).send();
+}
+
+
+
+// const createUser = (req, res) => {
+// 	let attributes = req.body.attributes;
+
+// 	try {
+// 		attributes = JSON.parse(attributes);
+// 	} catch (error) {
+// 		return res.status(400).json({
+// 			code: 'invalid_attributes',
+// 			message: 'Attributes field must be a json string'
+// 		});
+// 	}
+
+// 	if (!attributes || !attributes.length) {
+// 		return res.status(400).json({ code: 'no_attributes', message: 'No attributes provided' });
+// 	}
+
+// 	let documents = req.files.map(f => {
+// 		let doc = {
+// 			mimeType: f.mimetype,
+// 			size: f.size,
+// 			content: f.buffer
+// 		};
+// 		let id = f.fieldname.match(/^\$document-([0-9]*)$/);
+// 		if (id) doc.id = +id[1];
+// 		return doc;
+// 	});
+
+// 	documents = documents.map(doc => {
+// 		let newDoc = Documents.create(doc);
+// 		let link = `${HOST}/documents/${newDoc.id}`;
+// 		doc.localId = newDoc.id;
+// 		doc.content = link;
+// 		return doc;
+// 	});
+
+// 	attributes = attributes.map(attr => {
+// 		let attrDocs = attr.documents
+// 			.map(id => {
+// 				let found = documents.filter(doc => doc.id === id);
+// 				return found.length ? found[0] : null;
+// 			})
+// 			.filter(doc => !!doc);
+// 		attr = { ...attr, documents: attrDocs };
+// 		let { value } = denormalizeDocumentsSchema(attr.schema, attr.data, attrDocs);
+// 		return { id: attr.id, value };
+// 	});
+
+// 	let publicKey = req.decodedAuth.sub;
+
+// 	let user = Users.findByPublicKey(publicKey);
+
+// 	if (user) {
+// 		console.log('updating user');
+// 		user = Users.update(user.id, { attributes });
+// 	} else {
+// 		user = Users.create({ attributes }, publicKey);
+// 	}
+
+// 	if (!user) {
+// 		return res.status(400).json({
+// 			code: 'could_not_create',
+// 			message: 'Could not create user'
+// 		});
+// 	}
+
+// 	return res.status(201).send();
+// };
+
 
 const login = (req, res) => {
 	const { body } = req;
@@ -175,73 +273,6 @@ const login = (req, res) => {
 	}
 };
 
-const createUser = (req, res) => {
-	let attributes = req.body.attributes;
-
-	try {
-		attributes = JSON.parse(attributes);
-	} catch (error) {
-		return res.status(400).json({
-			code: 'invalid_attributes',
-			message: 'Attributes field must be a json string'
-		});
-	}
-
-	if (!attributes || !attributes.length) {
-		return res.status(400).json({ code: 'no_attributes', message: 'No attributes provided' });
-	}
-
-	let documents = req.files.map(f => {
-		let doc = {
-			mimeType: f.mimetype,
-			size: f.size,
-			content: f.buffer
-		};
-		let id = f.fieldname.match(/^\$document-([0-9]*)$/);
-		if (id) doc.id = +id[1];
-		return doc;
-	});
-
-	documents = documents.map(doc => {
-		let newDoc = Documents.create(doc);
-		let link = `${HOST}/documents/${newDoc.id}`;
-		doc.localId = newDoc.id;
-		doc.content = link;
-		return doc;
-	});
-
-	attributes = attributes.map(attr => {
-		let attrDocs = attr.documents
-			.map(id => {
-				let found = documents.filter(doc => doc.id === id);
-				return found.length ? found[0] : null;
-			})
-			.filter(doc => !!doc);
-		attr = { ...attr, documents: attrDocs };
-		let { value } = denormalizeDocumentsSchema(attr.schema, attr.data, attrDocs);
-		return { id: attr.id, value };
-	});
-
-	let publicKey = req.decodedAuth.sub;
-
-	let user = Users.findByPublicKey(publicKey);
-
-	if (user) {
-		console.log('updating user');
-		user = Users.update(user.id, { attributes });
-	} else {
-		user = Users.create({ attributes }, publicKey);
-	}
-
-	if (!user) {
-		return res.status(400).json({
-			code: 'could_not_create',
-			message: 'Could not create user'
-		});
-	}
-
-	return res.status(201).send();
-};
 const getUserPayload = (req, res) => {
 	let publicKey = req.decodedAuth.sub;
 	let user = Users.findByPublicKey(publicKey);
@@ -259,15 +290,22 @@ const getUserPayload = (req, res) => {
 };
 
 const uploadFile = (req, res) => {
+	// fetch file from request
 	const f = req.file;
+
 	if (!f) return res.status(400).json({ code: 'no_file', message: 'no file uploaded' });
 
+	// parse file info
 	let doc = {
 		mimeType: f.mimetype,
 		size: f.size,
 		content: f.buffer
 	};
+
+	// save the document to storage
 	doc = Documents.create(doc);
+
+	// respond with document id
 	return res.json({ id: doc.id });
 };
 
@@ -365,38 +403,33 @@ const updateApplicationPayment = (req, res) => {
 };
 
 router.get('/auth/challenge/:publicKey', generateChallenge);
-router.post('/auth/challenge', jwtAuthMiddleware, handleChallengeResponse);
-router.get('/auth/token', jwtAuthMiddleware, verifyAccessTokenMiddleware, getUserPayload);
+router.post('/auth/challenge', jwtAuthMiddleware(CHALLENGE_TOKEN_TYPE), handleChallengeResponse);
+router.get('/auth/token', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), getUserPayload);
 
-router.post('/users', jwtAuthMiddleware, verifyAccessTokenMiddleware, upload.any(), createUser);
+// router.post('/users', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), upload.any(), createUser);
+router.post('/users', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), createUser);
 
 router.options('/login', cors());
 router.post('/login', cors(), login);
 
-router.post(
-	'/files',
-	jwtAuthMiddleware,
-	verifyAccessTokenMiddleware,
-	upload.single('document'),
-	uploadFile
-);
+router.post('/users/files', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), upload.single('document'), uploadFile);
+router.post('/files', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), upload.single('document'), uploadFile);
 
-router.get('/templates', jwtAuthMiddleware, verifyAccessTokenMiddleware, getTemplates);
-router.get('/templates/:id', jwtAuthMiddleware, verifyAccessTokenMiddleware, getTemplateDetails);
+router.get('/templates', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), getTemplates);
+router.get('/templates/:id', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), getTemplateDetails);
 
-router.get('/applications', jwtAuthMiddleware, verifyAccessTokenMiddleware, getApplications);
+router.get('/applications', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), getApplications);
 router.get(
 	'/applications/:id',
-	jwtAuthMiddleware,
-	verifyAccessTokenMiddleware,
+	jwtAuthMiddleware(ACCESS_TOKEN_TYPE),
+
 	getApplicationDetais
 );
-router.post('/applications', jwtAuthMiddleware, verifyAccessTokenMiddleware, createApplication);
-router.put('/applications/:id', jwtAuthMiddleware, verifyAccessTokenMiddleware, updateApplication);
+router.post('/applications', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), createApplication);
+router.put('/applications/:id', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), updateApplication);
 router.put(
 	'/applications/:id/payment',
-	jwtAuthMiddleware,
-	verifyAccessTokenMiddleware,
+	jwtAuthMiddleware(ACCESS_TOKEN_TYPE),
 	updateApplicationPayment
 );
 
