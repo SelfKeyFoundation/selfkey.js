@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const ethUtil = require('ethereumjs-util');
 const multer = require('multer');
+const { codeToStatus, UPLOADED } = require('./kyc-status');
 const upload = multer();
 
 const PORT = process.env.PORT || 3331;
@@ -16,7 +17,7 @@ const cors = require('cors');
 
 const JWT_SECRET = 'SUPER LONG JWT SECRET';
 
-const { denormalizeDocumentsSchema } = require('./util');
+// const { denormalizeDocumentsSchema } = require('./util');
 
 const CHALLENGE_TOKEN_TYPE = 'IDW_CHALLANGE';
 
@@ -178,6 +179,15 @@ const uploadFile = (req, res) => {
 	return res.json({ id: doc.id });
 };
 
+const getFileLink = (req, res) => {
+	const doc = Documents.findById(req.params.id);
+	if (!doc) {
+		return res.json({ code: 'not_found', message: 'File not found' });
+	}
+
+	return { url: `${HOST}/documents/${doc.id}` };
+};
+
 const createUser = (req, res) => {
 	// fetch attributes from body
 	const attributes = req.body;
@@ -289,7 +299,6 @@ const createUser = (req, res) => {
 // 	return res.status(201).send();
 // };
 
-
 const getUserPayload = (req, res) => {
 	// fetch public key from token
 	let publicKey = req.decodedAuth.sub;
@@ -310,7 +319,6 @@ const getUserPayload = (req, res) => {
 
 	return res.send({ token: userToken });
 };
-
 
 const login = (req, res) => {
 	const { body } = req;
@@ -335,19 +343,24 @@ const login = (req, res) => {
 	}
 };
 
-
-
 const getTemplates = (req, res) => {
 	res.json(
 		Templates.findAll().map(t => {
+			// copy template to new object (to avoid changing old template object)
 			let tpl = { ...t };
-			delete tpl.identity_atrributes;
+			// return only basic information about the template
+			delete tpl.attributes;
 			return tpl;
 		})
 	);
 };
 const getTemplateDetails = (req, res) => {
-	res.json(Templates.findById(req.params.id));
+	const tpl = Templates.findById(req.params.id);
+
+	if (!tpl) {
+		return res.status(404).json({ code: 'not_found', message: 'Template not found' });
+	}
+	res.json(tpl);
 };
 
 const getApplications = (req, res) => {
@@ -356,15 +369,17 @@ const getApplications = (req, res) => {
 		Applications.findAll()
 			.filter(appl => appl.publicKey === publicKey)
 			.map(appl => {
-				let newAppl = {};
-				newAppl.id = appl.id;
-				newAppl.templateId = appl.templateId;
-				newAppl.status = appl.status;
-				return newAppl;
+				let resAppl = {};
+				resAppl.id = appl.id;
+				resAppl.templateId = appl.templateId;
+				resAppl.status = appl.status;
+				resAppl.currentStatus = appl.currentStatus;
+				resAppl.statusName = appl.statusName;
+				return resAppl;
 			})
 	);
 };
-const getApplicationDetais = (req, res) => {
+const getApplicationDetails = (req, res) => {
 	let appl = Applications.findById(req.params.id);
 	if (!appl) return res.status(404).json({ code: 'not_found', message: 'Application not found' });
 	let publicKey = req.decodedAuth.sub;
@@ -376,15 +391,24 @@ const getApplicationDetais = (req, res) => {
 	}
 	return res.json(appl);
 };
+
 const createApplication = (req, res) => {
+	// fetch application from body
 	let appl = req.body;
+	// application must contain existing template ID
 	if (!appl.templateId || !Templates.findById(appl.templateId)) {
 		return res
 			.status(404)
-			.json({ code: 'template_not_exists', message: 'Requested template does not exists' });
+			.json({ code: 'not_found', message: 'Requested template does not exists' });
 	}
 	appl.publicKey = req.decodedAuth.sub;
-	appl.status = { id: 'pending', name: 'Pending' };
+	// status timestamp in iso format
+	const timestamp = new Date().toISOString();
+	// assign status to application
+	appl.status = [{ code: UPLOADED, timestamp }];
+	appl.currentStatus = UPLOADED;
+	appl.statusName = codeToStatus[UPLOADED].name;
+
 	return res.json(Applications.create(appl));
 };
 
@@ -412,6 +436,14 @@ const updateApplication = (req, res) => {
 const updateApplicationPayment = (req, res) => {
 	let tx = req.body;
 	let appl = Applications.findById(req.params.id);
+
+	if (!appl) {
+		return res.status(404).json({
+			code: 'not_found',
+			message: 'Application not found'
+		});
+	}
+
 	if (appl.publicKey !== req.decodedAuth.sub) {
 		return res.status(401).json({
 			code: 'access_denied',
@@ -447,17 +479,12 @@ router.post(
 	uploadFile
 );
 router.post('/files', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), upload.single('document'), uploadFile);
-
-router.get('/templates', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), getTemplates);
-router.get('/templates/:id', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), getTemplateDetails);
+router.get('/files/:id', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), getFileLink);
+router.get('/templates', getTemplates);
+router.get('/templates/:id', getTemplateDetails);
 
 router.get('/applications', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), getApplications);
-router.get(
-	'/applications/:id',
-	jwtAuthMiddleware(ACCESS_TOKEN_TYPE),
-
-	getApplicationDetais
-);
+router.get('/applications/:id', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), getApplicationDetails);
 router.post('/applications', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), createApplication);
 router.put('/applications/:id', jwtAuthMiddleware(ACCESS_TOKEN_TYPE), updateApplication);
 router.put(
