@@ -30,7 +30,9 @@
 		"ethereumjs-util": "^5.1.5",
 		"express-session": "^1.15.6",
 		"jsonwebtoken": "^8.4.0",
-		"nonce-generator": "^1.0.2"
+		"nonce-generator": "^1.0.2",
+		"request": "^2.88.0",
+		"request-promise-native": "^1.0.7"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.0.0",
