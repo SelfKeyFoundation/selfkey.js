@@ -26,6 +26,23 @@ const CHALLENGE_TOKEN_TYPE = 'IDW_CHALLANGE';
 
 const ACCESS_TOKEN_TYPE = 'IDW_ACCESS';
 
+const LWS_TEMPLATE = [
+	{
+		id: 'first_name',
+		label: 'First Name',
+		schemaId: 'http://platform.selfkey.org/schema/attribute/first-name.json'
+	},
+	{
+		label: 'Last Name',
+		attribute: 'http://platform.selfkey.org/schema/attribute/last-name.json'
+	},
+	{
+		id: 'email',
+		schemaId: 'http://platform.selfkey.org/schema/attribute/email.json'
+	},
+	'http://platform.selfkey.org/schema/attribute/email.json'
+];
+
 // JWT parsing middlware, will parse and validate the token for a request
 const jwtAuthMiddleware = tokenType => (req, res, next) => {
 	// Fetch authorization header
@@ -79,15 +96,30 @@ const jwtAuthMiddleware = tokenType => (req, res, next) => {
 const validateAttributes = async (attributes, requirements) => {
 	// here we will initialize schema manager for each validation request
 	// ideally it should be global to application and initialized only once
-	const schemaManager = new schemaManager();
+	const schemaManager = new SchemaManager();
+
+	// add schemas to validator, prepare it for validation:
+	await schemaManager.addSchemas(
+		requirements.map(req => (typeof req === 'string' ? req : req.schemaId))
+	);
 
 	// connect between attribute and requirements
 	const attributesToValidate = attributes.map(attribute => {
 		let toValidate = { attribute };
+
+		// match requirement by attribute id
 		if (attribute.id) {
-			toValidate.requirement =  requirements.find(req => req.id === attribute.id);
-		} else if (attribute.schemaId) {
-			toValidate.requirement = requirements.find(req => req.schemaId === attribute.schemaId && !attribute.id)
+			toValidate.requirement = requirements.find(req => req.id && req.id === attribute.id);
+		}
+
+		// if no id in attribute, match requirement by schema id
+		if (!toValidate.requirement && attribute.schemaId) {
+			toValidate.requirement = requirements.find(
+				req =>
+					// requirement can be a string with schemaId or an object containing schema id
+					(req === attribute.schemaId || req.schemaId === attribute.schemaId) &&
+					!attribute.id
+			);
 		}
 		return toValidate;
 	});
@@ -106,7 +138,7 @@ const generateChallenge = (req, res) => {
 	// generate a 48 bytes long hex string for nonce
 	const nonce = crypto.randomBytes(48).toString('hex');
 
-	// Generate challange JWT token
+	// Generate challenge JWT token
 	const jwtToken = jwt.sign({ nonce, typ: CHALLENGE_TOKEN_TYPE }, JWT_SECRET, {
 		expiresIn: '30m',
 		subject: publicKey,
@@ -205,7 +237,7 @@ const getFileLink = (req, res) => {
 	return { url: `${HOST}/documents/${doc.id}` };
 };
 
-const createUser = (req, res) => {
+const createUser = async (req, res) => {
 	// fetch attributes from body
 	const attributes = req.body;
 
@@ -214,7 +246,7 @@ const createUser = (req, res) => {
 	}
 
 	// validate attributes
-	const errors = validateAttributes(attributes);
+	const errors = await validateAttributes(attributes, LWS_TEMPLATE);
 
 	if (errors.length) {
 		return res.status(422).json({
@@ -409,21 +441,30 @@ const getApplicationDetails = (req, res) => {
 	return res.json(appl);
 };
 
-const createApplication = (req, res) => {
+const createApplication = async (req, res) => {
 	// fetch application from body
 	let appl = req.body;
 	// application must contain existing template ID
-	if (!appl.templateId || !Templates.findById(appl.templateId)) {
+	if (!appl.templateId) {
 		return res
 			.status(404)
 			.json({ code: 'not_found', message: 'Requested template does not exists' });
 	}
+
+	const tpl = Templates.findById(appl.templateId);
+
+	if (!tpl) {
+		return res
+			.status(404)
+			.json({ code: 'not_found', message: 'Requested template does not exists' });
+	}
+
 	appl.publicKey = req.decodedAuth.sub;
 	// status timestamp in iso format
 	const timestamp = new Date().toISOString();
 
 	// validate attributes
-	const errors = validateAttributes(appl.attributes);
+	const errors = await validateAttributes(appl.attributes, tpl.attributes);
 
 	if (errors.length) {
 		return res.status(422).json({
@@ -431,7 +472,7 @@ const createApplication = (req, res) => {
 			message: 'Validation errors occurred',
 			errors
 		});
-}
+	}
 
 	// assign status to application
 	appl.status = [{ code: UPLOADED, timestamp }];
@@ -450,6 +491,7 @@ const updateApplication = (req, res) => {
 			message: 'You are not allowed to modify this application'
 		});
 	}
+
 	if (newAppl.id !== appl.id) {
 		return res
 			.status(400)
@@ -458,6 +500,8 @@ const updateApplication = (req, res) => {
 	if (newAppl.templateId !== appl.templateId) {
 		return res.status(400).json({ code: 'bad_request', message: 'Cannot modify template id' });
 	}
+
+	// validate attributes
 
 	return res.json(Applications.update(appl));
 };
