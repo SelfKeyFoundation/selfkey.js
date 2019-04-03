@@ -8,6 +8,9 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const ethUtil = require('ethereumjs-util');
 const multer = require('multer');
+
+const SchemaManager = require('schema-manager');
+
 const { codeToStatus, UPLOADED } = require('./kyc-status');
 const upload = multer();
 
@@ -73,9 +76,23 @@ const jwtAuthMiddleware = tokenType => (req, res, next) => {
 	}
 };
 
-const validateAttributes = () => {
-	const errors = [];
-	return errors;
+const validateAttributes = async (attributes, requirements) => {
+	// here we will initialize schema manager for each validation request
+	// ideally it should be global to application and initialized only once
+	const schemaManager = new schemaManager();
+
+	// connect between attribute and requirements
+	const attributesToValidate = attributes.map(attribute => {
+		let toValidate = { attribute };
+		if (attribute.id) {
+			toValidate.requirement =  requirements.find(req => req.id === attribute.id);
+		} else if (attribute.schemaId) {
+			toValidate.requirement = requirements.find(req => req.schemaId === attribute.schemaId && !attribute.id)
+		}
+		return toValidate;
+	});
+
+	return schemaManager.validate(attributesToValidate);
 };
 
 const generateChallenge = (req, res) => {
@@ -404,6 +421,18 @@ const createApplication = (req, res) => {
 	appl.publicKey = req.decodedAuth.sub;
 	// status timestamp in iso format
 	const timestamp = new Date().toISOString();
+
+	// validate attributes
+	const errors = validateAttributes(appl.attributes);
+
+	if (errors.length) {
+		return res.status(422).json({
+			code: 'invalid_attributes',
+			message: 'Validation errors occurred',
+			errors
+		});
+}
+
 	// assign status to application
 	appl.status = [{ code: UPLOADED, timestamp }];
 	appl.currentStatus = UPLOADED;

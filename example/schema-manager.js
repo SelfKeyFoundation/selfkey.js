@@ -3,7 +3,7 @@ const Ajv = require('ajv');
 
 const SCHEMA_CACHE_TTL = 1 * 60 * 60 * 1000; // 1 hour
 
-export class SchemaManager {
+class SchemaManager {
 	constructor() {
 		// loaded schemas cache
 		this.schemas = {};
@@ -137,4 +137,4 @@ export class SchemaManager {
 	}
 }
 
-export default SchemaManager;
+module.exports = SchemaManager;
