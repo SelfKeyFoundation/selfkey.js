@@ -43,7 +43,7 @@ export class SchemaManager {
 
 			const schema = this.schemas[attribute.requirement.schemaId];
 
-			// if schema was not added or could not be added with
+			// if schema was not added or could not be added with addSchemas
 			if (!schema) {
 				errors.push({
 					attribute,
