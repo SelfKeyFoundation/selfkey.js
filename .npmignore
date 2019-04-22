@@ -1,5 +1,26 @@
-.npmignore
-node_modules/
-npm-debug.log
+# IDEA
+**/.idea/
+**/target/
+**/*.iml
+
+# Ignore Mac DS_Store files
 .DS_Store
+
+**/package-lock.json
+**/node_modules/
+
+**/*.log
+
+.vscode
+
+dist/
+
+src/renderer/angular/app.templates.js
+static/stylesheets/css/main.css
+static/stylesheets/css/*
+
+client-secret.json
+**/.env
+
 .git*
+.npmignore
