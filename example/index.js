@@ -19,7 +19,7 @@ const Templates = require('./templates');
 Templates.create({
 	name: 'Example Template 1',
 	description: 'This template 1 is an example template with identity attributes',
-	identity_attributes: [
+	attributes: [
 		{
 			id: '5c4e6edda58d2900401ba61b',
 			required: true,
@@ -49,7 +49,7 @@ Templates.create({
 Templates.create({
 	name: 'Example Template 2',
 	description: 'This template 2 is an example template with identity attributes',
-	identity_attributes: [
+	attributes: [
 		{
 			id: '5c511c64c7315f003ecfe2dc',
 			required: true,
@@ -71,7 +71,7 @@ Templates.create({
 Templates.create({
 	name: 'Example Template 3',
 	description: 'This template 3 is an example template with identity attributes',
-	identity_attributes: [
+	attributes: [
 		'http://platform.selfkey.org/schema/attribute/national-id.json',
 		'http://platform.selfkey.org/schema/attribute/nationality.json',
 		'http://platform.selfkey.org/schema/attribute/passport.json',
