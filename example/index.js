@@ -1,10 +1,12 @@
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const api = require('./api');
 const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3331;
 
+app.use(session({secret: "super secret session key"}));
 app.use(bodyParser.json({ limit: '300mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1/', api);
