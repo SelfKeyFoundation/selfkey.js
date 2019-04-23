@@ -9,7 +9,7 @@ const crypto = require('crypto');
 const ethUtil = require('ethereumjs-util');
 const multer = require('multer');
 
-const SchemaManager = require('schema-manager');
+const SchemaManager = require('./schema-manager');
 
 const { codeToStatus, UPLOADED } = require('./kyc-status');
 const upload = multer();
@@ -177,7 +177,7 @@ const handleChallengeResponse = (req, res) => {
 		// parse hex rpc message to object containing dc signature
 		const sig = ethUtil.fromRpcSig(signature);
 		// recover address
-		recoveredAddress = ethUtik.bufferToHex(
+		recoveredAddress = ethUtil.bufferToHex(
 			ethUtil.pubToAddress(ethUtil.ecrecover(msgHash, sig.v, sig.r, sig.s))
 		);
 	} catch (err) {
