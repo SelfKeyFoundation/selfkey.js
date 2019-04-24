@@ -1,9 +1,6 @@
-import crypto from 'crypto';
-import util from 'util';
+import { generateHMACKey } from '../key';
 
-const randomBytes = util.promisify(crypto.randomBytes);
-
-export const generateNonce = async (length = 64) => {
-	const buffer = await randomBytes(length);
-	return buffer.toString('base64');
+export const generateNonce = async length => {
+	const hmac = await generateHMACKey(length);
+	return hmac.toString('base64');
 };
