@@ -7,13 +7,11 @@ export const issueJWT = (
 	subject,
 	requestedAlgorithm,
 	secret,
-	typ = 'JWT',
 	expiresIn = '1h',
 	additionalClaims = {}
 ) => {
 	const payload = {
-		...additionalClaims,
-		typ
+		...additionalClaims
 	};
 
 	delete payload.exp;
