@@ -33,7 +33,7 @@ describe('issueJWT', () => {
 			header: { alg: 'HS512', typ: 'JWT' },
 			payload: { iat: 1556030699, exp: 1556034299, sub: 'test' },
 			signature:
-				'FxobjS6gSqOe0ZYB_bKCh0AqSQxLgzdZhVnsn0yZXP5FKWWDAFtfekm1l4SxF5_tPzZ5UL9u9z6u3Z1Bp2j-lw'
+				'RtYgHw8-QasjEK5vzaaX_vqPmFSJuBVl6_i3bsaLOaT16VsZyBj22NlIBYLpYb8bX9s_TdkUCupAG7mH1SFogg'
 		});
 	});
 
@@ -45,7 +45,7 @@ describe('issueJWT', () => {
 			header: { alg: 'RS512', typ: 'JWT' },
 			payload: { iat: 1556030699, exp: 1556034299, sub: 'test' },
 			signature:
-				'WYJVEP9OtTmGvHIb3ToDdFIWOq0u4aowNogUzFJhbztmOKcwkP4hJRWFtP3FZKD43qO9UufqqK4mY_yZT3_gpn3KWu5Skhg25gkwUt6NtD20RfEu4wexUHX7whfoAJw3sxwFtAgE682gzMfjLph74-vhzwu47TjegDYdaBcQ_Lw8QN35EoZ8-sot4GNuY7lsjnhIY19MPF9zrVs3fhI1rBGkyb6AasemN9WClYMCG-QGeXLjXB7feJwmLuy4QgATurzhxPu-uuYrLoC0v0mPorV8LbwrUDmATdeJlFbn2SwhNq7Uodz-_Xuvgs422oYsJtzG17Xb1AYpa2UgSL9hGA'
+				'GZe8BrhADMcunLB6LJyL__Vv4BRs6JRUfNBpctpCORD8kHVTLdEumtB5IcfhtJ82X7K5IKh347NkrWA37DpqLtn5Cm_v2NlB9aC2WoyE7EpfTay2rckWAF9K4gClg_hdk5UZaYTTPXEpExTxC4mT4ZVB4SaaEYVW3YS5nKDM9Xx2AZGMJQUcLusBipir1WaSZjmLTgZ9o2I9HOPHCZxMelb-r5PXeq4jIkJWC9XuIhS8ycWk4W-5a0dKqNSPFkbbn2iYdTzTIpDBPs05u9NInfi8S0Gf7PWK71Hv-pTwRlGyccmmOlEGpkgZP3grzMd43nIwkq9ht9hPjGUsjghJuMTbti0hxfOuj8I-_NB6Qh2hgL46rzD2nRjFBYIymkG9oIdho8sX8agW0ntRZh514AfZNaOlgKgJ1tcxikkft0o8Fctk9R0OlrWQE9H4D9VbkzpdERboL4Ncp9N4RNf0b8MeHSQ0P97k8Iq6NVGWUvTHZ9xZZ1ZoVS4R4F3MIFQPlBu_6UH9YoitHEi205rhEf0GmePAE6dM4fxKay4X7MifiQcX0yzLAHqZJhx9FeLaeeKmBFTNosYEDuOK_KkXCowUODMFX4usam5bZv_jKJjuYwKsPJAj7C28hwQKIC7-yxMhzThhJNa-avs9y_3zCA24Xu5otn2F3yM1n57QnT0'
 		});
 	});
 
@@ -64,7 +64,7 @@ describe('issueJWT', () => {
 			header: { alg: 'HS512', typ: 'JWT' },
 			payload: { iat: 1556030699, exp: 1556037899, sub, test: 'test-claim' },
 			signature:
-				'230ZseanNNBIfrkA5qvFWaiazvCVKAPeHFb8gbVSy6FYXzqeBo7mucSyqNrq2E4SCcqjeg8PFJ7FYmb_956oeA'
+				'AdkHdr7Xmap0iUl9ri2MB48eD0QWXf3UJcx4K2e_Us-6qYfuJjb7IcVP0oVcwWm6IS_LIfR2uXNSRleSd7wBlw'
 		});
 	});
 });

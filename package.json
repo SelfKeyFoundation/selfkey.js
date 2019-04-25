@@ -30,6 +30,7 @@
     "ajv": "6.10.0",
     "ethereumjs-util": "6.1.0",
     "jsonwebtoken": "8.5.1",
+    "pemtools": "^0.4.7",
     "request-promise-native": "1.0.7"
   },
   "devDependencies": {
@@ -64,7 +65,7 @@
     ]
   },
   "scripts": {
-    "build": "rm -rf lib/ && babel src -d lib --ignore=*.spec.js --ignore=**/*.spec.js",
+    "build": "rm -rf lib/ && babel src -d lib --ignore=*.spec.js --ignore=**/*.spec.js --ignore=**/__fixtures__/**",
     "test": "jest",
     "start": "jest --watch",
     "check-deps-precommit": "npm-check -i eslint -i || true"

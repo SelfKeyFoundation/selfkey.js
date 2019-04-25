@@ -1,6 +1,7 @@
 import { promisify } from 'util';
 import jwt from 'jsonwebtoken';
 import { JWT_ALGORITHMS } from './const';
+import { isValidPrivateKeySize } from '../key';
 const signJWT = promisify(jwt.sign);
 
 export const issueJWT = (
@@ -22,6 +23,10 @@ export const issueJWT = (
 
 	if (!algorithm) {
 		throw new Error(`Unknown algorithm ${requestedAlgorithm}`);
+	}
+
+	if (!isValidPrivateKeySize(secret, algorithm)) {
+		throw new Error('Insecure secret');
 	}
 
 	const options = {

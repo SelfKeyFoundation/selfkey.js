@@ -1,6 +1,7 @@
 const { generateKeyPair } = require('crypto');
+const pemtools = require('pemtools');
 
-export const generateRSAKeyPair = (length = 2048) => {
+export const generateRSAKeyPair = (length = 4096) => {
 	return new Promise((resolve, reject) => {
 		generateKeyPair(
 			'rsa',
@@ -11,7 +12,7 @@ export const generateRSAKeyPair = (length = 2048) => {
 					format: 'pem'
 				},
 				privateKeyEncoding: {
-					type: 'pkcs8',
+					type: 'pkcs1',
 					format: 'pem'
 				}
 			},
@@ -23,4 +24,9 @@ export const generateRSAKeyPair = (length = 2048) => {
 			}
 		);
 	});
+};
+
+export const getPEMBits = privateKey => {
+	const pem = pemtools(privateKey);
+	return pem.pubkey.bits;
 };
