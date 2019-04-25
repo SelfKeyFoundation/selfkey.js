@@ -25,5 +25,5 @@ export const resolve = async did => {
 		return Promise.reject(new Error('Not a valid selfkey DID'));
 	}
 	const address = await getControllerAddress(idString);
-	return Promise.resolve(generateDocument(did, address));
+	return generateDocument(did, address);
 };
