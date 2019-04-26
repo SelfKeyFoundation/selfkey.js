@@ -1,8 +1,10 @@
 import { getControllerAddress } from './selfkey_simple_resolver';
-import { resolve } from './selfkey_resolver';
+import { resolver } from './selfkey_resolver';
 
 jest.mock('./selfkey_simple_resolver');
 getControllerAddress.mockResolvedValue('0xf3beac30c498d9e26865f34fcaa57dbb935b0d74');
+
+const { resolve } = resolver();
 
 describe('resolve', () => {
 	it('invalid DID', async () => {

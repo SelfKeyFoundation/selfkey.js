@@ -1,4 +1,6 @@
-import { resolve } from './eth_resolver';
+import { resolver } from './eth_resolver';
+
+const { resolve } = resolver();
 
 describe('resolve', () => {
 	it('invalid DID', async () => {

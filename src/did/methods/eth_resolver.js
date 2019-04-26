@@ -15,10 +15,12 @@ const generateDocument = (did, address) => ({
 	authentication: [`${did}#keys-1`]
 });
 
-export const resolve = async did => {
-	const { method, idString } = parse(did);
-	if (method !== 'eth' || !isValidAddress(idString)) {
-		return Promise.reject(new Error('Not a valid eth DID'));
+export const resolver = () => ({
+	resolve: async did => {
+		const { method, idString } = parse(did);
+		if (method !== 'eth' || !isValidAddress(idString)) {
+			throw new Error('Not a valid eth DID');
+		}
+		return generateDocument(did, idString);
 	}
-	return Promise.resolve(generateDocument(did, idString));
-};
+});

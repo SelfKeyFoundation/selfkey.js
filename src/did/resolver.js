@@ -1,8 +1,11 @@
 import { parse } from './parse';
-import * as eth from './methods/eth_resolver';
-import * as selfkey from './methods/selfkey_resolver';
+import { resolver as eth } from './methods/eth_resolver';
+import { resolver as selfkey } from './methods/selfkey_resolver';
 
-const resolvers = { eth, selfkey };
+const resolvers = {
+	eth: eth(),
+	selfkey: selfkey()
+};
 
 export const isSupported = did => {
 	const { method } = parse(did);
@@ -13,7 +16,7 @@ export const resolve = async did => {
 	const { method } = parse(did);
 	const resolver = resolvers[method];
 	if (!resolver) {
-		return Promise.reject(new Error('Unsupported DID method'));
+		throw new Error('Unsupported DID method');
 	}
 	return resolver.resolve(did);
 };

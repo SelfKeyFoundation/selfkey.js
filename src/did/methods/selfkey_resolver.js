@@ -19,11 +19,13 @@ const generateDocument = (did, address) => ({
 	authentication: [`${did}#keys-1`]
 });
 
-export const resolve = async did => {
-	const { method, idString } = parse(did);
-	if (method !== 'selfkey' || !isValidIdentifier(idString)) {
-		return Promise.reject(new Error('Not a valid selfkey DID'));
+export const resolver = () => ({
+	resolve: async did => {
+		const { method, idString } = parse(did);
+		if (method !== 'selfkey' || !isValidIdentifier(idString)) {
+			throw new Error('Not a valid selfkey DID');
+		}
+		const address = await getControllerAddress(idString);
+		return generateDocument(did, address);
 	}
-	const address = await getControllerAddress(idString);
-	return generateDocument(did, address);
-};
+});
