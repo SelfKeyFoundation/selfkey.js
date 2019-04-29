@@ -1,5 +1,9 @@
-export { generateChallengeToken } from './generate-challenge-token';
-export { generateNonce } from './generate-nonce';
-export { generateAccessToken } from './generate-access-token';
-export { validateChallengeToken } from './validate-challenge-token';
-export { validateAccessToken } from './validate-access-token';
+import crypto from 'crypto';
+import util from 'util';
+
+const randomBytes = util.promisify(crypto.randomBytes);
+
+export const generateNonce = async (length = 64) => {
+	const buffer = await randomBytes(length);
+	return buffer.toString('base64');
+};
