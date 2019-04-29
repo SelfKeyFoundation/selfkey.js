@@ -1,7 +1,7 @@
 import { getSecretLength } from './hmac';
 import { getPEMBits } from './rsa';
 
-export const isValidPrivateKeySize = (key, algorithm) => {
+export const checkSecretLength = (key, algorithm) => {
 	switch (algorithm) {
 		case 'HS512':
 			return getSecretLength(key) >= 64;

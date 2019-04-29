@@ -3,12 +3,12 @@ import {
 	JWT_RSA_PRIVATE_KEY,
 	JWT_RSA_PRIVATE_KEY_WRONG
 } from '../jwt/__fixtures__/keys';
-import { isValidPrivateKeySize } from './validate-private-key-size';
+import { checkSecretLength } from './validate-private-key-size';
 
-describe('isValidPrivateKeySize', () => {
+describe('checkSecretLength', () => {
 	const t = (name, key, algorithm, isValid) =>
 		it(name, () => {
-			expect(isValidPrivateKeySize(key, algorithm)).toBe(isValid);
+			expect(checkSecretLength(key, algorithm)).toBe(isValid);
 		});
 
 	t(`${JWT_HMAC_SECRET} HS512 valid`, JWT_HMAC_SECRET, 'HS512', true);
