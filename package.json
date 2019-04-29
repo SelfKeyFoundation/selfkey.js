@@ -30,7 +30,6 @@
     "ajv": "6.10.0",
     "ethereumjs-util": "6.1.0",
     "jsonwebtoken": "8.5.1",
-    "pemtools": "^0.4.7",
     "request-promise-native": "1.0.7"
   },
   "devDependencies": {
@@ -53,10 +52,10 @@
     "husky": "1.2.0",
     "jest": "24.7.1",
     "lint-staged": "8.1.5",
-    "lolex": "4.0.1",
     "npm-check": "5.9.0",
     "prettier": "1.15.2",
-    "pretty-quick": "1.8.0"
+    "pretty-quick": "1.8.0",
+    "lint-staged": "8.1.5"
   },
   "lint-staged": {
     "*.js": [
@@ -65,9 +64,8 @@
     ]
   },
   "scripts": {
-    "build": "rm -rf lib/ && babel src -d lib --ignore=*.spec.js --ignore=**/*.spec.js --ignore=**/__fixtures__/**",
+    "build": "rm -rf lib/ && babel src -d lib --ignore **/*.spec.js",
     "test": "jest",
-    "start": "jest --watch",
     "check-deps-precommit": "npm-check -i eslint -i || true"
   }
 }
