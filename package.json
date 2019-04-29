@@ -1,5 +1,5 @@
 {
-  "name": "selfkey-lib.js",
+  "name": "selfkey-lib",
   "version": "1.0.0",
   "description": "SelfKey Javascript Library",
   "keywords": [
@@ -51,6 +51,7 @@
     "eslint-plugin-standard": "4.0.0",
     "husky": "1.2.0",
     "jest": "24.7.1",
+    "lint-staged": "8.1.5",
     "npm-check": "5.9.0",
     "prettier": "1.15.2",
     "pretty-quick": "1.8.0",
@@ -63,7 +64,7 @@
     ]
   },
   "scripts": {
-    "build": "rm -rf lib/ && babel src -d lib --ignore src/**/*.spec.js",
+    "build": "rm -rf lib/ && babel src -d lib --ignore **/*.spec.js",
     "test": "jest",
     "check-deps-precommit": "npm-check -i eslint -i || true"
   }
