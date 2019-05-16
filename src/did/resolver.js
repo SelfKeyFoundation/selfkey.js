@@ -1,6 +1,6 @@
 import { parse } from './parse';
-import { resolver as eth } from './methods/eth_resolver';
-import { resolver as selfkey } from './methods/selfkey_resolver';
+import { resolver as eth } from './methods/eth-resolver';
+import { resolver as selfkey } from './methods/selfkey-resolver';
 
 const resolvers = {
 	eth: eth(),

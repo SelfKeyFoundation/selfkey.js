@@ -1,7 +1,7 @@
-import { getControllerAddress } from './selfkey_simple_resolver';
-import { resolver } from './selfkey_resolver';
+import { getControllerAddress } from './selfkey-simple-resolver';
+import { resolver } from './selfkey-resolver';
 
-jest.mock('./selfkey_simple_resolver');
+jest.mock('./selfkey-simple-resolver');
 getControllerAddress.mockResolvedValue('0xf3beac30c498d9e26865f34fcaa57dbb935b0d74');
 
 const { resolve } = resolver();

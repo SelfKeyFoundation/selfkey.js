@@ -1,2 +1,2 @@
-export * from './generate_nonce';
-export * from './verify_challenge_signature';
+export { generateNonce } from './generate-nonce';
+export { verifyChallengeSignature } from './verify-challenge-signature';

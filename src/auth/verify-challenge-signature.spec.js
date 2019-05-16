@@ -1,5 +1,5 @@
 import { resolve } from '../did/resolver';
-import { verifyChallengeSignature, registerVerifier } from './verify_challenge_signature';
+import { verifyChallengeSignature, registerVerifier } from './verify-challenge-signature';
 
 jest.mock('../did/resolver');
 

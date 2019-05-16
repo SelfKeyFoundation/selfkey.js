@@ -1,5 +1,5 @@
 import { resolve } from '../did/resolver';
-import { verifier as secp256k1 } from './crypto/secp256k1_2018';
+import { verifier as secp256k1 } from './crypto/secp256k1-2018';
 
 const verifiers = {
 	Secp256k1VerificationKey2018: secp256k1()
@@ -23,6 +23,6 @@ export const verifyChallengeSignature = async (nonce, signature, did) => {
 };
 
 export const registerVerifier = (type, verifier) => {
-	// TODO - Check if resolver adheres to interface
+	// TODO - Check if verifier adheres to interface
 	verifiers[type] = verifier;
 };

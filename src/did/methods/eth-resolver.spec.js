@@ -1,4 +1,4 @@
-import { resolver } from './eth_resolver';
+import { resolver } from './eth-resolver';
 
 const { resolve } = resolver();
 

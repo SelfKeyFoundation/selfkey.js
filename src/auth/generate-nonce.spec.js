@@ -1,4 +1,4 @@
-import { generateNonce } from './generate_nonce';
+import { generateNonce } from './generate-nonce';
 
 describe('Generate nonce', () => {
 	it('correct length', async () => {

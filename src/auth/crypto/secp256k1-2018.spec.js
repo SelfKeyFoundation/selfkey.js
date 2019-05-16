@@ -1,5 +1,5 @@
 import { fromRpcSig, isValidSignature } from 'ethereumjs-util';
-import { signer, verifier } from './secp256k1_2018';
+import { signer, verifier } from './secp256k1-2018';
 
 const authKey = {
 	// Derived from Public Key:
