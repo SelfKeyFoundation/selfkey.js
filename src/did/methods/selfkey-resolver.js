@@ -1,5 +1,5 @@
 import { parse } from '../parse';
-import { getControllerAddress } from './selfkey_simple_resolver';
+import { getControllerAddress } from './selfkey-simple-resolver';
 
 const isValidIdentifier = idString => {
 	return !!idString.match(/^0x[0-9a-fA-F]{64}$/);
