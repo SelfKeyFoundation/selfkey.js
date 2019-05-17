@@ -10,7 +10,7 @@ aliases:
       name: Restore Yarn Package Cache
       keys:
         - yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}
-        - yarn-packages-{{ checksum "/tmp/cache_buster" }}}-master
+        - yarn-packages-{{ checksum "/tmp/cache_buster" }}-master
         - yarn-packages-{{ checksum "/tmp/cache_buster" }}-
   - &step_save_cache
     save_cache:
@@ -42,7 +42,7 @@ jobs:
       - *step_restore_cache
       - run:
           name: Authenticate with registry
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+          command: echo "@selfkey:registry=//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
           name: Install Package
           command: yarn
@@ -55,7 +55,7 @@ jobs:
       - *step_save_cache
 workflows:
   version: 2
-  main:
+  selfkey-lib:
     jobs:
       - 'unit-test':
           filters:
