@@ -42,7 +42,7 @@ jobs:
       - *step_restore_cache
       - run:
           name: Authenticate with registry
-          command: echo "@selfkey:registry=//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
           name: Install Package
           command: yarn
@@ -51,7 +51,7 @@ jobs:
           command: yarn
       - run:
           name: Publish package
-          command: npm publish
+          command: npm publish --access public
       - *step_save_cache
 workflows:
   version: 2
