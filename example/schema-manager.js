@@ -70,7 +70,7 @@ class SchemaManager {
 	}
 
 	async addSchemas(schemaIds) {
-		const schemas = await Promise.all(
+		let schemas = await Promise.all(
 			schemaIds.map(async schemaId => {
 				let schema = null;
 				try {
@@ -87,7 +87,7 @@ class SchemaManager {
 		schemas = schemas.filter(schema => !!schema);
 
 		schemas.forEach(schema => {
-			this.schemas[id] = schema;
+			this.schemas[schema.id] = schema;
 		});
 		return schemas;
 	}

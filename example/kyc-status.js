@@ -1,28 +1,34 @@
 // KYC process is approved
-export const APPROVED = 2;
+exports.APPROVED = 2;
 // KYC process is rejected
-export const REJECTED = 3;
+exports.REJECTED = 3;
 // User has submitted KYC data
 // and process ready for review
-export const UPLOADED = 4;
+exports.UPLOADED = 4;
 // KYC process is canceled
-export const CANCELED = 8;
+exports.CANCELED = 8;
 // Additional data requested
-export const ADDITIONAL_REQUEST = 9;
+exports.ADDITIONAL_REQUEST = 9;
 // User still filling out forms
-export const USER_PROCESSING_REQUIREMENTS = 11;
+exports.USER_PROCESSING_REQUIREMENTS = 11;
 // KYC process is approved by manager or checker (for multi person checks)
-export const PARTIALLY_APPROVED = 12;
+exports.PARTIALLY_APPROVED = 12;
 // Manager has been assigned
-export const MANAGER_ASSIGNED = 14;
+exports.MANAGER_ASSIGNED = 14;
 
-export const codeToStatus = {
-	[APPROVED]: { code: APPROVED, name: 'Approved' },
-	[REJECTED]: { code: REJECTED, name: 'Rejected' },
-	[UPLOADED]: { code: UPLOADED, name: 'Uploaded' },
-	[CANCELED]: { code: CANCELED, name: 'Canceled' },
-	[ADDITIONAL_REQUEST]: { code: ADDITIONAL_REQUEST, name: 'Additional attributes requested' },
-	[PARTIALLY_APPROVED]: { code: PARTIALLY_APPROVED, name: 'Partially approved' },
-	[MANAGER_ASSIGNED]: { code: MANAGER_ASSIGNED, name: 'Approved' },
-	[USER_PROCESSING_REQUIREMENTS]: { code: USER_PROCESSING_REQUIREMENTS, name: 'User processing requirements'}
+exports.codeToStatus = {
+	[exports.APPROVED]: { code: exports.APPROVED, name: 'Approved' },
+	[exports.REJECTED]: { code: exports.REJECTED, name: 'Rejected' },
+	[exports.UPLOADED]: { code: exports.UPLOADED, name: 'Uploaded' },
+	[exports.CANCELED]: { code: exports.CANCELED, name: 'Canceled' },
+	[exports.ADDITIONAL_REQUEST]: {
+		code: exports.ADDITIONAL_REQUEST,
+		name: 'Additional attributes requested'
+	},
+	[exports.PARTIALLY_APPROVED]: { code: exports.PARTIALLY_APPROVED, name: 'Partially approved' },
+	[exports.MANAGER_ASSIGNED]: { code: exports.MANAGER_ASSIGNED, name: 'Approved' },
+	[exports.USER_PROCESSING_REQUIREMENTS]: {
+		code: exports.USER_PROCESSING_REQUIREMENTS,
+		name: 'User processing requirements'
+	}
 };

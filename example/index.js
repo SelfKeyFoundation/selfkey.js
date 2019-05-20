@@ -6,13 +6,13 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3331;
 
-app.use(session({secret: "super secret session key"}));
+app.use(session({ secret: 'super secret session key' }));
 app.use(bodyParser.json({ limit: '300mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1/', api);
 app.listen(PORT, () => console.log(`dev server is listening on ${PORT}`));
 
-//init templates
+// init templates
 
 const Templates = require('./templates');
 
