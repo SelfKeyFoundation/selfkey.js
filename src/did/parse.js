@@ -7,7 +7,7 @@ export const parse = did => {
 
 	const params = (paramString.match(new RegExp('\\w+:(\\w+=\\w+)', 'g')) || []).reduce(
 		(result, each, n, every) => {
-			let [key, value] = each.split('=');
+			const [key, value] = each.split('=');
 			result[key] = value;
 			return result;
 		},
