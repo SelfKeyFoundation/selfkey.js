@@ -2,7 +2,7 @@ import { abi as ledgerABI } from './DIDLedger.json';
 import Web3 from 'web3';
 
 export const CONTRACT_CONFIG = {
-	main: {
+	mainnet: {
 		url: 'wss://mainnet.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd',
 		address: '0x0cb853331293d689c95187190e09bb46cb4e533e'
 	},

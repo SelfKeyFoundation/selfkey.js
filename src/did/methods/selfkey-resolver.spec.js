@@ -53,7 +53,7 @@ describe('resolve', () => {
 		});
 		expect(getControllerAddress).toHaveBeenCalledWith(
 			'0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
-			'main'
+			'mainnet'
 		);
 	});
 
@@ -107,7 +107,7 @@ describe('resolve', () => {
 		});
 		expect(getControllerAddress).toHaveBeenCalledWith(
 			'0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
-			'main'
+			'mainnet'
 		);
 	});
 });

@@ -33,7 +33,7 @@ describe('Selfkey Simple Resolver', () => {
 		const idString = '0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120';
 
 		mockGetControllerCall.mockReturnValue('0x27462DF3542882455E3bD6a23496a06E5E686162');
-		const actualAddress = await getControllerAddress(idString, 'main');
+		const actualAddress = await getControllerAddress(idString, 'mainnet');
 		expect(Web3).toHaveBeenCalledWith(
 			'wss://mainnet.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd'
 		);

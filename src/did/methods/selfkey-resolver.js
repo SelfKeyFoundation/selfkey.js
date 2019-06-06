@@ -26,9 +26,9 @@ export const resolver = () => ({
 			throw new Error('Not a valid selfkey DID');
 		}
 		const chain = !params
-			? 'main'
+			? 'mainnet'
 			: !params['selfkey:chain']
-			? 'main'
+			? 'mainnet'
 			: params['selfkey:chain'];
 		const address = await getControllerAddress(idString, chain);
 		return generateDocument(did, address);
