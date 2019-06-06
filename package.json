@@ -64,7 +64,7 @@
     ]
   },
   "scripts": {
-    "build": "rm -rf lib/ && babel src -d lib --ignore **/*.spec.js",
+    "build": "rm -rf lib/ && babel src -d lib --ignore **/*.spec.js && cp -rf ./src/assets ./lib",
     "test": "jest",
     "check-deps-precommit": "npm-check -i eslint -i || true"
   }

@@ -1,4 +1,4 @@
-import { abi as ledgerABI } from './DIDLedger.json';
+import { abi as ledgerABI } from '../../assets/DIDLedger.json';
 import Web3 from 'web3';
 
 export const CONTRACT_CONFIG = {
