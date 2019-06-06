@@ -21,11 +21,16 @@ const generateDocument = (did, address) => ({
 
 export const resolver = () => ({
 	resolve: async did => {
-		const { method, idString } = parse(did);
+		const { method, idString, params } = parse(did);
 		if (method !== 'selfkey' || !isValidIdentifier(idString)) {
 			throw new Error('Not a valid selfkey DID');
 		}
-		const address = await getControllerAddress(idString);
+		const chain = !params
+			? 'main'
+			: !params['selfkey:chain']
+			? 'main'
+			: params['selfkey:chain'];
+		const address = await getControllerAddress(idString, chain);
 		return generateDocument(did, address);
 	}
 });
