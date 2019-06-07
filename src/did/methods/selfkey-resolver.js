@@ -31,7 +31,7 @@ export const resolver = () => ({
 			? 'mainnet'
 			: params['selfkey:chain'];
 		const address = await getControllerAddress(idString, chain);
-		console.log('address', address);
+		console.error('address', address);
 		return generateDocument(did, address);
 	}
 });

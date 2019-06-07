@@ -13,7 +13,7 @@ export const CONTRACT_CONFIG = {
 };
 
 export const getControllerAddress = async (idString, chain) => {
-	console.log('getControllerAddress', idString, chain);
+	console.error('getControllerAddress', idString, chain);
 	const contractConfig = CONTRACT_CONFIG[chain];
 	if (!contractConfig) throw new Error('Not a valid Chain');
 	const web3 = new Web3(contractConfig.url);
