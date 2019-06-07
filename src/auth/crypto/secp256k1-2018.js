@@ -14,6 +14,7 @@ export const verifier = () => ({
 		const msgHash = hashPersonalMessage(toBuffer(message));
 		const { v, r, s } = fromRpcSig(signature);
 		const address = bufferToHex(pubToAddress(ecrecover(msgHash, v, r, s)));
+		console.error('verifier address', address);
 		return address === authKey.ethereumAddress;
 	}
 });
