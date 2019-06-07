@@ -16,7 +16,31 @@ describe('Parse DID', () => {
 	it('valid did', async () => {
 		expect(parse('did:example:123456789abcdefghi')).toEqual({
 			method: 'example',
-			idString: '123456789abcdefghi'
+			idString: '123456789abcdefghi',
+			params: {}
+		});
+	});
+
+	it('valid did with a param', async () => {
+		expect(parse('did:example:123456789abcdefghi;example:chain=ropsten')).toEqual({
+			method: 'example',
+			idString: '123456789abcdefghi',
+			params: {
+				'example:chain': 'ropsten'
+			}
+		});
+	});
+
+	it('valid did with more than one param', async () => {
+		expect(
+			parse('did:example:123456789abcdefghi;example:chain=ropsten;example:network=infura')
+		).toEqual({
+			method: 'example',
+			idString: '123456789abcdefghi',
+			params: {
+				'example:chain': 'ropsten',
+				'example:network': 'infura'
+			}
 		});
 	});
 });

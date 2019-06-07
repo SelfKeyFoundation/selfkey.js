@@ -31,7 +31,7 @@ describe('resolve', () => {
 		}
 	});
 
-	it('DID resolved', async () => {
+	it('DID resolved with no param', async () => {
 		const did =
 			'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120';
 		expect(await resolve(did)).toEqual({
@@ -51,5 +51,63 @@ describe('resolve', () => {
 				'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120#keys-1'
 			]
 		});
+		expect(getControllerAddress).toHaveBeenCalledWith(
+			'0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
+			'mainnet'
+		);
+	});
+
+	it('DID resolved with correct chain param', async () => {
+		const did =
+			'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten';
+		expect(await resolve(did)).toEqual({
+			'@context': 'https://www.w3.org/2019/did/v1',
+			id:
+				'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten',
+			publicKey: [
+				{
+					id:
+						'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten#keys-1',
+					type: 'Secp256k1VerificationKey2018',
+					controller:
+						'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten',
+					ethereumAddress: '0xf3beac30c498d9e26865f34fcaa57dbb935b0d74'
+				}
+			],
+			authentication: [
+				'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten#keys-1'
+			]
+		});
+		expect(getControllerAddress).toHaveBeenCalledWith(
+			'0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
+			'ropsten'
+		);
+	});
+
+	it('DID resolved with incorrect chain param', async () => {
+		const did =
+			'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten';
+		expect(await resolve(did)).toEqual({
+			'@context': 'https://www.w3.org/2019/did/v1',
+			id:
+				'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten',
+			publicKey: [
+				{
+					id:
+						'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten#keys-1',
+					type: 'Secp256k1VerificationKey2018',
+					controller:
+						'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten',
+					ethereumAddress: '0xf3beac30c498d9e26865f34fcaa57dbb935b0d74'
+				}
+			],
+			authentication: [
+				'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten#keys-1'
+			]
+		});
+		expect(getControllerAddress).toHaveBeenCalledWith(
+			'0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
+			'mainnet'
+		);
 	});
 });

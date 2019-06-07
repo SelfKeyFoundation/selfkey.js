@@ -21,11 +21,19 @@ const generateDocument = (did, address) => ({
 
 export const resolver = () => ({
 	resolve: async did => {
-		const { method, idString } = parse(did);
+		const { method, idString, params } = parse(did);
 		if (method !== 'selfkey' || !isValidIdentifier(idString)) {
 			throw new Error('Not a valid selfkey DID');
 		}
-		const address = await getControllerAddress(idString);
+		const chain = !params
+			? 'mainnet'
+			: !params['selfkey:chain']
+			? 'mainnet'
+			: params['selfkey:chain'];
+		const address = await getControllerAddress(idString, chain);
+		if (address === '0x0000000000000000000000000000000000000000') {
+			throw new Error('Controller Address Not Found');
+		}
 		return generateDocument(did, address);
 	}
 });
