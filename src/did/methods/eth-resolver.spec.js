@@ -35,7 +35,7 @@ describe('resolve', () => {
 			publicKey: [
 				{
 					id: 'did:eth:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74#keys-1',
-					type: 'Secp256k1VerificationKey2018',
+					type: 'EcdsaSecp256k1VerificationKey2019',
 					controller: 'did:eth:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74',
 					ethereumAddress: '0xf3beac30c498d9e26865f34fcaa57dbb935b0d74'
 				}
