@@ -28,6 +28,17 @@ describe('Selfkey Simple Resolver', () => {
 		mockGetControllerCall.mockClear();
 	});
 
+	it('Get null address', async () => {
+		const idString = '0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120';
+
+		mockGetControllerCall.mockReturnValue('0x0000000000000000000000000000000000000000');
+		const actualAddress = await getControllerAddress(idString, 'mainnet');
+		expect(Web3).toHaveBeenCalledWith(
+			'wss://mainnet.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd'
+		);
+		expect(actualAddress).toBeNull();
+	});
+
 	it('Get Controller Address from Main', async () => {
 		const address = '0x27462DF3542882455E3bD6a23496a06E5E686162';
 		const idString = '0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120';

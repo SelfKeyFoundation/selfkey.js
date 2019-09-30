@@ -6,17 +6,21 @@ const isValidIdentifier = idString => {
 };
 
 const generateDocument = (did, address) => ({
-	'@context': 'https://www.w3.org/2019/did/v1',
-	id: did,
-	publicKey: [
-		{
-			id: `${did}#keys-1`,
-			type: 'Secp256k1VerificationKey2018',
-			controller: did,
-			ethereumAddress: address
-		}
-	],
-	authentication: [`${did}#keys-1`]
+	didDocument: {
+		'@context': 'https://www.w3.org/2019/did/v1',
+		id: did,
+		publicKey: [
+			{
+				id: `${did}#keys-1`,
+				type: 'EcdsaSecp256k1VerificationKey2019',
+				controller: did,
+				ethereumAddress: address
+			}
+		],
+		authentication: [`${did}#keys-1`]
+	},
+	resolverMetadata: {},
+	methodMetadata: {}
 });
 
 export const resolver = () => ({
@@ -25,15 +29,8 @@ export const resolver = () => ({
 		if (method !== 'selfkey' || !isValidIdentifier(idString)) {
 			throw new Error('Not a valid selfkey DID');
 		}
-		const chain = !params
-			? 'mainnet'
-			: !params['selfkey:chain']
-			? 'mainnet'
-			: params['selfkey:chain'];
+		const chain = !params || !params['selfkey:chain'] ? 'mainnet' : params['selfkey:chain'];
 		const address = await getControllerAddress(idString, chain);
-		if (address === '0x0000000000000000000000000000000000000000') {
-			throw new Error('Controller Address Not Found');
-		}
-		return generateDocument(did, address);
+		return !address ? null : generateDocument(did, address);
 	}
 });

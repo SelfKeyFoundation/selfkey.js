@@ -31,25 +31,36 @@ describe('resolve', () => {
 		}
 	});
 
+	it('DID does not exist', async () => {
+		getControllerAddress.mockResolvedValueOnce(null);
+		const did =
+			'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120';
+		expect(await resolve(did)).toBeNull();
+	});
+
 	it('DID resolved with no param', async () => {
 		const did =
 			'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120';
 		expect(await resolve(did)).toEqual({
-			'@context': 'https://www.w3.org/2019/did/v1',
-			id: 'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
-			publicKey: [
-				{
-					id:
-						'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120#keys-1',
-					type: 'Secp256k1VerificationKey2018',
-					controller:
-						'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
-					ethereumAddress: '0xf3beac30c498d9e26865f34fcaa57dbb935b0d74'
-				}
-			],
-			authentication: [
-				'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120#keys-1'
-			]
+			didDocument: {
+				'@context': 'https://www.w3.org/2019/did/v1',
+				id: 'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
+				publicKey: [
+					{
+						id:
+							'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120#keys-1',
+						type: 'EcdsaSecp256k1VerificationKey2019',
+						controller:
+							'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
+						ethereumAddress: '0xf3beac30c498d9e26865f34fcaa57dbb935b0d74'
+					}
+				],
+				authentication: [
+					'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120#keys-1'
+				]
+			},
+			resolverMetadata: {},
+			methodMetadata: {}
 		});
 		expect(getControllerAddress).toHaveBeenCalledWith(
 			'0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
@@ -61,22 +72,26 @@ describe('resolve', () => {
 		const did =
 			'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten';
 		expect(await resolve(did)).toEqual({
-			'@context': 'https://www.w3.org/2019/did/v1',
-			id:
-				'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten',
-			publicKey: [
-				{
-					id:
-						'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten#keys-1',
-					type: 'Secp256k1VerificationKey2018',
-					controller:
-						'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten',
-					ethereumAddress: '0xf3beac30c498d9e26865f34fcaa57dbb935b0d74'
-				}
-			],
-			authentication: [
-				'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten#keys-1'
-			]
+			didDocument: {
+				'@context': 'https://www.w3.org/2019/did/v1',
+				id:
+					'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten',
+				publicKey: [
+					{
+						id:
+							'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten#keys-1',
+						type: 'EcdsaSecp256k1VerificationKey2019',
+						controller:
+							'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten',
+						ethereumAddress: '0xf3beac30c498d9e26865f34fcaa57dbb935b0d74'
+					}
+				],
+				authentication: [
+					'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:chain=ropsten#keys-1'
+				]
+			},
+			resolverMetadata: {},
+			methodMetadata: {}
 		});
 		expect(getControllerAddress).toHaveBeenCalledWith(
 			'0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
@@ -88,22 +103,26 @@ describe('resolve', () => {
 		const did =
 			'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten';
 		expect(await resolve(did)).toEqual({
-			'@context': 'https://www.w3.org/2019/did/v1',
-			id:
-				'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten',
-			publicKey: [
-				{
-					id:
-						'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten#keys-1',
-					type: 'Secp256k1VerificationKey2018',
-					controller:
-						'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten',
-					ethereumAddress: '0xf3beac30c498d9e26865f34fcaa57dbb935b0d74'
-				}
-			],
-			authentication: [
-				'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten#keys-1'
-			]
+			didDocument: {
+				'@context': 'https://www.w3.org/2019/did/v1',
+				id:
+					'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten',
+				publicKey: [
+					{
+						id:
+							'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten#keys-1',
+						type: 'EcdsaSecp256k1VerificationKey2019',
+						controller:
+							'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten',
+						ethereumAddress: '0xf3beac30c498d9e26865f34fcaa57dbb935b0d74'
+					}
+				],
+				authentication: [
+					'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120;selfkey:network=ropsten#keys-1'
+				]
+			},
+			resolverMetadata: {},
+			methodMetadata: {}
 		});
 		expect(getControllerAddress).toHaveBeenCalledWith(
 			'0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
