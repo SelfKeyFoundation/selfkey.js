@@ -1,1 +1,1 @@
-export * from './resolver';
+export { isSupported, resolve } from './resolver';

@@ -1,22 +1,13 @@
-describe('generateNonce', () => {
-	afterEach(() => {
-		jest.clearAllMocks();
+import { generateNonce } from './generate-nonce';
+
+describe('Generate nonce', () => {
+	it('correct length', async () => {
+		expect((await generateNonce()).length).toBe(88);
 	});
-	it('nonce should be bas64 encoded hmac secret', async () => {
-		const hmac = Buffer.from('test');
-		const nonceLength = 12;
 
-		const mockKey = () => {
-			const original = jest.requireActual('../key');
-			return { ...original, generateHMACKey: jest.fn(length => hmac.toString('base64')) };
-		};
-		jest.mock('../key', () => mockKey());
-
-		const { generateNonce } = require('./generate-nonce');
-		const { generateHMACKey } = require('../key');
-
-		const nonce = await generateNonce(nonceLength);
-		expect(nonce).toEqual(hmac.toString('base64'));
-		expect(generateHMACKey).toHaveBeenCalledWith(nonceLength, 'base64');
+	it('generates different values', async () => {
+		const nonce1 = await generateNonce();
+		const nonce2 = await generateNonce();
+		expect(nonce1 !== nonce2).toBe(true);
 	});
 });

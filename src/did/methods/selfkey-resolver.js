@@ -1,0 +1,36 @@
+import { parse } from '../parse';
+import { getControllerAddress } from './selfkey-simple-resolver';
+
+const isValidIdentifier = idString => {
+	return !!idString.match(/^0x[0-9a-fA-F]{64}$/);
+};
+
+const generateDocument = (did, address) => ({
+	didDocument: {
+		'@context': 'https://www.w3.org/2019/did/v1',
+		id: did,
+		publicKey: [
+			{
+				id: `${did}#keys-1`,
+				type: 'EcdsaSecp256k1VerificationKey2019',
+				controller: did,
+				ethereumAddress: address
+			}
+		],
+		authentication: [`${did}#keys-1`]
+	},
+	resolverMetadata: {},
+	methodMetadata: {}
+});
+
+export const resolver = () => ({
+	resolve: async did => {
+		const { method, idString, params } = parse(did);
+		if (method !== 'selfkey' || !isValidIdentifier(idString)) {
+			throw new Error('Not a valid selfkey DID');
+		}
+		const chain = !params || !params['selfkey:chain'] ? 'mainnet' : params['selfkey:chain'];
+		const address = await getControllerAddress(idString, chain);
+		return !address ? null : generateDocument(did, address);
+	}
+});
