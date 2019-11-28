@@ -43,6 +43,7 @@ jobs:
       - run:
           name: Unit Tests
           command: yarn test
+      - *step_save_cache
 
   'publish':
     working_directory: ~/repo
