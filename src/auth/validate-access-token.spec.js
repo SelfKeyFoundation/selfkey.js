@@ -1,8 +1,13 @@
 import * as JWT from '../jwt';
+import * as DID from '../did';
 import { TOKEN_TYPE_ACCESS } from './const';
 
 jest.mock('../jwt', () => ({
 	validateJWT: jest.fn()
+}));
+
+jest.mock('../did', () => ({
+	parse: jest.fn()
 }));
 
 describe('validateAccessToken', () => {
@@ -15,6 +20,8 @@ describe('validateAccessToken', () => {
 		JWT.validateJWT.mockImplementation(() => {
 			throw new Error('validation error');
 		});
+
+		DID.parse.mockImplementation(() => true);
 
 		const { validateAccessToken } = require('./validate-access-token');
 		try {
