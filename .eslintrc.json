@@ -13,7 +13,8 @@
 			"error",
 			{
 				"singleQuote": true,
-				"semi": true
+				"semi": true,
+				"bracketSpacing": true
 			}
 		]
 	}
