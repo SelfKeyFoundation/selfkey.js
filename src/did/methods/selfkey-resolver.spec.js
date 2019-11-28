@@ -44,7 +44,8 @@ describe('resolve', () => {
 		expect(await resolve(did)).toEqual({
 			didDocument: {
 				'@context': 'https://www.w3.org/2019/did/v1',
-				id: 'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
+				id:
+					'did:selfkey:0x11c47898a9d3498986129cdb0b8ac3ed468f5e400cb0076d40f355ad1ad2a120',
 				publicKey: [
 					{
 						id:
