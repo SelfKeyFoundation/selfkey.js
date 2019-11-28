@@ -3122,3 +3122,11 @@ patch:
         patched: '2019-07-04T08:07:51.638Z'
     - web3 > web3-eth > web3-eth-ens > web3-eth-contract > web3-eth-accounts > web3-core-method > web3-core > web3-providers > web3-core-helpers > web3-eth-iban > web3-utils > lodash:
         patched: '2019-07-04T08:07:51.638Z'
+    - snyk > lodash:
+        patched: '2019-11-28T17:08:14.984Z'
+    - snyk > inquirer > lodash:
+        patched: '2019-11-28T17:08:14.984Z'
+    - snyk > snyk-nodejs-lockfile-parser > lodash:
+        patched: '2019-11-28T17:08:14.984Z'
+    - snyk > snyk-nuget-plugin > lodash:
+        patched: '2019-11-28T17:08:14.984Z'
