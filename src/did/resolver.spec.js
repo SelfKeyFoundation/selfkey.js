@@ -23,8 +23,10 @@ describe('Resolver', () => {
 		registerMethodResolver('mock', {
 			resolve: async () =>
 				Promise.resolve({
-					'@context': 'https://www.w3.org/2019/did/v1',
-					id: 'did:mock:123456789abcdefghi'
+					didDocument: {
+						'@context': 'https://www.w3.org/2019/did/v1',
+						id: 'did:mock:123456789abcdefghi'
+					}
 				})
 		});
 	});
@@ -47,8 +49,10 @@ describe('Resolver', () => {
 
 	it('DID resolved', async () => {
 		expect(await resolve('did:mock:123456789abcdefghi')).toEqual({
-			'@context': 'https://www.w3.org/2019/did/v1',
-			id: 'did:mock:123456789abcdefghi'
+			didDocument: {
+				'@context': 'https://www.w3.org/2019/did/v1',
+				id: 'did:mock:123456789abcdefghi'
+			}
 		});
 	});
 });

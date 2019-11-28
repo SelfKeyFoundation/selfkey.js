@@ -9,7 +9,7 @@ const crypto = require('crypto');
 const ethUtil = require('ethereumjs-util');
 const multer = require('multer');
 
-const SchemaManager = require('./schema-manager');
+const SchemaManager = require('schema-manager');
 
 const { codeToStatus, UPLOADED } = require('./kyc-status');
 const upload = multer();
