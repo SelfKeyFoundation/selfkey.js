@@ -2,9 +2,8 @@ import rp from 'request-promise-native';
 import request from 'request';
 import * as JWT from '../jwt';
 
-export const authValidateUserToken = client => async (jwt, options = {}) => {
+export const authValidateUserToken = client => (jwt, user) => {
 	const parsed = JWT.parseJWT(jwt);
-	const user = await client.auth.login(jwt, options);
 	return user._id === parsed.payload.sub;
 };
 
