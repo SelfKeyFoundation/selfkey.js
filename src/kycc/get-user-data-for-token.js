@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import request from 'request';
 import { createClient } from './kycc-internal-client';
 
 export const getUserDataForToken = async (token, options = {}) => {
@@ -16,7 +17,8 @@ export const getUserDataForToken = async (token, options = {}) => {
 	const fileProcessor = options.fileProcessor || { stream: false, process: (file, id) => file };
 
 	const client = createClient({
-		instanceUrl
+		instanceUrl,
+		jar: request.jar()
 	});
 
 	let kyccUser = null;
@@ -28,7 +30,7 @@ export const getUserDataForToken = async (token, options = {}) => {
 	}
 
 	if (!kyccUser || !client.auth.validateUserToken(token, kyccUser)) {
-		throw new Error('invlid_token');
+		throw new Error('invalid_token');
 	}
 
 	const applications = await client.applications.list({ template_id: templateId }, [
