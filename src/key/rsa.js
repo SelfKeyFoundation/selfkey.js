@@ -26,6 +26,7 @@ export const generateRSAKeyPair = (length = 4096) => {
 	});
 };
 
+// TODO: reconsider adding third party for private key handing
 export const getPEMBits = privateKey => {
 	const pem = pemtools(privateKey);
 	return pem.pubkey.bits;
