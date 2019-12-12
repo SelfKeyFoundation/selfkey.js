@@ -33,7 +33,7 @@
     "pemtools": "0.4.7",
     "request": "2.88.0",
     "request-promise-native": "1.0.8",
-    "snyk": "1.189.0",
+    "snyk": "^1.258.2",
     "web3": "1.0.0-beta.55"
   },
   "devDependencies": {
@@ -73,7 +73,7 @@
     "test": "jest",
     "check-deps-precommit": "npm-check -i eslint -i || true",
     "snyk-protect": "snyk protect",
-    "prepublish": "yarn snyk-protect"
+    "prepublish": "npm run snyk-protect && yarn snyk-protect"
   },
   "snyk": true
 }

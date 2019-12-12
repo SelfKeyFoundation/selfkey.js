@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.5
+version: v1.14.0
 ignore: {}
 # patches apply the minimum changes required to fix a vulnerability
 patch:
@@ -3122,3 +3122,6 @@ patch:
         patched: '2019-07-04T08:07:51.638Z'
     - web3 > web3-eth > web3-eth-ens > web3-eth-contract > web3-eth-accounts > web3-core-method > web3-core > web3-providers > web3-core-helpers > web3-eth-iban > web3-utils > lodash:
         patched: '2019-07-04T08:07:51.638Z'
+  SNYK-JS-TREEKILL-536781:
+    - snyk > snyk-sbt-plugin > tree-kill:
+        patched: '2019-12-12T08:08:46.993Z'
