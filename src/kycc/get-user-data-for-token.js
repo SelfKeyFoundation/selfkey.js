@@ -2,6 +2,82 @@ import _ from 'lodash';
 import request from 'request';
 import { createClient } from './kycc-internal-client';
 
+/**
+ * File Processor
+ * @typedef FileProcessor
+ * @memberof kycc
+ * @property {boolean} stream
+ * @property {function} process
+ * @example
+ * ```js
+ * { stream: false, process: (file, id) => file }
+ * ```
+ */
+
+/**
+ * Options used in getUserDataForToken function
+ * @typedef GetUserDataForTokenOptions
+ * @memberof kycc
+ * @property {string} instanceUrl
+ * @property {string} templateId
+ * @property {FileProcessor} fileProcessor
+ */
+
+/**
+  * User Object
+  * @typedef UserObjects
+  * @property {string} id id of user in KYCC
+  * @property {object} attributes map from attribute id to attribute value
+  * @example
+  * ```js
+  * {
+	id: '5ddd5b1656fbcef0dd389637',
+	attributes: {
+		firstName: {
+			id: '5d076f0a315423134405cbc4',
+			label: 'First Name',
+			required: true,
+			schema: 'http://platform.selfkey.org/schema/attribute/first-name.json',
+			valid: true,
+			value: 'first-name'
+		},
+		lastName: {
+			label: 'Last Name',
+			id: '5d076f20315423f5db05cbc6',
+			required: true,
+			schema: 'http://platform.selfkey.org/schema/attribute/last-name.json',
+			valid: true,
+			value: 'last-name'
+		},
+		email: {
+			id: '5d13577f72089544cb86cda7',
+			label: 'Email Address',
+			required: true,
+			schema: 'http://platform.selfkey.org/schema/attribute/email.json',
+			valid: true,
+			value: 'test-4952@test.com'
+		},
+	}
+  * ```
+  */
+
+/**
+ * Fetch user data via token
+ * @function getUserDataForToken
+ * @memberof kycc
+ * @param {string} token - jwt token
+ * @param {GetUserDataForTokenOptions} options
+ * @returns {object} user object
+ * @throws if no instanceUrl in options
+ * @throws if no templateId in options
+ * @throws if invalid token
+ * @throws if invalid user for token
+ * @example
+ *
+ * ```js
+ * sk.kycc.getUserDataForToken(token, 'hmac', key);
+ * ```
+ */
 export const getUserDataForToken = async (token, options = {}) => {
 	const { instanceUrl, templateId } = options;
 

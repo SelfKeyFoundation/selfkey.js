@@ -72,6 +72,13 @@ import sk from '@selfkey/node-lib';
     * [`.generateRSAKeyPair([length])`](#key.generateRSAKeyPair) ⇒ <code>Promise.&lt;object&gt;</code>
     * [`.checkSecretLength(key, algorithm)`](#key.checkSecretLength) ⇒ <code>boolean</code>
 * [`kycc`](#kycc) : <code>object</code>
+    * [`.getUserDataForToken(token, options)`](#kycc.getUserDataForToken) ⇒ <code>object</code>
+    * [`.FileProcessor`](#kycc.FileProcessor)
+    * [`.GetUserDataForTokenOptions`](#kycc.GetUserDataForTokenOptions)
+
+### 
+
+* [`UserObjects`](#UserObjects)
 
 <a name="auth"></a>
 
@@ -544,6 +551,123 @@ sk.key.checkSecretLength();
 KYCC Namespace
 
 **Kind**: global namespace  
+
+* [`kycc`](#kycc) : <code>object</code>
+    * [`.getUserDataForToken(token, options)`](#kycc.getUserDataForToken) ⇒ <code>object</code>
+    * [`.FileProcessor`](#kycc.FileProcessor)
+    * [`.GetUserDataForTokenOptions`](#kycc.GetUserDataForTokenOptions)
+
+
+* * *
+
+<a name="kycc.getUserDataForToken"></a>
+
+#### `kycc.getUserDataForToken(token, options)` ⇒ <code>object</code>
+Fetch user data via token
+
+**Kind**: static method of [<code>kycc</code>](#kycc)  
+**Returns**: <code>object</code> - user object  
+**Throws**:
+
+- if no instanceUrl in options
+- if no templateId in options
+- if invalid token
+- if invalid user for token
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| token | <code>string</code> | jwt token |
+| options | <code>GetUserDataForTokenOptions</code> |  |
+
+**Example**  
+```js
+sk.kycc.getUserDataForToken(token, 'hmac', key);
+```
+
+* * *
+
+<a name="kycc.FileProcessor"></a>
+
+#### `kycc.FileProcessor`
+File Processor
+
+**Kind**: static typedef of [<code>kycc</code>](#kycc)  
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| stream | <code>boolean</code> | 
+| process | <code>function</code> | 
+
+**Example**  
+```js
+{ stream: false, process: (file, id) => file }
+```
+
+* * *
+
+<a name="kycc.GetUserDataForTokenOptions"></a>
+
+#### `kycc.GetUserDataForTokenOptions`
+Options used in getUserDataForToken function
+
+**Kind**: static typedef of [<code>kycc</code>](#kycc)  
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| instanceUrl | <code>string</code> | 
+| templateId | <code>string</code> | 
+| fileProcessor | <code>FileProcessor</code> | 
+
+
+* * *
+
+<a name="UserObjects"></a>
+
+### `UserObjects`
+User Object
+
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> | id of user in KYCC |
+| attributes | <code>object</code> | map from attribute id to attribute value |
+
+**Example**  
+```js
+{
+	id: '5ddd5b1656fbcef0dd389637',
+	attributes: {
+		firstName: {
+			id: '5d076f0a315423134405cbc4',
+			label: 'First Name',
+			required: true,
+			schema: 'http://platform.selfkey.org/schema/attribute/first-name.json',
+			valid: true,
+			value: 'first-name'
+		},
+		lastName: {
+			label: 'Last Name',
+			id: '5d076f20315423f5db05cbc6',
+			required: true,
+			schema: 'http://platform.selfkey.org/schema/attribute/last-name.json',
+			valid: true,
+			value: 'last-name'
+		},
+		email: {
+			id: '5d13577f72089544cb86cda7',
+			label: 'Email Address',
+			required: true,
+			schema: 'http://platform.selfkey.org/schema/attribute/email.json',
+			valid: true,
+			value: 'test-4952@test.com'
+		},
+	}
+```
 
 * * *
 
