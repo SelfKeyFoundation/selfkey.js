@@ -5,6 +5,22 @@ const verifiers = {
 	Secp256k1VerificationKey2018: secp256k1()
 };
 
+/**
+ * Validates challenge Signature
+ *
+ * @async
+ * @function verifyChallengeSignature
+ * @memberof auth
+ * @param {string} nonce
+ * @param {object} signature
+ * @param {string} did
+ * @returns {Promise<boolean>} is valid signature
+ * @throws key not found in resolved did document
+ * @throws if no registered verifier for that key type
+ * @example
+ * await sk.auth.verifyChallengeSignature(nonce, signature, did);
+ */
+
 export const verifyChallengeSignature = async (nonce, signature, did) => {
 	const { value, keyId } = signature;
 	const { authentication, publicKey } = await resolve(did);

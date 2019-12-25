@@ -2,6 +2,23 @@ import * as JWT from '../jwt';
 import * as DID from '../did';
 import { TOKEN_TYPE_ACCESS } from './const';
 
+/**
+ * Validates access token
+ *
+ * @async
+ * @function validateAccessToken
+ * @memberof auth
+ * @param {string} token
+ * @param {string} algorithm
+ * @param {string|Buffer} key
+ * @returns {Promise<object>} decodedToken
+ * @throws If token is invalid
+ * @throws if subject is not did
+ * @throws if token type is not access
+ * @example
+ * await sk.auth.validateAccessToken(token, 'hmac', 'secret');
+ */
+
 export const validateAccessToken = async (token, algorithm, key) => {
 	const decoded = await JWT.validateJWT(token, algorithm, key);
 

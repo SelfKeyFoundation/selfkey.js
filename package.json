@@ -55,6 +55,7 @@
     "eslint-plugin-standard": "4.0.0",
     "husky": "1.2.0",
     "jest": "24.7.1",
+    "jsdoc-to-markdown": "^5.0.3",
     "lint-staged": "8.1.5",
     "lolex": "4.0.1",
     "npm-check": "5.9.0",
@@ -72,8 +73,9 @@
     "build": "rm -rf lib/ && babel src -d lib --ignore=*.spec.js --ignore=**/*.spec.js --ignore=**/__fixtures__/** && cp -rf ./src/assets ./lib",
     "test": "jest",
     "check-deps-precommit": "npm-check -i eslint -i || true",
-    "snyk-protect": "snyk protect",
-    "prepublish": "yarn snyk-protect"
+    "snyik-protect": "snyk protect",
+    "prepublish": "yarn snyk-protect",
+    "generate-readme": "jsdoc2md --template=README.hbs src/**/*.js > README.md"
   },
-  "snyk": true
+  "snyk": false
 }

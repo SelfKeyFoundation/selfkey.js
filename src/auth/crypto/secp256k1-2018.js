@@ -9,13 +9,15 @@ import {
 	toRpcSig
 } from 'ethereumjs-util';
 
+const verify = (message, signature, authKey) => {
+	const msgHash = hashPersonalMessage(toBuffer(message));
+	const { v, r, s } = fromRpcSig(signature);
+	const address = bufferToHex(pubToAddress(ecrecover(msgHash, v, r, s)));
+	return address.toLowerCase() === authKey.ethereumAddress.toLowerCase();
+};
+
 export const verifier = () => ({
-	verify: (message, signature, authKey) => {
-		const msgHash = hashPersonalMessage(toBuffer(message));
-		const { v, r, s } = fromRpcSig(signature);
-		const address = bufferToHex(pubToAddress(ecrecover(msgHash, v, r, s)));
-		return address.toLowerCase() === authKey.ethereumAddress.toLowerCase();
-	}
+	verify
 });
 
 export const signer = ({ privateKey }) => ({

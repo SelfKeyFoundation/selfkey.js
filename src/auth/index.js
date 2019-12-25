@@ -1,3 +1,8 @@
+/**
+ * Authentication Namespace
+ * @namespace auth
+ */
+
 export { generateChallengeToken } from './generate-challenge-token';
 export { generateNonce } from './generate-nonce';
 export { generateAccessToken } from './generate-access-token';
