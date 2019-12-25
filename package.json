@@ -55,7 +55,7 @@
     "eslint-plugin-standard": "4.0.0",
     "husky": "1.2.0",
     "jest": "24.7.1",
-    "jsdoc-to-markdown": "^5.0.3",
+    "jsdoc-to-markdown": "5.0.3",
     "lint-staged": "8.1.5",
     "lolex": "4.0.1",
     "npm-check": "5.9.0",
@@ -75,7 +75,7 @@
     "check-deps-precommit": "npm-check -i eslint -i || true",
     "snyk-protect": "snyk protect",
     "prepublish": "yarn snyk-protect",
-    "generate-readme": "jsdoc2md --template=README.hbs src/**/*.js > README.md"
+    "generate-readme": "jsdoc2md -t README.hbs -d 3 --name-format --separators -g grouped -m none src/**/*.js > README.md"
   },
   "snyk": true
 }

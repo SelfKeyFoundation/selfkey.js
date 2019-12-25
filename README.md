@@ -9,14 +9,14 @@
 [npm-url]: https://npmjs.org/package/@selfkey/node-lib
 
 
-# Contents
+## Contents
 
 - [Install](#install)
 - [Usage](#usage)
 - [API](#api)
 - [License](#license)
 
-# Install
+## Install
 
 Requires [Node](https://nodejs.org/en/) version 10 or abow
 
@@ -24,7 +24,7 @@ Requires [Node](https://nodejs.org/en/) version 10 or abow
 npm install --save @selfkey/node-lib
 ```
 
-# Contents
+## Contents
 
 - [Usage](#usage)
 - [API](#api)
@@ -32,7 +32,7 @@ npm install --save @selfkey/node-lib
 
 <a name="usage"></a>
 
-# Usage
+## Usage
 
 ```js
 const sk = require('@selfkey/node-lib');
@@ -45,48 +45,55 @@ import sk from '@selfkey/node-lib';
 ```
 
 <a name="api"></a>
-# API
-## Objects
+## API
+### 
 
-<dl>
-<dt><a href="#auth">auth</a> : <code>object</code></dt>
-<dd><p>Authentication Namespace</p>
-</dd>
-<dt><a href="#did">did</a> : <code>object</code></dt>
-<dd><p>DID Namespace</p>
-</dd>
-<dt><a href="#identityAttributes">identityAttributes</a> : <code>object</code></dt>
-<dd><p>Identity Attributes Namespace</p>
-</dd>
-<dt><a href="#jwt">jwt</a> : <code>object</code></dt>
-<dd><p>JWT Namespace</p>
-</dd>
-<dt><a href="#key">key</a> : <code>object</code></dt>
-<dd><p>Key Namespace</p>
-</dd>
-<dt><a href="#kycc">kycc</a> : <code>object</code></dt>
-<dd><p>KYCC Namespace</p>
-</dd>
-</dl>
+* [`auth`](#auth) : <code>object</code>
+    * [`.generateAccessToken(did, algorithm, secret, [expiresIn])`](#auth.generateAccessToken) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [`.generateChallengeToken(did, algorithm, secret, [expiresIn])`](#auth.generateChallengeToken) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [`.generateNonce([length])`](#auth.generateNonce) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [`.validateAccessToken(token, algorithm, key)`](#auth.validateAccessToken) ⇒ <code>Promise.&lt;object&gt;</code>
+    * [`.validateChallengeToken(token, algorithm, key)`](#auth.validateChallengeToken) ⇒ <code>Promise.&lt;object&gt;</code>
+    * [`.verifyChallengeSignature(nonce, signature, did)`](#auth.verifyChallengeSignature) ⇒ <code>Promise.&lt;boolean&gt;</code>
+* [`did`](#did) : <code>object</code>
+    * [`.resolvers`](#did.resolvers) : <code>object</code>
+    * [`.parse(did)`](#did.parse) ⇒ <code>object</code>
+    * [`.isSupported(did)`](#did.isSupported) ⇒ <code>boolean</code>
+    * [`.resolve(did)`](#did.resolve) ⇒ <code>object</code>
+    * [`.registerMethodResolver(method, resolver)`](#did.registerMethodResolver)
+* [`identityAttributes`](#identityAttributes) : <code>object</code>
+* [`jwt`](#jwt) : <code>object</code>
+    * [`.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)`](#jwt.issueJWT) ⇒ <code>string</code>
+    * [`.parseJWT(token)`](#jwt.parseJWT) ⇒ <code>object</code>
+    * [`.validateJWT(token, requestedAlgorithm, key)`](#jwt.validateJWT) ⇒ <code>object</code> \| <code>null</code>
+* [`key`](#key) : <code>object</code>
+    * [`.generateHMACKey([length], [encoding])`](#key.generateHMACKey) ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
+    * [`.generateHMACKey(secret, [encoding])`](#key.generateHMACKey) ⇒
+    * [`.generateRSAKeyPair([length])`](#key.generateRSAKeyPair) ⇒ <code>Promise.&lt;object&gt;</code>
+    * [`.checkSecretLength(key, algorithm)`](#key.checkSecretLength) ⇒ <code>boolean</code>
+* [`kycc`](#kycc) : <code>object</code>
 
 <a name="auth"></a>
 
-## auth : <code>object</code>
+### `auth` : <code>object</code>
 Authentication Namespace
 
 **Kind**: global namespace  
 
-* [auth](#auth) : <code>object</code>
-    * [.generateAccessToken(did, algorithm, secret, [expiresIn])](#auth.generateAccessToken) ⇒ <code>Promise.&lt;string&gt;</code>
-    * [.generateChallengeToken(did, algorithm, secret, [expiresIn])](#auth.generateChallengeToken) ⇒ <code>Promise.&lt;string&gt;</code>
-    * [.generateNonce([length])](#auth.generateNonce) ⇒ <code>Promise.&lt;string&gt;</code>
-    * [.validateAccessToken(token, algorithm, key)](#auth.validateAccessToken) ⇒ <code>Promise.&lt;object&gt;</code>
-    * [.validateChallengeToken(token, algorithm, key)](#auth.validateChallengeToken) ⇒ <code>Promise.&lt;object&gt;</code>
-    * [.verifyChallengeSignature(nonce, signature, did)](#auth.verifyChallengeSignature) ⇒ <code>Promise.&lt;boolean&gt;</code>
+* [`auth`](#auth) : <code>object</code>
+    * [`.generateAccessToken(did, algorithm, secret, [expiresIn])`](#auth.generateAccessToken) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [`.generateChallengeToken(did, algorithm, secret, [expiresIn])`](#auth.generateChallengeToken) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [`.generateNonce([length])`](#auth.generateNonce) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [`.validateAccessToken(token, algorithm, key)`](#auth.validateAccessToken) ⇒ <code>Promise.&lt;object&gt;</code>
+    * [`.validateChallengeToken(token, algorithm, key)`](#auth.validateChallengeToken) ⇒ <code>Promise.&lt;object&gt;</code>
+    * [`.verifyChallengeSignature(nonce, signature, did)`](#auth.verifyChallengeSignature) ⇒ <code>Promise.&lt;boolean&gt;</code>
+
+
+* * *
 
 <a name="auth.generateAccessToken"></a>
 
-### auth.generateAccessToken(did, algorithm, secret, [expiresIn]) ⇒ <code>Promise.&lt;string&gt;</code>
+#### `auth.generateAccessToken(did, algorithm, secret, [expiresIn])` ⇒ <code>Promise.&lt;string&gt;</code>
 Generate access token
 
 **Kind**: static method of [<code>auth</code>](#auth)  
@@ -103,9 +110,12 @@ Generate access token
 ```js
 await sk.auth.generateAccessToken(did, 'rsa', 'secret')
 ```
+
+* * *
+
 <a name="auth.generateChallengeToken"></a>
 
-### auth.generateChallengeToken(did, algorithm, secret, [expiresIn]) ⇒ <code>Promise.&lt;string&gt;</code>
+#### `auth.generateChallengeToken(did, algorithm, secret, [expiresIn])` ⇒ <code>Promise.&lt;string&gt;</code>
 Generate challenge token
 
 **Kind**: static method of [<code>auth</code>](#auth)  
@@ -122,9 +132,12 @@ Generate challenge token
 ```js
 await sk.auth.generateChallengeToken(did, 'rsa', 'secret')
 ```
+
+* * *
+
 <a name="auth.generateNonce"></a>
 
-### auth.generateNonce([length]) ⇒ <code>Promise.&lt;string&gt;</code>
+#### `auth.generateNonce([length])` ⇒ <code>Promise.&lt;string&gt;</code>
 Generates base64 encoded random string
 
 **Kind**: static method of [<code>auth</code>](#auth)  
@@ -138,9 +151,12 @@ Generates base64 encoded random string
 ```js
 await sk.auth.generateNonce();
 ```
+
+* * *
+
 <a name="auth.validateAccessToken"></a>
 
-### auth.validateAccessToken(token, algorithm, key) ⇒ <code>Promise.&lt;object&gt;</code>
+#### `auth.validateAccessToken(token, algorithm, key)` ⇒ <code>Promise.&lt;object&gt;</code>
 Validates access token
 
 **Kind**: static method of [<code>auth</code>](#auth)  
@@ -162,9 +178,12 @@ Validates access token
 ```js
 await sk.auth.validateAccessToken(token, 'hmac', 'secret');
 ```
+
+* * *
+
 <a name="auth.validateChallengeToken"></a>
 
-### auth.validateChallengeToken(token, algorithm, key) ⇒ <code>Promise.&lt;object&gt;</code>
+#### `auth.validateChallengeToken(token, algorithm, key)` ⇒ <code>Promise.&lt;object&gt;</code>
 Validates challenge token
 
 **Kind**: static method of [<code>auth</code>](#auth)  
@@ -186,9 +205,12 @@ Validates challenge token
 ```js
 await sk.auth.validateChallengeToken(token, 'hmac', 'secret');
 ```
+
+* * *
+
 <a name="auth.verifyChallengeSignature"></a>
 
-### auth.verifyChallengeSignature(nonce, signature, did) ⇒ <code>Promise.&lt;boolean&gt;</code>
+#### `auth.verifyChallengeSignature(nonce, signature, did)` ⇒ <code>Promise.&lt;boolean&gt;</code>
 Validates challenge Signature
 
 **Kind**: static method of [<code>auth</code>](#auth)  
@@ -209,23 +231,29 @@ Validates challenge Signature
 ```js
 await sk.auth.verifyChallengeSignature(nonce, signature, did);
 ```
+
+* * *
+
 <a name="did"></a>
 
-## did : <code>object</code>
+### `did` : <code>object</code>
 DID Namespace
 
 **Kind**: global namespace  
 
-* [did](#did) : <code>object</code>
-    * [.resolvers](#did.resolvers) : <code>object</code>
-    * [.parse(did)](#did.parse) ⇒ <code>object</code>
-    * [.isSupported(did)](#did.isSupported) ⇒ <code>boolean</code>
-    * [.resolve(did)](#did.resolve) ⇒ <code>object</code>
-    * [.registerMethodResolver(method, resolver)](#did.registerMethodResolver)
+* [`did`](#did) : <code>object</code>
+    * [`.resolvers`](#did.resolvers) : <code>object</code>
+    * [`.parse(did)`](#did.parse) ⇒ <code>object</code>
+    * [`.isSupported(did)`](#did.isSupported) ⇒ <code>boolean</code>
+    * [`.resolve(did)`](#did.resolve) ⇒ <code>object</code>
+    * [`.registerMethodResolver(method, resolver)`](#did.registerMethodResolver)
+
+
+* * *
 
 <a name="did.resolvers"></a>
 
-### did.resolvers : <code>object</code>
+#### `did.resolvers` : <code>object</code>
 **Kind**: static constant of [<code>did</code>](#did)  
 **Properties**
 
@@ -234,9 +262,12 @@ DID Namespace
 | eth | <code>object</code> | eth did resolver |
 | sekfkey | <code>object</code> | selfkey did resolver |
 
+
+* * *
+
 <a name="did.parse"></a>
 
-### did.parse(did) ⇒ <code>object</code>
+#### `did.parse(did)` ⇒ <code>object</code>
 Parses did string to components
 
 **Kind**: static method of [<code>did</code>](#did)  
@@ -254,9 +285,12 @@ Parses did string to components
 ```js
 sk.did.parse('did:selfkey:0xdsdasddasdsa...');
 ```
+
+* * *
+
 <a name="did.isSupported"></a>
 
-### did.isSupported(did) ⇒ <code>boolean</code>
+#### `did.isSupported(did)` ⇒ <code>boolean</code>
 Checks if a resolver exists for that particular did
 
 **Kind**: static method of [<code>did</code>](#did)  
@@ -272,9 +306,12 @@ sk.did.isSupported('did:selfkey:0xdsdasddasdsa...'); // true
 sk.did.isSupported('did:eth:0xdsdasddasdsa...'); // true
 sk.did.isSupported('did:unknown:0xdsdasddasdsa...'); // false
 ```
+
+* * *
+
 <a name="did.resolve"></a>
 
-### did.resolve(did) ⇒ <code>object</code>
+#### `did.resolve(did)` ⇒ <code>object</code>
 Resolves did document
 
 **Kind**: static method of [<code>did</code>](#did)  
@@ -288,9 +325,12 @@ Resolves did document
 ```js
 await sk.did.resolve('did:selfkey:0xdsdasddasdsa...');
 ```
+
+* * *
+
 <a name="did.registerMethodResolver"></a>
 
-### did.registerMethodResolver(method, resolver)
+#### `did.registerMethodResolver(method, resolver)`
 Register custom resolver for a did method
 
 **Kind**: static method of [<code>did</code>](#did)  
@@ -304,39 +344,36 @@ Register custom resolver for a did method
 ```js
 sk.did.register('new-method', resolver);
 ```
+
+* * *
+
 <a name="identityAttributes"></a>
 
-## identityAttributes : <code>object</code>
+### `identityAttributes` : <code>object</code>
 Identity Attributes Namespace
 
 **Kind**: global namespace  
+
+* * *
+
 <a name="jwt"></a>
 
-## jwt : <code>object</code>
+### `jwt` : <code>object</code>
 JWT Namespace
 
 **Kind**: global namespace  
 
-* [jwt](#jwt) : <code>object</code>
-    * [.JWT_ALGORITHMS](#jwt.JWT_ALGORITHMS) : <code>object</code>
-    * [.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)](#jwt.issueJWT) ⇒ <code>string</code>
-    * [.parseJWT(token)](#jwt.parseJWT) ⇒ <code>object</code>
-    * [.validateJWT(token, requestedAlgorithm, key)](#jwt.validateJWT) ⇒ <code>object</code> \| <code>null</code>
+* [`jwt`](#jwt) : <code>object</code>
+    * [`.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)`](#jwt.issueJWT) ⇒ <code>string</code>
+    * [`.parseJWT(token)`](#jwt.parseJWT) ⇒ <code>object</code>
+    * [`.validateJWT(token, requestedAlgorithm, key)`](#jwt.validateJWT) ⇒ <code>object</code> \| <code>null</code>
 
-<a name="jwt.JWT_ALGORITHMS"></a>
 
-### jwt.JWT\_ALGORITHMS : <code>object</code>
-**Kind**: static constant of [<code>jwt</code>](#jwt)  
-**Properties**
-
-| Name | Description |
-| --- | --- |
-| RSA | RSA algorithm name |
-| HMAC | HMAC algorithm name |
+* * *
 
 <a name="jwt.issueJWT"></a>
 
-### jwt.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims) ⇒ <code>string</code>
+#### `jwt.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)` ⇒ <code>string</code>
 Issue a new JWT token
 
 **Kind**: static method of [<code>jwt</code>](#jwt)  
@@ -359,9 +396,12 @@ Issue a new JWT token
 ```js
 sk.jwt.issueJWT('simple-session', 'hmac', 'test');
 ```
+
+* * *
+
 <a name="jwt.parseJWT"></a>
 
-### jwt.parseJWT(token) ⇒ <code>object</code>
+#### `jwt.parseJWT(token)` ⇒ <code>object</code>
 Parse a JWT token
 
 **Kind**: static method of [<code>jwt</code>](#jwt)  
@@ -375,9 +415,12 @@ Parse a JWT token
 ```js
 sk.jwt.parseJWT(token);
 ```
+
+* * *
+
 <a name="jwt.validateJWT"></a>
 
-### jwt.validateJWT(token, requestedAlgorithm, key) ⇒ <code>object</code> \| <code>null</code>
+#### `jwt.validateJWT(token, requestedAlgorithm, key)` ⇒ <code>object</code> \| <code>null</code>
 Validate a JWT token
 
 **Kind**: static method of [<code>jwt</code>](#jwt)  
@@ -397,22 +440,28 @@ Validate a JWT token
 ```js
 sk.jwt.validateJWT(token, 'hmac', key);
 ```
+
+* * *
+
 <a name="key"></a>
 
-## key : <code>object</code>
+### `key` : <code>object</code>
 Key Namespace
 
 **Kind**: global namespace  
 
-* [key](#key) : <code>object</code>
-    * [.generateHMACKey([length], [encoding])](#key.generateHMACKey) ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
-    * [.generateHMACKey(secret, [encoding])](#key.generateHMACKey) ⇒
-    * [.generateRSAKeyPair([length])](#key.generateRSAKeyPair) ⇒ <code>Promise.&lt;object&gt;</code>
-    * [.checkSecretLength(key, algorithm)](#key.checkSecretLength) ⇒ <code>boolean</code>
+* [`key`](#key) : <code>object</code>
+    * [`.generateHMACKey([length], [encoding])`](#key.generateHMACKey) ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
+    * [`.generateHMACKey(secret, [encoding])`](#key.generateHMACKey) ⇒
+    * [`.generateRSAKeyPair([length])`](#key.generateRSAKeyPair) ⇒ <code>Promise.&lt;object&gt;</code>
+    * [`.checkSecretLength(key, algorithm)`](#key.checkSecretLength) ⇒ <code>boolean</code>
+
+
+* * *
 
 <a name="key.generateHMACKey"></a>
 
-### key.generateHMACKey([length], [encoding]) ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
+#### `key.generateHMACKey([length], [encoding])` ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
 Generate a HMAC Key
 
 **Kind**: static method of [<code>key</code>](#key)  
@@ -427,9 +476,12 @@ Generate a HMAC Key
 ```js
 sk.key.generateHMACKey();
 ```
+
+* * *
+
 <a name="key.generateHMACKey"></a>
 
-### key.generateHMACKey(secret, [encoding]) ⇒
+#### `key.generateHMACKey(secret, [encoding])` ⇒
 Calculate the bytes length of secret key
 
 **Kind**: static method of [<code>key</code>](#key)  
@@ -444,9 +496,12 @@ Calculate the bytes length of secret key
 ```js
 sk.key.getSecretLength(secret);
 ```
+
+* * *
+
 <a name="key.generateRSAKeyPair"></a>
 
-### key.generateRSAKeyPair([length]) ⇒ <code>Promise.&lt;object&gt;</code>
+#### `key.generateRSAKeyPair([length])` ⇒ <code>Promise.&lt;object&gt;</code>
 Generate a RSA Key Pair
 
 **Kind**: static method of [<code>key</code>](#key)  
@@ -460,9 +515,12 @@ Generate a RSA Key Pair
 ```js
 sk.key.generateRSAKeyPair();
 ```
+
+* * *
+
 <a name="key.checkSecretLength"></a>
 
-### key.checkSecretLength(key, algorithm) ⇒ <code>boolean</code>
+#### `key.checkSecretLength(key, algorithm)` ⇒ <code>boolean</code>
 Checks if secret length is good enough
 
 **Kind**: static method of [<code>key</code>](#key)  
@@ -477,12 +535,18 @@ Checks if secret length is good enough
 ```js
 sk.key.checkSecretLength();
 ```
+
+* * *
+
 <a name="kycc"></a>
 
-## kycc : <code>object</code>
+### `kycc` : <code>object</code>
 KYCC Namespace
 
 **Kind**: global namespace  
+
+* * *
+
 
 # License
 

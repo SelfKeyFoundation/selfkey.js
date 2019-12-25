@@ -1,5 +1,6 @@
 /**
  * @constant
+ * @private
  * @type object
  * @name JWT_ALGORITHMS
  * @memberof jwt
