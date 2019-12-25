@@ -73,9 +73,9 @@
     "build": "rm -rf lib/ && babel src -d lib --ignore=*.spec.js --ignore=**/*.spec.js --ignore=**/__fixtures__/** && cp -rf ./src/assets ./lib",
     "test": "jest",
     "check-deps-precommit": "npm-check -i eslint -i || true",
-    "snyik-protect": "snyk protect",
+    "snyk-protect": "snyk protect",
     "prepublish": "yarn snyk-protect",
     "generate-readme": "jsdoc2md --template=README.hbs src/**/*.js > README.md"
   },
-  "snyk": false
+  "snyk": true
 }
