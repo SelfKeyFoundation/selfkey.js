@@ -321,7 +321,7 @@ JWT Namespace
     * [.JWT_ALGORITHMS](#jwt.JWT_ALGORITHMS) : <code>object</code>
     * [.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)](#jwt.issueJWT) ⇒ <code>string</code>
     * [.parseJWT(token)](#jwt.parseJWT) ⇒ <code>object</code>
-    * [.parseJWT(token, requestedAlgorithm, key)](#jwt.parseJWT) ⇒ <code>object</code> \| <code>null</code>
+    * [.validateJWT(token, requestedAlgorithm, key)](#jwt.validateJWT) ⇒ <code>object</code> \| <code>null</code>
 
 <a name="jwt.JWT_ALGORITHMS"></a>
 
@@ -375,9 +375,9 @@ Parse a JWT token
 ```js
 sk.jwt.parseJWT(token);
 ```
-<a name="jwt.parseJWT"></a>
+<a name="jwt.validateJWT"></a>
 
-### jwt.parseJWT(token, requestedAlgorithm, key) ⇒ <code>object</code> \| <code>null</code>
+### jwt.validateJWT(token, requestedAlgorithm, key) ⇒ <code>object</code> \| <code>null</code>
 Validate a JWT token
 
 **Kind**: static method of [<code>jwt</code>](#jwt)  
