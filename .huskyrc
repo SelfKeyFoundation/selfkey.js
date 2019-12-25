@@ -1,6 +1,6 @@
 {
   "hooks": {
-    "pre-commit": "yarn check-deps-precommit && pretty-quick --staged && lint-staged && yarn generate-readme",
+    "pre-commit": "yarn check-deps-precommit && pretty-quick --staged && yarn generate-readme && lint-staged",
     "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
   }
 }

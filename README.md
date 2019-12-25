@@ -407,7 +407,7 @@ Key Namespace
 * [key](#key) : <code>object</code>
     * [.generateHMACKey([length], [encoding])](#key.generateHMACKey) ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
     * [.generateHMACKey(secret, [encoding])](#key.generateHMACKey) ⇒
-    * [.generateHMACKey([length])](#key.generateHMACKey) ⇒ <code>Promise.&lt;object&gt;</code>
+    * [.generateRSAKeyPair([length])](#key.generateRSAKeyPair) ⇒ <code>Promise.&lt;object&gt;</code>
     * [.checkSecretLength(key, algorithm)](#key.checkSecretLength) ⇒ <code>boolean</code>
 
 <a name="key.generateHMACKey"></a>
@@ -444,9 +444,9 @@ Calculate the bytes length of secret key
 ```js
 sk.key.getSecretLength(secret);
 ```
-<a name="key.generateHMACKey"></a>
+<a name="key.generateRSAKeyPair"></a>
 
-### key.generateHMACKey([length]) ⇒ <code>Promise.&lt;object&gt;</code>
+### key.generateRSAKeyPair([length]) ⇒ <code>Promise.&lt;object&gt;</code>
 Generate a RSA Key Pair
 
 **Kind**: static method of [<code>key</code>](#key)  
@@ -475,7 +475,7 @@ Checks if secret length is good enough
 
 **Example**  
 ```js
-sk.key.generateRSAKeyPair();
+sk.key.checkSecretLength();
 ```
 <a name="kycc"></a>
 
