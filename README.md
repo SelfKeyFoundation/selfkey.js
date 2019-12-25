@@ -215,6 +215,95 @@ await sk.auth.verifyChallengeSignature(nonce, signature, did);
 DID Namespace
 
 **Kind**: global namespace  
+
+* [did](#did) : <code>object</code>
+    * [.resolvers](#did.resolvers) : <code>object</code>
+    * [.parse(did)](#did.parse) ⇒ <code>object</code>
+    * [.isSupported(did)](#did.isSupported) ⇒ <code>boolean</code>
+    * [.resolve(did)](#did.resolve) ⇒ <code>object</code>
+    * [.registerMethodResolver(method, resolver)](#did.registerMethodResolver)
+
+<a name="did.resolvers"></a>
+
+### did.resolvers : <code>object</code>
+**Kind**: static constant of [<code>did</code>](#did)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| eth | <code>object</code> | eth did resolver |
+| sekfkey | <code>object</code> | selfkey did resolver |
+
+<a name="did.parse"></a>
+
+### did.parse(did) ⇒ <code>object</code>
+Parses did string to components
+
+**Kind**: static method of [<code>did</code>](#did)  
+**Returns**: <code>object</code> - parsedDid  
+**Throws**:
+
+- if invalid did is provided
+
+
+| Param | Type |
+| --- | --- |
+| did | <code>string</code> | 
+
+**Example**  
+```js
+sk.did.parse('did:selfkey:0xdsdasddasdsa...');
+```
+<a name="did.isSupported"></a>
+
+### did.isSupported(did) ⇒ <code>boolean</code>
+Checks if a resolver exists for that particular did
+
+**Kind**: static method of [<code>did</code>](#did)  
+**Returns**: <code>boolean</code> - isSuppored  
+
+| Param | Type |
+| --- | --- |
+| did | <code>string</code> | 
+
+**Example**  
+```js
+sk.did.isSupported('did:selfkey:0xdsdasddasdsa...'); // true
+sk.did.isSupported('did:eth:0xdsdasddasdsa...'); // true
+sk.did.isSupported('did:unknown:0xdsdasddasdsa...'); // false
+```
+<a name="did.resolve"></a>
+
+### did.resolve(did) ⇒ <code>object</code>
+Resolves did document
+
+**Kind**: static method of [<code>did</code>](#did)  
+**Returns**: <code>object</code> - didDocument  
+
+| Param | Type |
+| --- | --- |
+| did | <code>string</code> | 
+
+**Example**  
+```js
+await sk.did.resolve('did:selfkey:0xdsdasddasdsa...');
+```
+<a name="did.registerMethodResolver"></a>
+
+### did.registerMethodResolver(method, resolver)
+Register custom resolver for a did method
+
+**Kind**: static method of [<code>did</code>](#did)  
+
+| Param | Type |
+| --- | --- |
+| method | <code>string</code> | 
+| resolver | <code>object</code> | 
+
+**Example**  
+```js
+sk.did.register('new-method', resolver);
+```
 <a name="identityAttributes"></a>
 
 ## identityAttributes : <code>object</code>
@@ -227,12 +316,167 @@ Identity Attributes Namespace
 JWT Namespace
 
 **Kind**: global namespace  
+
+* [jwt](#jwt) : <code>object</code>
+    * [.JWT_ALGORITHMS](#jwt.JWT_ALGORITHMS) : <code>object</code>
+    * [.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)](#jwt.issueJWT) ⇒ <code>string</code>
+    * [.parseJWT(token)](#jwt.parseJWT) ⇒ <code>object</code>
+    * [.parseJWT(token, requestedAlgorithm, key)](#jwt.parseJWT) ⇒ <code>object</code> \| <code>null</code>
+
+<a name="jwt.JWT_ALGORITHMS"></a>
+
+### jwt.JWT\_ALGORITHMS : <code>object</code>
+**Kind**: static constant of [<code>jwt</code>](#jwt)  
+**Properties**
+
+| Name | Description |
+| --- | --- |
+| RSA | RSA algorithm name |
+| HMAC | HMAC algorithm name |
+
+<a name="jwt.issueJWT"></a>
+
+### jwt.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims) ⇒ <code>string</code>
+Issue a new JWT token
+
+**Kind**: static method of [<code>jwt</code>](#jwt)  
+**Returns**: <code>string</code> - jwt  
+**Throws**:
+
+- if unknown algorithm provided
+- if secret deemed as not secure enough
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| subject | <code>string</code> |  | sub claim |
+| requestedAlgorithm | <code>string</code> |  | signature algorithm |
+| secret | <code>string</code> \| <code>Buffer</code> |  | secret key for signature |
+| [expiresIn] | <code>string</code> | <code>&quot;1h&quot;</code> | longevity of the token |
+| additionalClaims | <code>object</code> |  | claims to include in the token |
+
+**Example**  
+```js
+sk.jwt.issueJWT('simple-session', 'hmac', 'test');
+```
+<a name="jwt.parseJWT"></a>
+
+### jwt.parseJWT(token) ⇒ <code>object</code>
+Parse a JWT token
+
+**Kind**: static method of [<code>jwt</code>](#jwt)  
+**Returns**: <code>object</code> - decodedJwt  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| token | <code>string</code> | jwt token |
+
+**Example**  
+```js
+sk.jwt.parseJWT(token);
+```
+<a name="jwt.parseJWT"></a>
+
+### jwt.parseJWT(token, requestedAlgorithm, key) ⇒ <code>object</code> \| <code>null</code>
+Validate a JWT token
+
+**Kind**: static method of [<code>jwt</code>](#jwt)  
+**Returns**: <code>object</code> \| <code>null</code> - decodedJwt  
+**Throws**:
+
+- if unknown algorithm provided
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| token | <code>string</code> | jwt token |
+| requestedAlgorithm | <code>string</code> | algorithm name |
+| key | <code>string</code> | the key to validate the token against |
+
+**Example**  
+```js
+sk.jwt.validateJWT(token, 'hmac', key);
+```
 <a name="key"></a>
 
 ## key : <code>object</code>
 Key Namespace
 
 **Kind**: global namespace  
+
+* [key](#key) : <code>object</code>
+    * [.generateHMACKey([length], [encoding])](#key.generateHMACKey) ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
+    * [.generateHMACKey(secret, [encoding])](#key.generateHMACKey) ⇒
+    * [.generateHMACKey([length])](#key.generateHMACKey) ⇒ <code>Promise.&lt;object&gt;</code>
+    * [.checkSecretLength(key, algorithm)](#key.checkSecretLength) ⇒ <code>boolean</code>
+
+<a name="key.generateHMACKey"></a>
+
+### key.generateHMACKey([length], [encoding]) ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
+Generate a HMAC Key
+
+**Kind**: static method of [<code>key</code>](#key)  
+**Returns**: <code>Promise.&lt;(string\|Buffer)&gt;</code> - key  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [length] | <code>number</code> | <code>64</code> | key length in bytes |
+| [encoding] | <code>string</code> | <code>&quot;base64&quot;</code> | the output encoding of the key |
+
+**Example**  
+```js
+sk.key.generateHMACKey();
+```
+<a name="key.generateHMACKey"></a>
+
+### key.generateHMACKey(secret, [encoding]) ⇒
+Calculate the bytes length of secret key
+
+**Kind**: static method of [<code>key</code>](#key)  
+**Returns**: number  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| secret | <code>string</code> |  |  |
+| [encoding] | <code>string</code> | <code>&quot;base64&quot;</code> | the input encoding of the secret |
+
+**Example**  
+```js
+sk.key.getSecretLength(secret);
+```
+<a name="key.generateHMACKey"></a>
+
+### key.generateHMACKey([length]) ⇒ <code>Promise.&lt;object&gt;</code>
+Generate a RSA Key Pair
+
+**Kind**: static method of [<code>key</code>](#key)  
+**Returns**: <code>Promise.&lt;object&gt;</code> - keypair - contains publicKey adn privateKey  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [length] | <code>number</code> | <code>4096</code> | key length in bytes |
+
+**Example**  
+```js
+sk.key.generateRSAKeyPair();
+```
+<a name="key.checkSecretLength"></a>
+
+### key.checkSecretLength(key, algorithm) ⇒ <code>boolean</code>
+Checks if secret length is good enough
+
+**Kind**: static method of [<code>key</code>](#key)  
+**Returns**: <code>boolean</code> - - isKeyLongEnough  
+
+| Param | Type |
+| --- | --- |
+| key | <code>string</code> | 
+| algorithm | <code>string</code> | 
+
+**Example**  
+```js
+sk.key.generateRSAKeyPair();
+```
 <a name="kycc"></a>
 
 ## kycc : <code>object</code>

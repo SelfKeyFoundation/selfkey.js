@@ -1,3 +1,16 @@
+/**
+ * Parses did string to components
+ *
+ * @function parse
+ * @memberof did
+ * @param {string} did
+ * @throws if invalid did is provided
+ * @returns {object} parsedDid
+ * @example
+ * ```js
+ * sk.did.parse('did:selfkey:0xdsdasddasdsa...');
+ * ```
+ */
 export const parse = did => {
 	const match = /^did:(\w+):(\w+)((?:;\w+:\w+=\w+)*)$/.exec(did); // TODO - Check if there are no exceptions to this
 	if (!match) {

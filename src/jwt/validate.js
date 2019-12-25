@@ -5,6 +5,21 @@ import { JWT_ALGORITHMS } from './const';
 
 const verifyJWT = promisify(jwt.verify);
 
+/**
+ * Validate a JWT token
+ * @function parseJWT
+ * @memberof jwt
+ * @param {string} token - jwt token
+ * @param {string} requestedAlgorithm - algorithm name
+ * @param {string} key - the key to validate the token against
+ * @returns {object|null} decodedJwt
+ * @throws if unknown algorithm provided
+ * @example
+ *
+ * ```js
+ * sk.jwt.validateJWT(token, 'hmac', key);
+ * ```
+ */
 export const validateJWT = (token, requestedAlgorithm, key) => {
 	const algorithm = JWT_ALGORITHMS[(requestedAlgorithm || '').toUpperCase()];
 

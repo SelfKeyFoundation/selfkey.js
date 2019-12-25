@@ -1,6 +1,19 @@
 import { getSecretLength } from './hmac';
 import { getPEMBits } from './rsa';
 
+/**
+ * Checks if secret length is good enough
+ * @function checkSecretLength
+ * @memberof key
+ * @param {string} key
+ * @param {string} algorithm
+ * @returns {boolean} - isKeyLongEnough
+ * @example
+ *
+ * ```js
+ * sk.key.checkSecretLength();
+ * ```
+ */
 export const checkSecretLength = (key, algorithm) => {
 	switch (algorithm) {
 		case 'HS512':
