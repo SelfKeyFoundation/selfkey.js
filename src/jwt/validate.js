@@ -7,7 +7,7 @@ const verifyJWT = promisify(jwt.verify);
 
 /**
  * Validate a JWT token
- * @function parseJWT
+ * @function validateJWT
  * @memberof jwt
  * @param {string} token - jwt token
  * @param {string} requestedAlgorithm - algorithm name
