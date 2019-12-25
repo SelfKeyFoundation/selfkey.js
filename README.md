@@ -72,13 +72,13 @@ import sk from '@selfkey/node-lib';
     * [`.generateRSAKeyPair([length])`](#key.generateRSAKeyPair) ⇒ <code>Promise.&lt;object&gt;</code>
     * [`.checkSecretLength(key, algorithm)`](#key.checkSecretLength) ⇒ <code>boolean</code>
 * [`kycc`](#kycc) : <code>object</code>
-    * [`.getUserDataForToken(token, options)`](#kycc.getUserDataForToken) ⇒ <code>object</code>
-    * [`.FileProcessor`](#kycc.FileProcessor)
-    * [`.GetUserDataForTokenOptions`](#kycc.GetUserDataForTokenOptions)
+    * [`.getUserDataForToken(token, options)`](#kycc.getUserDataForToken) ⇒ [<code>KYCCUserObject</code>](#KYCCUserObject)
 
 ### 
 
-* [`UserObjects`](#UserObjects)
+* [`FileProcessor`](#FileProcessor)
+* [`GetUserDataForTokenOptions`](#GetUserDataForTokenOptions)
+* [`KYCCUserObject`](#KYCCUserObject)
 
 <a name="auth"></a>
 
@@ -552,21 +552,15 @@ KYCC Namespace
 
 **Kind**: global namespace  
 
-* [`kycc`](#kycc) : <code>object</code>
-    * [`.getUserDataForToken(token, options)`](#kycc.getUserDataForToken) ⇒ <code>object</code>
-    * [`.FileProcessor`](#kycc.FileProcessor)
-    * [`.GetUserDataForTokenOptions`](#kycc.GetUserDataForTokenOptions)
-
-
 * * *
 
 <a name="kycc.getUserDataForToken"></a>
 
-#### `kycc.getUserDataForToken(token, options)` ⇒ <code>object</code>
+#### `kycc.getUserDataForToken(token, options)` ⇒ [<code>KYCCUserObject</code>](#KYCCUserObject)
 Fetch user data via token
 
 **Kind**: static method of [<code>kycc</code>](#kycc)  
-**Returns**: <code>object</code> - user object  
+**Returns**: [<code>KYCCUserObject</code>](#KYCCUserObject) - user object  
 **Throws**:
 
 - if no instanceUrl in options
@@ -578,7 +572,7 @@ Fetch user data via token
 | Param | Type | Description |
 | --- | --- | --- |
 | token | <code>string</code> | jwt token |
-| options | <code>GetUserDataForTokenOptions</code> |  |
+| options | [<code>GetUserDataForTokenOptions</code>](#GetUserDataForTokenOptions) |  |
 
 **Example**  
 ```js
@@ -587,12 +581,12 @@ sk.kycc.getUserDataForToken(token, 'hmac', key);
 
 * * *
 
-<a name="kycc.FileProcessor"></a>
+<a name="FileProcessor"></a>
 
-#### `kycc.FileProcessor`
+### `FileProcessor`
 File Processor
 
-**Kind**: static typedef of [<code>kycc</code>](#kycc)  
+**Kind**: global typedef  
 **Properties**
 
 | Name | Type |
@@ -607,26 +601,26 @@ File Processor
 
 * * *
 
-<a name="kycc.GetUserDataForTokenOptions"></a>
+<a name="GetUserDataForTokenOptions"></a>
 
-#### `kycc.GetUserDataForTokenOptions`
+### `GetUserDataForTokenOptions`
 Options used in getUserDataForToken function
 
-**Kind**: static typedef of [<code>kycc</code>](#kycc)  
+**Kind**: global typedef  
 **Properties**
 
 | Name | Type |
 | --- | --- |
 | instanceUrl | <code>string</code> | 
 | templateId | <code>string</code> | 
-| fileProcessor | <code>FileProcessor</code> | 
+| fileProcessor | [<code>FileProcessor</code>](#FileProcessor) | 
 
 
 * * *
 
-<a name="UserObjects"></a>
+<a name="KYCCUserObject"></a>
 
-### `UserObjects`
+### `KYCCUserObject`
 User Object
 
 **Kind**: global typedef  

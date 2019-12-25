@@ -5,7 +5,6 @@ import { createClient } from './kycc-internal-client';
 /**
  * File Processor
  * @typedef FileProcessor
- * @memberof kycc
  * @property {boolean} stream
  * @property {function} process
  * @example
@@ -17,7 +16,6 @@ import { createClient } from './kycc-internal-client';
 /**
  * Options used in getUserDataForToken function
  * @typedef GetUserDataForTokenOptions
- * @memberof kycc
  * @property {string} instanceUrl
  * @property {string} templateId
  * @property {FileProcessor} fileProcessor
@@ -25,7 +23,7 @@ import { createClient } from './kycc-internal-client';
 
 /**
   * User Object
-  * @typedef UserObjects
+  * @typedef KYCCUserObject
   * @property {string} id id of user in KYCC
   * @property {object} attributes map from attribute id to attribute value
   * @example
@@ -67,7 +65,7 @@ import { createClient } from './kycc-internal-client';
  * @memberof kycc
  * @param {string} token - jwt token
  * @param {GetUserDataForTokenOptions} options
- * @returns {object} user object
+ * @returns {KYCCUserObject} user object
  * @throws if no instanceUrl in options
  * @throws if no templateId in options
  * @throws if invalid token
