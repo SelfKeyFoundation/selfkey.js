@@ -72,7 +72,7 @@ import sk from '@selfkey/node-lib';
     * [`.generateRSAKeyPair([length])`](#key.generateRSAKeyPair) ⇒ <code>Promise.&lt;object&gt;</code>
     * [`.checkSecretLength(key, algorithm)`](#key.checkSecretLength) ⇒ <code>boolean</code>
 * [`kycc`](#kycc) : <code>object</code>
-    * [`.getUserDataForToken(token, options)`](#kycc.getUserDataForToken) ⇒ [<code>KYCCUserObject</code>](#KYCCUserObject)
+    * [`.getUserDataForToken(token, options)`](#kycc.getUserDataForToken) ⇒ [<code>Promise.&lt;KYCCUserObject&gt;</code>](#KYCCUserObject)
 
 ### 
 
@@ -556,11 +556,11 @@ KYCC Namespace
 
 <a name="kycc.getUserDataForToken"></a>
 
-#### `kycc.getUserDataForToken(token, options)` ⇒ [<code>KYCCUserObject</code>](#KYCCUserObject)
+#### `kycc.getUserDataForToken(token, options)` ⇒ [<code>Promise.&lt;KYCCUserObject&gt;</code>](#KYCCUserObject)
 Fetch user data via token
 
 **Kind**: static method of [<code>kycc</code>](#kycc)  
-**Returns**: [<code>KYCCUserObject</code>](#KYCCUserObject) - user object  
+**Returns**: [<code>Promise.&lt;KYCCUserObject&gt;</code>](#KYCCUserObject) - user object  
 **Throws**:
 
 - if no instanceUrl in options
@@ -576,7 +576,7 @@ Fetch user data via token
 
 **Example**  
 ```js
-sk.kycc.getUserDataForToken(token, 'hmac', key);
+async sk.kycc.getUserDataForToken(token, options);
 ```
 
 * * *

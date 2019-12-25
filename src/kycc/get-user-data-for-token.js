@@ -61,11 +61,12 @@ import { createClient } from './kycc-internal-client';
 
 /**
  * Fetch user data via token
+ * @async
  * @function getUserDataForToken
  * @memberof kycc
  * @param {string} token - jwt token
  * @param {GetUserDataForTokenOptions} options
- * @returns {KYCCUserObject} user object
+ * @returns {Promise<KYCCUserObject>} user object
  * @throws if no instanceUrl in options
  * @throws if no templateId in options
  * @throws if invalid token
@@ -73,7 +74,7 @@ import { createClient } from './kycc-internal-client';
  * @example
  *
  * ```js
- * sk.kycc.getUserDataForToken(token, 'hmac', key);
+ * async sk.kycc.getUserDataForToken(token, options);
  * ```
  */
 export const getUserDataForToken = async (token, options = {}) => {
