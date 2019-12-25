@@ -3,10 +3,11 @@
 > Selfkey sdk for third party integrations written in Node.js
 
 [![NPM][npm-icon]][npm-url]
+[![CircleCI](https://circleci.com/gh/SelfKeyFoundation/selfkey-lib/tree/master.svg?style=svg)](https://circleci.com/gh/SelfKeyFoundation/selfkey-lib/tree/master)
 
 [npm-icon]: https://img.shields.io/npm/v/@selfkey/node-lib
-
 [npm-url]: https://npmjs.org/package/@selfkey/node-lib
+
 
 # Contents
 
