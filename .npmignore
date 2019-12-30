@@ -16,3 +16,19 @@
 
 .git*
 .npmignore
+src/
+.circleci/
+example/
+test/
+.babelrc
+.editorconfig
+.eslintrc.json
+.huskyrc
+.prettier*
+commitlint.config.js
+jest*
+README.hbs
+yarn-error.log
+npm-debug.log
+.history
+
