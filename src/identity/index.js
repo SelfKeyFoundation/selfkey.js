@@ -1,0 +1,4 @@
+/**
+ * Identity Namespace
+ * @namespace identity
+ */

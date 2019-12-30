@@ -31,4 +31,4 @@ README.hbs
 yarn-error.log
 npm-debug.log
 .history
-
+yarn.lock

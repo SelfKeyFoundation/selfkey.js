@@ -61,7 +61,7 @@ import sk from '@selfkey/node-lib';
     * [`.isSupported(did)`](#did.isSupported) ⇒ <code>boolean</code>
     * [`.resolve(did)`](#did.resolve) ⇒ <code>object</code>
     * [`.registerMethodResolver(method, resolver)`](#did.registerMethodResolver)
-* [`identityAttributes`](#identityAttributes) : <code>object</code>
+* [`identity`](#identity) : <code>object</code>
 * [`jwt`](#jwt) : <code>object</code>
     * [`.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)`](#jwt.issueJWT) ⇒ <code>string</code>
     * [`.parseJWT(token)`](#jwt.parseJWT) ⇒ <code>object</code>
@@ -354,10 +354,10 @@ sk.did.register('new-method', resolver);
 
 * * *
 
-<a name="identityAttributes"></a>
+<a name="identity"></a>
 
-### `identityAttributes` : <code>object</code>
-Identity Attributes Namespace
+### `identity` : <code>object</code>
+Identity Namespace
 
 **Kind**: global namespace  
 
