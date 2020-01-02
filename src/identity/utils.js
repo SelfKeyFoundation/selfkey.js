@@ -17,6 +17,41 @@ export const attributeMapBySchema = (attributes = []) =>
 		return acc;
 	}, {});
 
+export const resolveAttributeFiles = async (data, fileProcessor) => {
+	if (!data) {
+		return data;
+	}
+
+	if (Array.isArray(data)) {
+		return Promise.all(data.map(d => resolveAttributeFiles(d, fileProcessor)));
+	}
+
+	if (typeof data !== 'object') {
+		return data;
+	}
+
+	if (
+		{}.hasOwnProperty.call(data, 'mimeType') &&
+		{}.hasOwnProperty.call(data, 'size') &&
+		{}.hasOwnProperty.call(data, 'content')
+	) {
+		const file = await fileProcessor(data);
+		return file;
+	}
+
+	const resolved = await Promise.all(
+		Object.keys(data).map(async k => {
+			const value = await resolveAttributeFiles(data[k], fileProcessor);
+			return { k, value };
+		})
+	);
+
+	return resolved.reduce((acc, curr) => {
+		acc[curr.k] = curr.value;
+		return acc;
+	}, {});
+};
+
 export const denormalizeDocumentsSchema = (typeSchema, value, documents = [], maxDepth = 10) => {
 	if (maxDepth < 0) {
 		return { value, documents };
@@ -173,7 +208,6 @@ export const schemaContainsFile = (schema, maxDepth = 10) => {
 
 export const fetchJson = async (url, options = {}) => {
 	options = { maxAttempts: 3, attempt: 1, ...options };
-	console.log('XXX', url, options.attempt);
 	try {
 		const resp = await rp.get({
 			url,

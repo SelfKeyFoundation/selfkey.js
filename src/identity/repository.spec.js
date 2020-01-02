@@ -164,7 +164,6 @@ describe('Repository', () => {
 		it('should return ajv validator', () => {
 			const meta = sinon.stub(Ajv.prototype, 'addMetaSchema');
 			const schema = sinon.stub(Ajv.prototype, 'addSchema');
-			const compile = sinon.stub(Ajv.prototype, 'compile');
 			const repo = new Repository();
 			repo.identityAttributeSchema = 'test-attribute';
 			repo.jsonSchemas = {
@@ -177,7 +176,36 @@ describe('Repository', () => {
 			expect(meta.calledWith(repo.identityAttributeSchema)).toBe(true);
 			expect(schema.calledWith(repo.jsonSchemas.attr1.schema)).toBe(true);
 			expect(schema.calledWith(repo.jsonSchemas.attr2.schema)).toBe(true);
-			expect(compile.calledOnce).toBe(true);
+		});
+	});
+	describe('validateData', () => {
+		it('should return an error if schema not found', () => {
+			const repo = new Repository();
+			const schemaId = 'test';
+			const data = { test: 'test' };
+
+			expect(repo.validateData(schemaId, data)).toEqual({
+				valid: false,
+				errors: ['No schema found for ' + schemaId]
+			});
+		});
+
+		it('should validate data', () => {
+			const repo = new Repository();
+			repo.jsonSchemas.test = {};
+			const validationResults = {
+				valid: true,
+				errors: null
+			};
+
+			sinon.stub(repo, 'getValidator').returns({
+				validate: () => validationResults.valid,
+				errors: validationResults.errors
+			});
+			const schemaId = 'test';
+			const data = { test: 'test' };
+
+			expect(repo.validateData(schemaId, data)).toEqual(validationResults);
 		});
 	});
 });

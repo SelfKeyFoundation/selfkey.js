@@ -74,7 +74,7 @@
   "scripts": {
     "build": "rm -rf lib/ && babel src -d lib --ignore=*.spec.js --ignore=**/*.spec.js --ignore=**/__fixtures__/** && cp -rf ./src/assets ./lib",
     "test": "snyk test && jest",
-    "check-deps-precommit": "npm-check -i eslint -i || true",
+    "check-deps-precommit": "npm-check -i eslint || true",
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect",
     "generate-readme": "jsdoc2md -t README.hbs -d 3 --name-format --separators -g grouped -m none src/**/*.js > README.md"

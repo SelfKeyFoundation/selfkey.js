@@ -2,7 +2,8 @@
  * Authentication Namespace
  * @namespace auth
  */
-
+import * as constants from './const';
+export { constants };
 export { generateChallengeToken } from './generate-challenge-token';
 export { generateNonce } from './generate-nonce';
 export { generateAccessToken } from './generate-access-token';

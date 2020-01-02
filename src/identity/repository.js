@@ -143,7 +143,20 @@ export class Repository {
 			ajv.addMetaSchema(this.identityAttributeSchema);
 		}
 		Object.keys(this.jsonSchemas).forEach(url => ajv.addSchema(this.jsonSchemas[url].schema));
-		return ajv.compile();
+		return ajv;
+	}
+
+	validateData(schemaId, data) {
+		if (!this.jsonSchemas[schemaId]) {
+			return {
+				valid: false,
+				errors: ['No schema found for ' + schemaId]
+			};
+		}
+		const validator = this.getValidator();
+		const valid = validator.validate(schemaId, data);
+		const errors = validator.errors;
+		return { valid, errors };
 	}
 }
 
