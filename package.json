@@ -73,10 +73,10 @@
   },
   "scripts": {
     "build": "rm -rf lib/ && babel src -d lib --ignore=*.spec.js --ignore=**/*.spec.js --ignore=**/__fixtures__/** && cp -rf ./src/assets ./lib",
-    "test": "snyk test && jest",
+    "test": "jest",
     "check-deps-precommit": "npm-check -i eslint || true",
     "snyk-protect": "snyk protect",
-    "prepare1": "npm run snyk-protect",
+    "prepare": "npm run snyk-protect",
     "generate-readme": "jsdoc2md -t README.hbs -d 3 --name-format --separators -g grouped src/**/*.js > README.md"
   },
   "snyk": true
