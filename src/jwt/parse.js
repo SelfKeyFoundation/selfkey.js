@@ -1,9 +1,11 @@
 import jwt from 'jsonwebtoken';
-
+/**
+ * @module jwt/parse
+ */
 /**
  * Parse a JWT token
  * @function parseJWT
- * @memberof jwt
+ *
  * @param {string} token - jwt token
  * @returns {object} decodedJwt
  * @example

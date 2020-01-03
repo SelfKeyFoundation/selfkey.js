@@ -1,10 +1,12 @@
 import { getSecretLength } from './hmac';
 import { getPEMBits } from './rsa';
-
+/**
+ * @module key/validate-private-key
+ */
 /**
  * Checks if secret length is good enough
  * @function checkSecretLength
- * @memberof key
+ *
  * @param {string} key
  * @param {string} algorithm
  * @returns {boolean} - isKeyLongEnough

@@ -3,11 +3,15 @@ import * as DID from '../did';
 import { TOKEN_TYPE_ACCESS } from './const';
 
 /**
+ * @module auth/validate-access-token
+ */
+
+/**
  * Validates access token
  *
  * @async
  * @function validateAccessToken
- * @memberof auth
+ *
  * @param {string} token
  * @param {string} algorithm
  * @param {string|Buffer} key

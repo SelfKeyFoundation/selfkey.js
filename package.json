@@ -77,7 +77,7 @@
     "check-deps-precommit": "npm-check -i eslint || true",
     "snyk-protect": "snyk protect",
     "prepare1": "npm run snyk-protect",
-    "generate-readme": "jsdoc2md -t README.hbs -d 3 --name-format --separators -g grouped -m none src/**/*.js > README.md"
+    "generate-readme": "jsdoc2md -t README.hbs -d 3 --name-format --separators -g grouped src/**/*.js > README.md"
   },
   "snyk": true
 }

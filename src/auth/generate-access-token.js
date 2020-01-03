@@ -2,11 +2,14 @@ import { issueJWT } from '../jwt';
 import { TOKEN_TYPE_ACCESS } from './const';
 
 /**
+ * @module auth/generate-access-token
+ */
+
+/**
  * Generate access token
  *
  * @async
  * @function generateAccessToken
- * @memberof auth
  * @param {string} did
  * @param {string} algorithm
  * @param {string} secret

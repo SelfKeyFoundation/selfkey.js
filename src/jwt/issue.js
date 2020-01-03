@@ -3,11 +3,13 @@ import jwt from 'jsonwebtoken';
 import { JWT_ALGORITHMS } from './const';
 import { checkSecretLength } from '../key';
 const signJWT = promisify(jwt.sign);
-
+/**
+ * @module jwt/issue
+ */
 /**
  * Issue a new JWT token
  * @function issueJWT
- * @memberof jwt
+ *
  * @param {string} subject - sub claim
  * @param {string} requestedAlgorithm - signature algorithm
  * @param {string|Buffer} secret - secret key for signature

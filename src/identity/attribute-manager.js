@@ -1,9 +1,12 @@
 import { Repository } from './repository';
 
 /**
+ * @module identity/attribute-manager
+ */
+
+/**
  * @classdesc Attribute Manager, manages multiple repositories of attributes
  *
- * Part of `identity` namespace
  *
  * @class AttributeManager
  */

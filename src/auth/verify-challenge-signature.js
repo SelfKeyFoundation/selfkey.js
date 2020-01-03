@@ -4,13 +4,15 @@ import { verifier as secp256k1 } from './crypto/secp256k1-2018';
 const verifiers = {
 	Secp256k1VerificationKey2018: secp256k1()
 };
+/**
+ * @module auth/verify-challenge-signature
+ */
 
 /**
  * Validates challenge Signature
  *
  * @async
  * @function verifyChallengeSignature
- * @memberof auth
  * @param {string} nonce
  * @param {object} signature
  * @param {string} did

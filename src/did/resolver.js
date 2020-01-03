@@ -1,3 +1,6 @@
+/**
+ * @module did/resolver
+ */
 import { parse } from './parse';
 import { resolver as eth } from './methods/eth-resolver';
 import { resolver as selfkey } from './methods/selfkey-resolver';
@@ -5,7 +8,7 @@ import { resolver as selfkey } from './methods/selfkey-resolver';
 /**
  * @constant
  * @type object
- * @memberof did
+ *
  * @property {object} eth - eth did resolver
  * @property {object} sekfkey - selfkey did resolver
  */
@@ -17,7 +20,7 @@ const resolvers = {
 /**
  * Checks if a resolver exists for that particular did
  * @function isSupported
- * @memberof did
+ *
  * @param {string} did
  * @returns {boolean} isSuppored
  * @example
@@ -37,7 +40,7 @@ export const isSupported = did => {
  * Resolves did document
  * @async
  * @function resolve
- * @memberof did
+ *
  * @param {string} did
  * @returns {object} didDocument
  * @example
@@ -58,7 +61,7 @@ export const resolve = async did => {
  * Register custom resolver for a did method
  *
  * @function registerMethodResolver
- * @memberof did
+ *
  * @param {string} method
  * @param {object} resolver
  * @example

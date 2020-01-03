@@ -2,12 +2,15 @@ import crypto from 'crypto';
 import util from 'util';
 
 const randomBytes = util.promisify(crypto.randomBytes);
+/**
+ * @module key/hmac
+ */
 
 /**
  * Generate a HMAC Key
  * @async
  * @function generateHMACKey
- * @memberof key
+ *
  * @param {number} [length=64] - key length in bytes
  * @param {string} [encoding=base64] - the output encoding of the key
  * @returns {Promise<string|Buffer>} key
@@ -30,7 +33,7 @@ export const generateHMACKey = async (length = 64, encoding = 'base64') => {
  * Calculate the bytes length of secret key
  * @async
  * @function generateHMACKey
- * @memberof key
+ *
  * @param {string} secret
  * @param {string} [encoding=base64] - the input encoding of the secret
  * @returns number

@@ -4,11 +4,14 @@ import { promisify } from 'util';
 import { JWT_ALGORITHMS } from './const';
 
 const verifyJWT = promisify(jwt.verify);
+/**
+ * @module jwt/validate
+ */
 
 /**
  * Validate a JWT token
  * @function validateJWT
- * @memberof jwt
+ *
  * @param {string} token - jwt token
  * @param {string} requestedAlgorithm - algorithm name
  * @param {string} key - the key to validate the token against

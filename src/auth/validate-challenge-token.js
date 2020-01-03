@@ -2,11 +2,15 @@ import * as JWT from '../jwt';
 import { TOKEN_TYPE_CHALLENGE } from './const';
 
 /**
+ * @module auth/validate-challenge-token
+ */
+
+/**
  * Validates challenge token
  *
  * @async
  * @function validateChallengeToken
- * @memberof auth
+ *
  * @param {string} token
  * @param {string} algorithm
  * @param {string|Buffer} key

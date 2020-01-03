@@ -3,11 +3,14 @@ import { generateNonce } from './generate-nonce';
 import { TOKEN_TYPE_CHALLENGE } from './const';
 
 /**
+ * @module auth/generate-challenge-token
+ */
+
+/**
  * Generate challenge token
  *
  * @async
  * @function generateChallengeToken
- * @memberof auth
  * @param {string} did
  * @param {string} algorithm
  * @param {string} secret

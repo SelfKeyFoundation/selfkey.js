@@ -1,7 +1,3 @@
-/**
- * Authentication Namespace
- * @namespace auth
- */
 import * as constants from './const';
 export { constants };
 export { generateChallengeToken } from './generate-challenge-token';

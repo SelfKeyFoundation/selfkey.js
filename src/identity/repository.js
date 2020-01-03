@@ -1,6 +1,10 @@
 import * as utils from './utils';
 import Ajv from 'ajv';
 
+/**
+ * @module identity/repository
+ */
+
 export const SELFKEY_REPOSITORY = {
 	repository: 'http://platform.selfkey.org/repository.json',
 	resolved: 'http://platform.selfkey.org/resolved-repository.json',

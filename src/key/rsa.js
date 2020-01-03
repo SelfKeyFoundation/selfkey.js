@@ -1,10 +1,12 @@
 const { generateKeyPair } = require('crypto');
 const pemtools = require('pemtools');
-
+/**
+ * @module key/rsa
+ */
 /**
  * Generate a RSA Key Pair
  * @function generateRSAKeyPair
- * @memberof key
+ *
  * @param {number} [length=4096] - key length in bytes
  * @returns {Promise<object>} keypair - contains publicKey adn privateKey
  * @example

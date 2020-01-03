@@ -1,8 +1,3 @@
-/**
- * KYCC Namespace
- * @namespace kycc
- */
-
 import * as utils from './utils';
 export { createClient as createKYCCIntegrationsClient } from './kycc-integrations-client';
 export { createClient as createKYCCInternalClient } from './kycc-internal-client';

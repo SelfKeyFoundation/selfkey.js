@@ -46,396 +46,61 @@ import sk from '@selfkey/node-lib';
 
 <a name="api"></a>
 ## API
-### 
+### Modules
 
-* [AttributeManager](#AttributeManager)
-    * _instance_
-        * [.AttributeManager](#AttributeManager+AttributeManager)
-            * [`new exports.AttributeManager()`](#new_AttributeManager+AttributeManager_new)
-        * [`.addRepository(repository)`](#AttributeManager+addRepository)
-        * [`.removeRepository(repository)`](#AttributeManager+removeRepository)
-        * [`.findRepositoryForAttribute(attr)`](#AttributeManager+findRepositoryForAttribute) ⇒ <code>identity.Repository</code> \| <code>null</code>
-        * [`.zipAttributesWithRequirements(attributes, [requirements])`](#AttributeManager+zipAttributesWithRequirements) ⇒ <code>Array</code>
-        * [`.validateOneAttribute(attr, requirement)`](#AttributeManager+validateOneAttribute) ⇒ <code>object</code>
-        * [`.validateAttributes(attributes, requirements)`](#AttributeManager+validateAttributes) ⇒ <code>object</code>
-    * _static_
-        * [`.createWithSelfkeyRepository(options)`](#AttributeManager.createWithSelfkeyRepository) ⇒ [<code>AttributeManager</code>](#AttributeManager)
-* [Repository](#Repository)
-    * _instance_
-        * [.Repository](#Repository+Repository)
-            * [`new exports.Repository([config])`](#new_Repository+Repository_new)
-        * [`.resolveAll()`](#Repository+resolveAll)
-        * [`.resolveJsonSchema(schema, [config])`](#Repository+resolveJsonSchema) ⇒ <code>object</code>
-        * [`.resolveUiSchema(schema, [config])`](#Repository+resolveUiSchema) ⇒ <code>object</code>
-        * [`.getValidator()`](#Repository+getValidator) ⇒
-        * [`.validateData(schemaId, data)`](#Repository+validateData) ⇒ <code>object</code>
-    * _static_
-        * [`.createSelfkeyRepo([options])`](#Repository.createSelfkeyRepo) ⇒ [<code>Repository</code>](#Repository)
-        * [`.fromConfig(config, [ui])`](#Repository.fromConfig) ⇒ [<code>Repository</code>](#Repository)
-        * [`.fromSchemaId(schemaId, [ui])`](#Repository.fromSchemaId) ⇒ [<code>Repository</code>](#Repository)
+<dl>
+<dt><a href="#module_auth/generate-access-token">auth/generate-access-token</a></dt>
+<dd></dd>
+<dt><a href="#module_auth/generate-challenge-token">auth/generate-challenge-token</a></dt>
+<dd></dd>
+<dt><a href="#module_auth/generate-nonce">auth/generate-nonce</a></dt>
+<dd></dd>
+<dt><a href="#module_auth/validate-access-token">auth/validate-access-token</a></dt>
+<dd></dd>
+<dt><a href="#module_auth/validate-challenge-token">auth/validate-challenge-token</a></dt>
+<dd></dd>
+<dt><a href="#module_auth/verify-challenge-signature">auth/verify-challenge-signature</a></dt>
+<dd></dd>
+<dt><a href="#module_did/parse">did/parse</a></dt>
+<dd></dd>
+<dt><a href="#module_did/resolver">did/resolver</a></dt>
+<dd></dd>
+<dt><a href="#module_identity/attribute-manager">identity/attribute-manager</a></dt>
+<dd></dd>
+<dt><a href="#module_identity/repository">identity/repository</a></dt>
+<dd></dd>
+<dt><a href="#module_identity/utils">identity/utils</a></dt>
+<dd></dd>
+<dt><a href="#module_jwt/constants">jwt/constants</a></dt>
+<dd></dd>
+<dt><a href="#module_jwt/issue">jwt/issue</a></dt>
+<dd></dd>
+<dt><a href="#module_jwt/parse">jwt/parse</a></dt>
+<dd></dd>
+<dt><a href="#module_jwt/validate">jwt/validate</a></dt>
+<dd></dd>
+<dt><a href="#module_key/hmac">key/hmac</a></dt>
+<dd></dd>
+<dt><a href="#module_key/rsa">key/rsa</a></dt>
+<dd></dd>
+<dt><a href="#module_key/validate-private-key">key/validate-private-key</a></dt>
+<dd></dd>
+<dt><a href="#module_kycc/get-user-data-for-token">kycc/get-user-data-for-token</a></dt>
+<dd></dd>
+</dl>
 
-### 
+<a name="module_auth/generate-access-token"></a>
 
-* [`auth`](#auth) : <code>object</code>
-    * [`.generateAccessToken(did, algorithm, secret, [expiresIn])`](#auth.generateAccessToken) ⇒ <code>Promise.&lt;string&gt;</code>
-    * [`.generateChallengeToken(did, algorithm, secret, [expiresIn])`](#auth.generateChallengeToken) ⇒ <code>Promise.&lt;string&gt;</code>
-    * [`.generateNonce([length])`](#auth.generateNonce) ⇒ <code>Promise.&lt;string&gt;</code>
-    * [`.validateAccessToken(token, algorithm, key)`](#auth.validateAccessToken) ⇒ <code>Promise.&lt;object&gt;</code>
-    * [`.validateChallengeToken(token, algorithm, key)`](#auth.validateChallengeToken) ⇒ <code>Promise.&lt;object&gt;</code>
-    * [`.verifyChallengeSignature(nonce, signature, did)`](#auth.verifyChallengeSignature) ⇒ <code>Promise.&lt;boolean&gt;</code>
-* [`did`](#did) : <code>object</code>
-    * [`.resolvers`](#did.resolvers) : <code>object</code>
-    * [`.parse(did)`](#did.parse) ⇒ <code>object</code>
-    * [`.isSupported(did)`](#did.isSupported) ⇒ <code>boolean</code>
-    * [`.resolve(did)`](#did.resolve) ⇒ <code>object</code>
-    * [`.registerMethodResolver(method, resolver)`](#did.registerMethodResolver)
-* [`identity`](#identity) : <code>object</code>
-    * [`.utils`](#identity.utils) : <code>object</code>
-        * [`.attributeMapBySchema(attributes)`](#identity.utils.attributeMapBySchema) ⇒ <code>object</code>
-        * [`.resolveAttributeFiles(all, fileProcessor)`](#identity.utils.resolveAttributeFiles) ⇒ <code>object</code>
-        * [`.denormalizeDocumentsSchema(typeSchema, value, documents, maxDepth)`](#identity.utils.denormalizeDocumentsSchema) ⇒ <code>object</code>
-        * [`.normalizeDocumentsSchema(typeSchema, value, documents, maxDepth)`](#identity.utils.normalizeDocumentsSchema) ⇒ <code>object</code>
-        * [`.schemaContainsFile(schema, maxDepth)`](#identity.utils.schemaContainsFile) ⇒ <code>boolean</code>
-        * [`.fetchJson(url, options)`](#identity.utils.fetchJson) ⇒ <code>Promise.&lt;object&gt;</code>
-        * [`.dereferenceSchema(schema, options)`](#identity.utils.dereferenceSchema) ⇒ <code>Promise.&lt;object&gt;</code>
-* [`jwt`](#jwt) : <code>object</code>
-    * [`.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)`](#jwt.issueJWT) ⇒ <code>Promise.&lt;string&gt;</code>
-    * [`.parseJWT(token)`](#jwt.parseJWT) ⇒ <code>object</code>
-    * [`.validateJWT(token, requestedAlgorithm, key)`](#jwt.validateJWT) ⇒ <code>Promise.&lt;(object\|null)&gt;</code>
-* [`key`](#key) : <code>object</code>
-    * [`.generateHMACKey([length], [encoding])`](#key.generateHMACKey) ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
-    * [`.generateHMACKey(secret, [encoding])`](#key.generateHMACKey) ⇒
-    * [`.generateRSAKeyPair([length])`](#key.generateRSAKeyPair) ⇒ <code>Promise.&lt;object&gt;</code>
-    * [`.checkSecretLength(key, algorithm)`](#key.checkSecretLength) ⇒ <code>boolean</code>
-* [`kycc`](#kycc) : <code>object</code>
-    * [`.getUserDataForToken(token, options)`](#kycc.getUserDataForToken) ⇒ [<code>Promise.&lt;KYCCUserObject&gt;</code>](#KYCCUserObject)
-
-### 
-
-* [`FileProcessor`](#FileProcessor)
-* [`GetUserDataForTokenOptions`](#GetUserDataForTokenOptions)
-* [`KYCCUserObject`](#KYCCUserObject)
-
-<a name="AttributeManager"></a>
-
-### AttributeManager
-Attribute Manager, manages multiple repositories of attributes
-
-Part of `identity` namespace
-
-**Kind**: global class  
-
-* [AttributeManager](#AttributeManager)
-    * _instance_
-        * [.AttributeManager](#AttributeManager+AttributeManager)
-            * [`new exports.AttributeManager()`](#new_AttributeManager+AttributeManager_new)
-        * [`.addRepository(repository)`](#AttributeManager+addRepository)
-        * [`.removeRepository(repository)`](#AttributeManager+removeRepository)
-        * [`.findRepositoryForAttribute(attr)`](#AttributeManager+findRepositoryForAttribute) ⇒ <code>identity.Repository</code> \| <code>null</code>
-        * [`.zipAttributesWithRequirements(attributes, [requirements])`](#AttributeManager+zipAttributesWithRequirements) ⇒ <code>Array</code>
-        * [`.validateOneAttribute(attr, requirement)`](#AttributeManager+validateOneAttribute) ⇒ <code>object</code>
-        * [`.validateAttributes(attributes, requirements)`](#AttributeManager+validateAttributes) ⇒ <code>object</code>
-    * _static_
-        * [`.createWithSelfkeyRepository(options)`](#AttributeManager.createWithSelfkeyRepository) ⇒ [<code>AttributeManager</code>](#AttributeManager)
-
+### auth/generate-access-token
 
 * * *
 
-<a name="AttributeManager+AttributeManager"></a>
+<a name="module_auth/generate-access-token..generateAccessToken"></a>
 
-#### attributeManager.AttributeManager
-**Kind**: instance class of [<code>AttributeManager</code>](#AttributeManager)  
-
-* * *
-
-<a name="new_AttributeManager+AttributeManager_new"></a>
-
-##### `new exports.AttributeManager()`
-Creates an instance of AttributeManager.
-
-
-* * *
-
-<a name="AttributeManager+addRepository"></a>
-
-#### `attributeManager.addRepository(repository)`
-Adds a new repository
-
-**Kind**: instance method of [<code>AttributeManager</code>](#AttributeManager)  
-
-| Param | Type |
-| --- | --- |
-| repository | <code>identity.Repository</code> | 
-
-
-* * *
-
-<a name="AttributeManager+removeRepository"></a>
-
-#### `attributeManager.removeRepository(repository)`
-Remove a repository
-
-**Kind**: instance method of [<code>AttributeManager</code>](#AttributeManager)  
-
-| Param | Type |
-| --- | --- |
-| repository | <code>identity.Repository</code> | 
-
-
-* * *
-
-<a name="AttributeManager+findRepositoryForAttribute"></a>
-
-#### `attributeManager.findRepositoryForAttribute(attr)` ⇒ <code>identity.Repository</code> \| <code>null</code>
-Finds a repository for a given attribute
-
-**Kind**: instance method of [<code>AttributeManager</code>](#AttributeManager)  
-
-| Param | Type |
-| --- | --- |
-| attr | <code>object</code> \| <code>string</code> | 
-
-
-* * *
-
-<a name="AttributeManager+zipAttributesWithRequirements"></a>
-
-#### `attributeManager.zipAttributesWithRequirements(attributes, [requirements])` ⇒ <code>Array</code>
-Given an array of attributes and requirements, tries to much between them
-
-**Kind**: instance method of [<code>AttributeManager</code>](#AttributeManager)  
-
-| Param | Type | Default |
-| --- | --- | --- |
-| attributes | <code>Array</code> |  | 
-| [requirements] | <code>Array</code> | <code>[]</code> | 
-
-
-* * *
-
-<a name="AttributeManager+validateOneAttribute"></a>
-
-#### `attributeManager.validateOneAttribute(attr, requirement)` ⇒ <code>object</code>
-Given an attribute and requirement validates the attribute
-
-**Kind**: instance method of [<code>AttributeManager</code>](#AttributeManager)  
-
-| Param | Type |
-| --- | --- |
-| attr | <code>object</code> | 
-| requirement | <code>object</code> | 
-
-
-* * *
-
-<a name="AttributeManager+validateAttributes"></a>
-
-#### `attributeManager.validateAttributes(attributes, requirements)` ⇒ <code>object</code>
-Given a list of attribute and requirements, validates all attributes
-
-**Kind**: instance method of [<code>AttributeManager</code>](#AttributeManager)  
-
-| Param | Type |
-| --- | --- |
-| attributes | <code>Array</code> | 
-| requirements | <code>Array</code> | 
-
-
-* * *
-
-<a name="AttributeManager.createWithSelfkeyRepository"></a>
-
-#### `AttributeManager.createWithSelfkeyRepository(options)` ⇒ [<code>AttributeManager</code>](#AttributeManager)
-Creates an AttributeManager and initializes it with selfkey repository
-
-**Kind**: static method of [<code>AttributeManager</code>](#AttributeManager)  
-
-| Param | Type |
-| --- | --- |
-| options | <code>object</code> | 
-
-
-* * *
-
-<a name="Repository"></a>
-
-### Repository
-Repository Class allows to load identity attribute repository and validate schemas
-
-Part of `identity` namespace
-
-**Kind**: global class  
-
-* [Repository](#Repository)
-    * _instance_
-        * [.Repository](#Repository+Repository)
-            * [`new exports.Repository([config])`](#new_Repository+Repository_new)
-        * [`.resolveAll()`](#Repository+resolveAll)
-        * [`.resolveJsonSchema(schema, [config])`](#Repository+resolveJsonSchema) ⇒ <code>object</code>
-        * [`.resolveUiSchema(schema, [config])`](#Repository+resolveUiSchema) ⇒ <code>object</code>
-        * [`.getValidator()`](#Repository+getValidator) ⇒
-        * [`.validateData(schemaId, data)`](#Repository+validateData) ⇒ <code>object</code>
-    * _static_
-        * [`.createSelfkeyRepo([options])`](#Repository.createSelfkeyRepo) ⇒ [<code>Repository</code>](#Repository)
-        * [`.fromConfig(config, [ui])`](#Repository.fromConfig) ⇒ [<code>Repository</code>](#Repository)
-        * [`.fromSchemaId(schemaId, [ui])`](#Repository.fromSchemaId) ⇒ [<code>Repository</code>](#Repository)
-
-
-* * *
-
-<a name="Repository+Repository"></a>
-
-#### repository.Repository
-**Kind**: instance class of [<code>Repository</code>](#Repository)  
-
-* * *
-
-<a name="new_Repository+Repository_new"></a>
-
-##### `new exports.Repository([config])`
-Creates an instance of Repository.
-
-
-| Param | Type | Default |
-| --- | --- | --- |
-| [config] | <code>object</code> | <code>{}</code> | 
-
-
-* * *
-
-<a name="Repository+resolveAll"></a>
-
-#### `repository.resolveAll()`
-Resolve all repository data
-
-**Kind**: instance method of [<code>Repository</code>](#Repository)  
-
-* * *
-
-<a name="Repository+resolveJsonSchema"></a>
-
-#### `repository.resolveJsonSchema(schema, [config])` ⇒ <code>object</code>
-Resolve one JSON schema
-
-**Kind**: instance method of [<code>Repository</code>](#Repository)  
-
-| Param | Type | Default |
-| --- | --- | --- |
-| schema | <code>object</code> \| <code>string</code> |  | 
-| [config] | <code>object</code> | <code>{}</code> | 
-
-
-* * *
-
-<a name="Repository+resolveUiSchema"></a>
-
-#### `repository.resolveUiSchema(schema, [config])` ⇒ <code>object</code>
-Resolve one ui schema
-
-**Kind**: instance method of [<code>Repository</code>](#Repository)  
-
-| Param | Type | Default |
-| --- | --- | --- |
-| schema | <code>object</code> \| <code>string</code> |  | 
-| [config] | <code>object</code> | <code>{}</code> | 
-
-
-* * *
-
-<a name="Repository+getValidator"></a>
-
-#### `repository.getValidator()` ⇒
-Creates an Ajv validator for the repository data
-
-**Kind**: instance method of [<code>Repository</code>](#Repository)  
-**Returns**: Ajv instance  
-
-* * *
-
-<a name="Repository+validateData"></a>
-
-#### `repository.validateData(schemaId, data)` ⇒ <code>object</code>
-Given schemaId and data, validates the data based on relevant schema
-
-**Kind**: instance method of [<code>Repository</code>](#Repository)  
-**Returns**: <code>object</code> - {valid:boolean, errors: array}  
-
-| Param | Type |
-| --- | --- |
-| schemaId | <code>string</code> | 
-| data | <code>object</code> | 
-
-
-* * *
-
-<a name="Repository.createSelfkeyRepo"></a>
-
-#### `Repository.createSelfkeyRepo([options])` ⇒ [<code>Repository</code>](#Repository)
-Creates a repository initialized with selfkey data
-
-**Kind**: static method of [<code>Repository</code>](#Repository)  
-
-| Param | Type | Default |
-| --- | --- | --- |
-| [options] | <code>object</code> | <code>{}</code> | 
-
-
-* * *
-
-<a name="Repository.fromConfig"></a>
-
-#### `Repository.fromConfig(config, [ui])` ⇒ [<code>Repository</code>](#Repository)
-Creates and preloads a Repository from a config object
-
-**Kind**: static method of [<code>Repository</code>](#Repository)  
-
-| Param | Type | Default |
-| --- | --- | --- |
-| config | <code>object</code> |  | 
-| [ui] | <code>boolean</code> | <code>false</code> | 
-
-
-* * *
-
-<a name="Repository.fromSchemaId"></a>
-
-#### `Repository.fromSchemaId(schemaId, [ui])` ⇒ [<code>Repository</code>](#Repository)
-Creates and preloads a Repository based on attribute schema id
-
-**Kind**: static method of [<code>Repository</code>](#Repository)  
-
-| Param | Type | Default |
-| --- | --- | --- |
-| schemaId | <code>string</code> |  | 
-| [ui] | <code>boolean</code> | <code>false</code> | 
-
-
-* * *
-
-<a name="auth"></a>
-
-### `auth` : <code>object</code>
-Authentication Namespace
-
-**Kind**: global namespace  
-
-* [`auth`](#auth) : <code>object</code>
-    * [`.generateAccessToken(did, algorithm, secret, [expiresIn])`](#auth.generateAccessToken) ⇒ <code>Promise.&lt;string&gt;</code>
-    * [`.generateChallengeToken(did, algorithm, secret, [expiresIn])`](#auth.generateChallengeToken) ⇒ <code>Promise.&lt;string&gt;</code>
-    * [`.generateNonce([length])`](#auth.generateNonce) ⇒ <code>Promise.&lt;string&gt;</code>
-    * [`.validateAccessToken(token, algorithm, key)`](#auth.validateAccessToken) ⇒ <code>Promise.&lt;object&gt;</code>
-    * [`.validateChallengeToken(token, algorithm, key)`](#auth.validateChallengeToken) ⇒ <code>Promise.&lt;object&gt;</code>
-    * [`.verifyChallengeSignature(nonce, signature, did)`](#auth.verifyChallengeSignature) ⇒ <code>Promise.&lt;boolean&gt;</code>
-
-
-* * *
-
-<a name="auth.generateAccessToken"></a>
-
-#### `auth.generateAccessToken(did, algorithm, secret, [expiresIn])` ⇒ <code>Promise.&lt;string&gt;</code>
+#### `auth/generate-access-token~generateAccessToken(did, algorithm, secret, [expiresIn])` ⇒ <code>Promise.&lt;string&gt;</code>
 Generate access token
 
-**Kind**: static method of [<code>auth</code>](#auth)  
+**Kind**: inner method of [<code>auth/generate-access-token</code>](#module_auth/generate-access-token)  
 **Returns**: <code>Promise.&lt;string&gt;</code> - jwtToken  
 
 | Param | Type | Default |
@@ -452,12 +117,18 @@ await sk.auth.generateAccessToken(did, 'rsa', 'secret')
 
 * * *
 
-<a name="auth.generateChallengeToken"></a>
+<a name="module_auth/generate-challenge-token"></a>
 
-#### `auth.generateChallengeToken(did, algorithm, secret, [expiresIn])` ⇒ <code>Promise.&lt;string&gt;</code>
+### auth/generate-challenge-token
+
+* * *
+
+<a name="module_auth/generate-challenge-token..generateChallengeToken"></a>
+
+#### `auth/generate-challenge-token~generateChallengeToken(did, algorithm, secret, [expiresIn])` ⇒ <code>Promise.&lt;string&gt;</code>
 Generate challenge token
 
-**Kind**: static method of [<code>auth</code>](#auth)  
+**Kind**: inner method of [<code>auth/generate-challenge-token</code>](#module_auth/generate-challenge-token)  
 **Returns**: <code>Promise.&lt;string&gt;</code> - jwtToken  
 
 | Param | Type | Default |
@@ -474,12 +145,18 @@ await sk.auth.generateChallengeToken(did, 'rsa', 'secret')
 
 * * *
 
-<a name="auth.generateNonce"></a>
+<a name="module_auth/generate-nonce"></a>
 
-#### `auth.generateNonce([length])` ⇒ <code>Promise.&lt;string&gt;</code>
+### auth/generate-nonce
+
+* * *
+
+<a name="module_auth/generate-nonce..generateNonce"></a>
+
+#### `auth/generate-nonce~generateNonce([length])` ⇒ <code>Promise.&lt;string&gt;</code>
 Generates base64 encoded random string
 
-**Kind**: static method of [<code>auth</code>](#auth)  
+**Kind**: inner method of [<code>auth/generate-nonce</code>](#module_auth/generate-nonce)  
 **Returns**: <code>Promise.&lt;string&gt;</code> - nonce  
 
 | Param | Type | Default |
@@ -493,12 +170,18 @@ await sk.auth.generateNonce();
 
 * * *
 
-<a name="auth.validateAccessToken"></a>
+<a name="module_auth/validate-access-token"></a>
 
-#### `auth.validateAccessToken(token, algorithm, key)` ⇒ <code>Promise.&lt;object&gt;</code>
+### auth/validate-access-token
+
+* * *
+
+<a name="module_auth/validate-access-token..validateAccessToken"></a>
+
+#### `auth/validate-access-token~validateAccessToken(token, algorithm, key)` ⇒ <code>Promise.&lt;object&gt;</code>
 Validates access token
 
-**Kind**: static method of [<code>auth</code>](#auth)  
+**Kind**: inner method of [<code>auth/validate-access-token</code>](#module_auth/validate-access-token)  
 **Returns**: <code>Promise.&lt;object&gt;</code> - decodedToken  
 **Throws**:
 
@@ -520,12 +203,18 @@ await sk.auth.validateAccessToken(token, 'hmac', 'secret');
 
 * * *
 
-<a name="auth.validateChallengeToken"></a>
+<a name="module_auth/validate-challenge-token"></a>
 
-#### `auth.validateChallengeToken(token, algorithm, key)` ⇒ <code>Promise.&lt;object&gt;</code>
+### auth/validate-challenge-token
+
+* * *
+
+<a name="module_auth/validate-challenge-token..validateChallengeToken"></a>
+
+#### `auth/validate-challenge-token~validateChallengeToken(token, algorithm, key)` ⇒ <code>Promise.&lt;object&gt;</code>
 Validates challenge token
 
-**Kind**: static method of [<code>auth</code>](#auth)  
+**Kind**: inner method of [<code>auth/validate-challenge-token</code>](#module_auth/validate-challenge-token)  
 **Returns**: <code>Promise.&lt;object&gt;</code> - decodedToken  
 **Throws**:
 
@@ -547,12 +236,18 @@ await sk.auth.validateChallengeToken(token, 'hmac', 'secret');
 
 * * *
 
-<a name="auth.verifyChallengeSignature"></a>
+<a name="module_auth/verify-challenge-signature"></a>
 
-#### `auth.verifyChallengeSignature(nonce, signature, did)` ⇒ <code>Promise.&lt;boolean&gt;</code>
+### auth/verify-challenge-signature
+
+* * *
+
+<a name="module_auth/verify-challenge-signature..verifyChallengeSignature"></a>
+
+#### `auth/verify-challenge-signature~verifyChallengeSignature(nonce, signature, did)` ⇒ <code>Promise.&lt;boolean&gt;</code>
 Validates challenge Signature
 
-**Kind**: static method of [<code>auth</code>](#auth)  
+**Kind**: inner method of [<code>auth/verify-challenge-signature</code>](#module_auth/verify-challenge-signature)  
 **Returns**: <code>Promise.&lt;boolean&gt;</code> - is valid signature  
 **Throws**:
 
@@ -573,43 +268,18 @@ await sk.auth.verifyChallengeSignature(nonce, signature, did);
 
 * * *
 
-<a name="did"></a>
+<a name="module_did/parse"></a>
 
-### `did` : <code>object</code>
-DID Namespace
-
-**Kind**: global namespace  
-
-* [`did`](#did) : <code>object</code>
-    * [`.resolvers`](#did.resolvers) : <code>object</code>
-    * [`.parse(did)`](#did.parse) ⇒ <code>object</code>
-    * [`.isSupported(did)`](#did.isSupported) ⇒ <code>boolean</code>
-    * [`.resolve(did)`](#did.resolve) ⇒ <code>object</code>
-    * [`.registerMethodResolver(method, resolver)`](#did.registerMethodResolver)
-
+### did/parse
 
 * * *
 
-<a name="did.resolvers"></a>
+<a name="module_did/parse..parse"></a>
 
-#### `did.resolvers` : <code>object</code>
-**Kind**: static constant of [<code>did</code>](#did)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| eth | <code>object</code> | eth did resolver |
-| sekfkey | <code>object</code> | selfkey did resolver |
-
-
-* * *
-
-<a name="did.parse"></a>
-
-#### `did.parse(did)` ⇒ <code>object</code>
+#### `did/parse~parse(did)` ⇒ <code>object</code>
 Parses did string to components
 
-**Kind**: static method of [<code>did</code>](#did)  
+**Kind**: inner method of [<code>did/parse</code>](#module_did/parse)  
 **Returns**: <code>object</code> - parsedDid  
 **Throws**:
 
@@ -627,12 +297,39 @@ sk.did.parse('did:selfkey:0xdsdasddasdsa...');
 
 * * *
 
-<a name="did.isSupported"></a>
+<a name="module_did/resolver"></a>
 
-#### `did.isSupported(did)` ⇒ <code>boolean</code>
+### did/resolver
+
+* [did/resolver](#module_did/resolver)
+    * [`~resolvers`](#module_did/resolver..resolvers) : <code>object</code>
+    * [`~isSupported(did)`](#module_did/resolver..isSupported) ⇒ <code>boolean</code>
+    * [`~resolve(did)`](#module_did/resolver..resolve) ⇒ <code>object</code>
+    * [`~registerMethodResolver(method, resolver)`](#module_did/resolver..registerMethodResolver)
+
+
+* * *
+
+<a name="module_did/resolver..resolvers"></a>
+
+#### `did/resolver~resolvers` : <code>object</code>
+**Kind**: inner constant of [<code>did/resolver</code>](#module_did/resolver)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| eth | <code>object</code> | eth did resolver |
+| sekfkey | <code>object</code> | selfkey did resolver |
+
+
+* * *
+
+<a name="module_did/resolver..isSupported"></a>
+
+#### `did/resolver~isSupported(did)` ⇒ <code>boolean</code>
 Checks if a resolver exists for that particular did
 
-**Kind**: static method of [<code>did</code>](#did)  
+**Kind**: inner method of [<code>did/resolver</code>](#module_did/resolver)  
 **Returns**: <code>boolean</code> - isSuppored  
 
 | Param | Type |
@@ -648,12 +345,12 @@ sk.did.isSupported('did:unknown:0xdsdasddasdsa...'); // false
 
 * * *
 
-<a name="did.resolve"></a>
+<a name="module_did/resolver..resolve"></a>
 
-#### `did.resolve(did)` ⇒ <code>object</code>
+#### `did/resolver~resolve(did)` ⇒ <code>object</code>
 Resolves did document
 
-**Kind**: static method of [<code>did</code>](#did)  
+**Kind**: inner method of [<code>did/resolver</code>](#module_did/resolver)  
 **Returns**: <code>object</code> - didDocument  
 
 | Param | Type |
@@ -667,12 +364,12 @@ await sk.did.resolve('did:selfkey:0xdsdasddasdsa...');
 
 * * *
 
-<a name="did.registerMethodResolver"></a>
+<a name="module_did/resolver..registerMethodResolver"></a>
 
-#### `did.registerMethodResolver(method, resolver)`
+#### `did/resolver~registerMethodResolver(method, resolver)`
 Register custom resolver for a did method
 
-**Kind**: static method of [<code>did</code>](#did)  
+**Kind**: inner method of [<code>did/resolver</code>](#module_did/resolver)  
 
 | Param | Type |
 | --- | --- |
@@ -686,51 +383,367 @@ sk.did.register('new-method', resolver);
 
 * * *
 
-<a name="identity"></a>
+<a name="module_identity/attribute-manager"></a>
 
-### `identity` : <code>object</code>
-Identity Namespace
+### identity/attribute-manager
 
-**Kind**: global namespace  
-
-* [`identity`](#identity) : <code>object</code>
-    * [`.utils`](#identity.utils) : <code>object</code>
-        * [`.attributeMapBySchema(attributes)`](#identity.utils.attributeMapBySchema) ⇒ <code>object</code>
-        * [`.resolveAttributeFiles(all, fileProcessor)`](#identity.utils.resolveAttributeFiles) ⇒ <code>object</code>
-        * [`.denormalizeDocumentsSchema(typeSchema, value, documents, maxDepth)`](#identity.utils.denormalizeDocumentsSchema) ⇒ <code>object</code>
-        * [`.normalizeDocumentsSchema(typeSchema, value, documents, maxDepth)`](#identity.utils.normalizeDocumentsSchema) ⇒ <code>object</code>
-        * [`.schemaContainsFile(schema, maxDepth)`](#identity.utils.schemaContainsFile) ⇒ <code>boolean</code>
-        * [`.fetchJson(url, options)`](#identity.utils.fetchJson) ⇒ <code>Promise.&lt;object&gt;</code>
-        * [`.dereferenceSchema(schema, options)`](#identity.utils.dereferenceSchema) ⇒ <code>Promise.&lt;object&gt;</code>
-
-
-* * *
-
-<a name="identity.utils"></a>
-
-#### `identity.utils` : <code>object</code>
-Identity utils
-
-**Kind**: static namespace of [<code>identity</code>](#identity)  
-
-* [`.utils`](#identity.utils) : <code>object</code>
-    * [`.attributeMapBySchema(attributes)`](#identity.utils.attributeMapBySchema) ⇒ <code>object</code>
-    * [`.resolveAttributeFiles(all, fileProcessor)`](#identity.utils.resolveAttributeFiles) ⇒ <code>object</code>
-    * [`.denormalizeDocumentsSchema(typeSchema, value, documents, maxDepth)`](#identity.utils.denormalizeDocumentsSchema) ⇒ <code>object</code>
-    * [`.normalizeDocumentsSchema(typeSchema, value, documents, maxDepth)`](#identity.utils.normalizeDocumentsSchema) ⇒ <code>object</code>
-    * [`.schemaContainsFile(schema, maxDepth)`](#identity.utils.schemaContainsFile) ⇒ <code>boolean</code>
-    * [`.fetchJson(url, options)`](#identity.utils.fetchJson) ⇒ <code>Promise.&lt;object&gt;</code>
-    * [`.dereferenceSchema(schema, options)`](#identity.utils.dereferenceSchema) ⇒ <code>Promise.&lt;object&gt;</code>
+* [identity/attribute-manager](#module_identity/attribute-manager)
+    * _static_
+        * [.AttributeManager](#module_identity/attribute-manager.AttributeManager)
+            * [`new exports.AttributeManager()`](#new_module_identity/attribute-manager.AttributeManager_new)
+            * _instance_
+                * [`.addRepository(repository)`](#module_identity/attribute-manager.AttributeManager+addRepository)
+                * [`.removeRepository(repository)`](#module_identity/attribute-manager.AttributeManager+removeRepository)
+                * [`.findRepositoryForAttribute(attr)`](#module_identity/attribute-manager.AttributeManager+findRepositoryForAttribute) ⇒ <code>identity.Repository</code> \| <code>null</code>
+                * [`.zipAttributesWithRequirements(attributes, [requirements])`](#module_identity/attribute-manager.AttributeManager+zipAttributesWithRequirements) ⇒ <code>Array</code>
+                * [`.validateOneAttribute(attr, requirement)`](#module_identity/attribute-manager.AttributeManager+validateOneAttribute) ⇒ <code>object</code>
+                * [`.validateAttributes(attributes, requirements)`](#module_identity/attribute-manager.AttributeManager+validateAttributes) ⇒ <code>object</code>
+            * _static_
+                * [`.createWithSelfkeyRepository(options)`](#module_identity/attribute-manager.AttributeManager.createWithSelfkeyRepository) ⇒ <code>AttributeManager</code>
+    * _inner_
+        * [~AttributeManager](#module_identity/attribute-manager..AttributeManager)
 
 
 * * *
 
-<a name="identity.utils.attributeMapBySchema"></a>
+<a name="module_identity/attribute-manager.AttributeManager"></a>
 
-##### `utils.attributeMapBySchema(attributes)` ⇒ <code>object</code>
+#### identity/attribute-manager.AttributeManager
+**Kind**: static class of [<code>identity/attribute-manager</code>](#module_identity/attribute-manager)  
+
+* [.AttributeManager](#module_identity/attribute-manager.AttributeManager)
+    * [`new exports.AttributeManager()`](#new_module_identity/attribute-manager.AttributeManager_new)
+    * _instance_
+        * [`.addRepository(repository)`](#module_identity/attribute-manager.AttributeManager+addRepository)
+        * [`.removeRepository(repository)`](#module_identity/attribute-manager.AttributeManager+removeRepository)
+        * [`.findRepositoryForAttribute(attr)`](#module_identity/attribute-manager.AttributeManager+findRepositoryForAttribute) ⇒ <code>identity.Repository</code> \| <code>null</code>
+        * [`.zipAttributesWithRequirements(attributes, [requirements])`](#module_identity/attribute-manager.AttributeManager+zipAttributesWithRequirements) ⇒ <code>Array</code>
+        * [`.validateOneAttribute(attr, requirement)`](#module_identity/attribute-manager.AttributeManager+validateOneAttribute) ⇒ <code>object</code>
+        * [`.validateAttributes(attributes, requirements)`](#module_identity/attribute-manager.AttributeManager+validateAttributes) ⇒ <code>object</code>
+    * _static_
+        * [`.createWithSelfkeyRepository(options)`](#module_identity/attribute-manager.AttributeManager.createWithSelfkeyRepository) ⇒ <code>AttributeManager</code>
+
+
+* * *
+
+<a name="new_module_identity/attribute-manager.AttributeManager_new"></a>
+
+##### `new exports.AttributeManager()`
+Creates an instance of AttributeManager.
+
+
+* * *
+
+<a name="module_identity/attribute-manager.AttributeManager+addRepository"></a>
+
+##### `attributeManager.addRepository(repository)`
+Adds a new repository
+
+**Kind**: instance method of [<code>AttributeManager</code>](#module_identity/attribute-manager.AttributeManager)  
+
+| Param | Type |
+| --- | --- |
+| repository | <code>identity.Repository</code> | 
+
+
+* * *
+
+<a name="module_identity/attribute-manager.AttributeManager+removeRepository"></a>
+
+##### `attributeManager.removeRepository(repository)`
+Remove a repository
+
+**Kind**: instance method of [<code>AttributeManager</code>](#module_identity/attribute-manager.AttributeManager)  
+
+| Param | Type |
+| --- | --- |
+| repository | <code>identity.Repository</code> | 
+
+
+* * *
+
+<a name="module_identity/attribute-manager.AttributeManager+findRepositoryForAttribute"></a>
+
+##### `attributeManager.findRepositoryForAttribute(attr)` ⇒ <code>identity.Repository</code> \| <code>null</code>
+Finds a repository for a given attribute
+
+**Kind**: instance method of [<code>AttributeManager</code>](#module_identity/attribute-manager.AttributeManager)  
+
+| Param | Type |
+| --- | --- |
+| attr | <code>object</code> \| <code>string</code> | 
+
+
+* * *
+
+<a name="module_identity/attribute-manager.AttributeManager+zipAttributesWithRequirements"></a>
+
+##### `attributeManager.zipAttributesWithRequirements(attributes, [requirements])` ⇒ <code>Array</code>
+Given an array of attributes and requirements, tries to much between them
+
+**Kind**: instance method of [<code>AttributeManager</code>](#module_identity/attribute-manager.AttributeManager)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| attributes | <code>Array</code> |  | 
+| [requirements] | <code>Array</code> | <code>[]</code> | 
+
+
+* * *
+
+<a name="module_identity/attribute-manager.AttributeManager+validateOneAttribute"></a>
+
+##### `attributeManager.validateOneAttribute(attr, requirement)` ⇒ <code>object</code>
+Given an attribute and requirement validates the attribute
+
+**Kind**: instance method of [<code>AttributeManager</code>](#module_identity/attribute-manager.AttributeManager)  
+
+| Param | Type |
+| --- | --- |
+| attr | <code>object</code> | 
+| requirement | <code>object</code> | 
+
+
+* * *
+
+<a name="module_identity/attribute-manager.AttributeManager+validateAttributes"></a>
+
+##### `attributeManager.validateAttributes(attributes, requirements)` ⇒ <code>object</code>
+Given a list of attribute and requirements, validates all attributes
+
+**Kind**: instance method of [<code>AttributeManager</code>](#module_identity/attribute-manager.AttributeManager)  
+
+| Param | Type |
+| --- | --- |
+| attributes | <code>Array</code> | 
+| requirements | <code>Array</code> | 
+
+
+* * *
+
+<a name="module_identity/attribute-manager.AttributeManager.createWithSelfkeyRepository"></a>
+
+##### `AttributeManager.createWithSelfkeyRepository(options)` ⇒ <code>AttributeManager</code>
+Creates an AttributeManager and initializes it with selfkey repository
+
+**Kind**: static method of [<code>AttributeManager</code>](#module_identity/attribute-manager.AttributeManager)  
+
+| Param | Type |
+| --- | --- |
+| options | <code>object</code> | 
+
+
+* * *
+
+<a name="module_identity/attribute-manager..AttributeManager"></a>
+
+#### identity/attribute-manager~AttributeManager
+Attribute Manager, manages multiple repositories of attributes
+
+**Kind**: inner class of [<code>identity/attribute-manager</code>](#module_identity/attribute-manager)  
+
+* * *
+
+<a name="module_identity/repository"></a>
+
+### identity/repository
+
+* [identity/repository](#module_identity/repository)
+    * _static_
+        * [.Repository](#module_identity/repository.Repository)
+            * [`new exports.Repository([config])`](#new_module_identity/repository.Repository_new)
+            * _instance_
+                * [`.resolveAll()`](#module_identity/repository.Repository+resolveAll)
+                * [`.resolveJsonSchema(schema, [config])`](#module_identity/repository.Repository+resolveJsonSchema) ⇒ <code>object</code>
+                * [`.resolveUiSchema(schema, [config])`](#module_identity/repository.Repository+resolveUiSchema) ⇒ <code>object</code>
+                * [`.getValidator()`](#module_identity/repository.Repository+getValidator) ⇒
+                * [`.validateData(schemaId, data)`](#module_identity/repository.Repository+validateData) ⇒ <code>object</code>
+            * _static_
+                * [`.createSelfkeyRepo([options])`](#module_identity/repository.Repository.createSelfkeyRepo) ⇒ <code>Repository</code>
+                * [`.fromConfig(config, [ui])`](#module_identity/repository.Repository.fromConfig) ⇒ <code>Repository</code>
+                * [`.fromSchemaId(schemaId, [ui])`](#module_identity/repository.Repository.fromSchemaId) ⇒ <code>Repository</code>
+    * _inner_
+        * [~Repository](#module_identity/repository..Repository)
+
+
+* * *
+
+<a name="module_identity/repository.Repository"></a>
+
+#### identity/repository.Repository
+**Kind**: static class of [<code>identity/repository</code>](#module_identity/repository)  
+
+* [.Repository](#module_identity/repository.Repository)
+    * [`new exports.Repository([config])`](#new_module_identity/repository.Repository_new)
+    * _instance_
+        * [`.resolveAll()`](#module_identity/repository.Repository+resolveAll)
+        * [`.resolveJsonSchema(schema, [config])`](#module_identity/repository.Repository+resolveJsonSchema) ⇒ <code>object</code>
+        * [`.resolveUiSchema(schema, [config])`](#module_identity/repository.Repository+resolveUiSchema) ⇒ <code>object</code>
+        * [`.getValidator()`](#module_identity/repository.Repository+getValidator) ⇒
+        * [`.validateData(schemaId, data)`](#module_identity/repository.Repository+validateData) ⇒ <code>object</code>
+    * _static_
+        * [`.createSelfkeyRepo([options])`](#module_identity/repository.Repository.createSelfkeyRepo) ⇒ <code>Repository</code>
+        * [`.fromConfig(config, [ui])`](#module_identity/repository.Repository.fromConfig) ⇒ <code>Repository</code>
+        * [`.fromSchemaId(schemaId, [ui])`](#module_identity/repository.Repository.fromSchemaId) ⇒ <code>Repository</code>
+
+
+* * *
+
+<a name="new_module_identity/repository.Repository_new"></a>
+
+##### `new exports.Repository([config])`
+Creates an instance of Repository.
+
+
+| Param | Type | Default |
+| --- | --- | --- |
+| [config] | <code>object</code> | <code>{}</code> | 
+
+
+* * *
+
+<a name="module_identity/repository.Repository+resolveAll"></a>
+
+##### `repository.resolveAll()`
+Resolve all repository data
+
+**Kind**: instance method of [<code>Repository</code>](#module_identity/repository.Repository)  
+
+* * *
+
+<a name="module_identity/repository.Repository+resolveJsonSchema"></a>
+
+##### `repository.resolveJsonSchema(schema, [config])` ⇒ <code>object</code>
+Resolve one JSON schema
+
+**Kind**: instance method of [<code>Repository</code>](#module_identity/repository.Repository)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| schema | <code>object</code> \| <code>string</code> |  | 
+| [config] | <code>object</code> | <code>{}</code> | 
+
+
+* * *
+
+<a name="module_identity/repository.Repository+resolveUiSchema"></a>
+
+##### `repository.resolveUiSchema(schema, [config])` ⇒ <code>object</code>
+Resolve one ui schema
+
+**Kind**: instance method of [<code>Repository</code>](#module_identity/repository.Repository)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| schema | <code>object</code> \| <code>string</code> |  | 
+| [config] | <code>object</code> | <code>{}</code> | 
+
+
+* * *
+
+<a name="module_identity/repository.Repository+getValidator"></a>
+
+##### `repository.getValidator()` ⇒
+Creates an Ajv validator for the repository data
+
+**Kind**: instance method of [<code>Repository</code>](#module_identity/repository.Repository)  
+**Returns**: Ajv instance  
+
+* * *
+
+<a name="module_identity/repository.Repository+validateData"></a>
+
+##### `repository.validateData(schemaId, data)` ⇒ <code>object</code>
+Given schemaId and data, validates the data based on relevant schema
+
+**Kind**: instance method of [<code>Repository</code>](#module_identity/repository.Repository)  
+**Returns**: <code>object</code> - {valid:boolean, errors: array}  
+
+| Param | Type |
+| --- | --- |
+| schemaId | <code>string</code> | 
+| data | <code>object</code> | 
+
+
+* * *
+
+<a name="module_identity/repository.Repository.createSelfkeyRepo"></a>
+
+##### `Repository.createSelfkeyRepo([options])` ⇒ <code>Repository</code>
+Creates a repository initialized with selfkey data
+
+**Kind**: static method of [<code>Repository</code>](#module_identity/repository.Repository)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| [options] | <code>object</code> | <code>{}</code> | 
+
+
+* * *
+
+<a name="module_identity/repository.Repository.fromConfig"></a>
+
+##### `Repository.fromConfig(config, [ui])` ⇒ <code>Repository</code>
+Creates and preloads a Repository from a config object
+
+**Kind**: static method of [<code>Repository</code>](#module_identity/repository.Repository)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| config | <code>object</code> |  | 
+| [ui] | <code>boolean</code> | <code>false</code> | 
+
+
+* * *
+
+<a name="module_identity/repository.Repository.fromSchemaId"></a>
+
+##### `Repository.fromSchemaId(schemaId, [ui])` ⇒ <code>Repository</code>
+Creates and preloads a Repository based on attribute schema id
+
+**Kind**: static method of [<code>Repository</code>](#module_identity/repository.Repository)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| schemaId | <code>string</code> |  | 
+| [ui] | <code>boolean</code> | <code>false</code> | 
+
+
+* * *
+
+<a name="module_identity/repository..Repository"></a>
+
+#### identity/repository~Repository
+Repository Class allows to load identity attribute repository and validate schemas
+
+Part of `identity` namespace
+
+**Kind**: inner class of [<code>identity/repository</code>](#module_identity/repository)  
+
+* * *
+
+<a name="module_identity/utils"></a>
+
+### identity/utils
+
+* [identity/utils](#module_identity/utils)
+    * [`~attributeMapBySchema(attributes)`](#module_identity/utils..attributeMapBySchema) ⇒ <code>object</code>
+    * [`~resolveAttributeFiles(all, fileProcessor)`](#module_identity/utils..resolveAttributeFiles) ⇒ <code>object</code>
+    * [`~denormalizeDocumentsSchema(typeSchema, value, documents, maxDepth)`](#module_identity/utils..denormalizeDocumentsSchema) ⇒ <code>object</code>
+    * [`~normalizeDocumentsSchema(typeSchema, value, documents, maxDepth)`](#module_identity/utils..normalizeDocumentsSchema) ⇒ <code>object</code>
+    * [`~schemaContainsFile(schema, maxDepth)`](#module_identity/utils..schemaContainsFile) ⇒ <code>boolean</code>
+    * [`~fetchJson(url, options)`](#module_identity/utils..fetchJson) ⇒ <code>Promise.&lt;object&gt;</code>
+    * [`~dereferenceSchema(schema, options)`](#module_identity/utils..dereferenceSchema) ⇒ <code>Promise.&lt;object&gt;</code>
+
+
+* * *
+
+<a name="module_identity/utils..attributeMapBySchema"></a>
+
+#### `identity/utils~attributeMapBySchema(attributes)` ⇒ <code>object</code>
 Map list of attributes to schema name
 
-**Kind**: static method of [<code>utils</code>](#identity.utils)  
+**Kind**: inner method of [<code>identity/utils</code>](#module_identity/utils)  
 **Returns**: <code>object</code> - an object with attribute name as keys  
 
 | Param | Type | Description |
@@ -740,12 +753,12 @@ Map list of attributes to schema name
 
 * * *
 
-<a name="identity.utils.resolveAttributeFiles"></a>
+<a name="module_identity/utils..resolveAttributeFiles"></a>
 
-##### `utils.resolveAttributeFiles(all, fileProcessor)` ⇒ <code>object</code>
+#### `identity/utils~resolveAttributeFiles(all, fileProcessor)` ⇒ <code>object</code>
 Given a attribute data object and a file processor, process all files in the data object
 
-**Kind**: static method of [<code>utils</code>](#identity.utils)  
+**Kind**: inner method of [<code>identity/utils</code>](#module_identity/utils)  
 **Returns**: <code>object</code> - a new attribute data object with processed files  
 
 | Param | Type | Description |
@@ -756,13 +769,13 @@ Given a attribute data object and a file processor, process all files in the dat
 
 * * *
 
-<a name="identity.utils.denormalizeDocumentsSchema"></a>
+<a name="module_identity/utils..denormalizeDocumentsSchema"></a>
 
-##### `utils.denormalizeDocumentsSchema(typeSchema, value, documents, maxDepth)` ⇒ <code>object</code>
+#### `identity/utils~denormalizeDocumentsSchema(typeSchema, value, documents, maxDepth)` ⇒ <code>object</code>
 Given a attribute data object and an array of documents, insert the documents
 into the data object where they are referenced from
 
-**Kind**: static method of [<code>utils</code>](#identity.utils)  
+**Kind**: inner method of [<code>identity/utils</code>](#module_identity/utils)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -774,14 +787,14 @@ into the data object where they are referenced from
 
 * * *
 
-<a name="identity.utils.normalizeDocumentsSchema"></a>
+<a name="module_identity/utils..normalizeDocumentsSchema"></a>
 
-##### `utils.normalizeDocumentsSchema(typeSchema, value, documents, maxDepth)` ⇒ <code>object</code>
+#### `identity/utils~normalizeDocumentsSchema(typeSchema, value, documents, maxDepth)` ⇒ <code>object</code>
 Given a attribute data object
 export all documents from the object to a separate array, leaving documnent
 references behind
 
-**Kind**: static method of [<code>utils</code>](#identity.utils)  
+**Kind**: inner method of [<code>identity/utils</code>](#module_identity/utils)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -793,12 +806,12 @@ references behind
 
 * * *
 
-<a name="identity.utils.schemaContainsFile"></a>
+<a name="module_identity/utils..schemaContainsFile"></a>
 
-##### `utils.schemaContainsFile(schema, maxDepth)` ⇒ <code>boolean</code>
+#### `identity/utils~schemaContainsFile(schema, maxDepth)` ⇒ <code>boolean</code>
 Check if schema contains a file
 
-**Kind**: static method of [<code>utils</code>](#identity.utils)  
+**Kind**: inner method of [<code>identity/utils</code>](#module_identity/utils)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -808,13 +821,13 @@ Check if schema contains a file
 
 * * *
 
-<a name="identity.utils.fetchJson"></a>
+<a name="module_identity/utils..fetchJson"></a>
 
-##### `utils.fetchJson(url, options)` ⇒ <code>Promise.&lt;object&gt;</code>
+#### `identity/utils~fetchJson(url, options)` ⇒ <code>Promise.&lt;object&gt;</code>
 Fetch json from remote server.
 Optionally specify max number of attempts to do on failure (3 by default)
 
-**Kind**: static method of [<code>utils</code>](#identity.utils)  
+**Kind**: inner method of [<code>identity/utils</code>](#module_identity/utils)  
 **Returns**: <code>Promise.&lt;object&gt;</code> - json loaded from server  
 
 | Param | Type |
@@ -829,13 +842,13 @@ async sk.identity.utils.fetchJson('http://platform.selfkey.org/schema/attribute/
 
 * * *
 
-<a name="identity.utils.dereferenceSchema"></a>
+<a name="module_identity/utils..dereferenceSchema"></a>
 
-##### `utils.dereferenceSchema(schema, options)` ⇒ <code>Promise.&lt;object&gt;</code>
+#### `identity/utils~dereferenceSchema(schema, options)` ⇒ <code>Promise.&lt;object&gt;</code>
 Given a scheme object, load all references from the schema
 And combine into one json schema object
 
-**Kind**: static method of [<code>utils</code>](#identity.utils)  
+**Kind**: inner method of [<code>identity/utils</code>](#module_identity/utils)  
 **Returns**: <code>Promise.&lt;object&gt;</code> - dereferences json schema object  
 
 | Param | Type |
@@ -846,27 +859,24 @@ And combine into one json schema object
 
 * * *
 
-<a name="jwt"></a>
+<a name="module_jwt/constants"></a>
 
-### `jwt` : <code>object</code>
-JWT Namespace
-
-**Kind**: global namespace  
-
-* [`jwt`](#jwt) : <code>object</code>
-    * [`.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)`](#jwt.issueJWT) ⇒ <code>Promise.&lt;string&gt;</code>
-    * [`.parseJWT(token)`](#jwt.parseJWT) ⇒ <code>object</code>
-    * [`.validateJWT(token, requestedAlgorithm, key)`](#jwt.validateJWT) ⇒ <code>Promise.&lt;(object\|null)&gt;</code>
-
+### jwt/constants
 
 * * *
 
-<a name="jwt.issueJWT"></a>
+<a name="module_jwt/issue"></a>
 
-#### `jwt.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)` ⇒ <code>Promise.&lt;string&gt;</code>
+### jwt/issue
+
+* * *
+
+<a name="module_jwt/issue..issueJWT"></a>
+
+#### `jwt/issue~issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)` ⇒ <code>Promise.&lt;string&gt;</code>
 Issue a new JWT token
 
-**Kind**: static method of [<code>jwt</code>](#jwt)  
+**Kind**: inner method of [<code>jwt/issue</code>](#module_jwt/issue)  
 **Returns**: <code>Promise.&lt;string&gt;</code> - jwt  
 **Throws**:
 
@@ -889,12 +899,18 @@ sk.jwt.issueJWT('simple-session', 'hmac', 'test');
 
 * * *
 
-<a name="jwt.parseJWT"></a>
+<a name="module_jwt/parse"></a>
 
-#### `jwt.parseJWT(token)` ⇒ <code>object</code>
+### jwt/parse
+
+* * *
+
+<a name="module_jwt/parse..parseJWT"></a>
+
+#### `jwt/parse~parseJWT(token)` ⇒ <code>object</code>
 Parse a JWT token
 
-**Kind**: static method of [<code>jwt</code>](#jwt)  
+**Kind**: inner method of [<code>jwt/parse</code>](#module_jwt/parse)  
 **Returns**: <code>object</code> - decodedJwt  
 
 | Param | Type | Description |
@@ -908,12 +924,18 @@ sk.jwt.parseJWT(token);
 
 * * *
 
-<a name="jwt.validateJWT"></a>
+<a name="module_jwt/validate"></a>
 
-#### `jwt.validateJWT(token, requestedAlgorithm, key)` ⇒ <code>Promise.&lt;(object\|null)&gt;</code>
+### jwt/validate
+
+* * *
+
+<a name="module_jwt/validate..validateJWT"></a>
+
+#### `jwt/validate~validateJWT(token, requestedAlgorithm, key)` ⇒ <code>Promise.&lt;(object\|null)&gt;</code>
 Validate a JWT token
 
-**Kind**: static method of [<code>jwt</code>](#jwt)  
+**Kind**: inner method of [<code>jwt/validate</code>](#module_jwt/validate)  
 **Returns**: <code>Promise.&lt;(object\|null)&gt;</code> - decodedJwt  
 **Throws**:
 
@@ -933,28 +955,23 @@ sk.jwt.validateJWT(token, 'hmac', key);
 
 * * *
 
-<a name="key"></a>
+<a name="module_key/hmac"></a>
 
-### `key` : <code>object</code>
-Key Namespace
+### key/hmac
 
-**Kind**: global namespace  
-
-* [`key`](#key) : <code>object</code>
-    * [`.generateHMACKey([length], [encoding])`](#key.generateHMACKey) ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
-    * [`.generateHMACKey(secret, [encoding])`](#key.generateHMACKey) ⇒
-    * [`.generateRSAKeyPair([length])`](#key.generateRSAKeyPair) ⇒ <code>Promise.&lt;object&gt;</code>
-    * [`.checkSecretLength(key, algorithm)`](#key.checkSecretLength) ⇒ <code>boolean</code>
+* [key/hmac](#module_key/hmac)
+    * [`~generateHMACKey([length], [encoding])`](#module_key/hmac..generateHMACKey) ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
+    * [`~generateHMACKey(secret, [encoding])`](#module_key/hmac..generateHMACKey) ⇒
 
 
 * * *
 
-<a name="key.generateHMACKey"></a>
+<a name="module_key/hmac..generateHMACKey"></a>
 
-#### `key.generateHMACKey([length], [encoding])` ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
+#### `key/hmac~generateHMACKey([length], [encoding])` ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
 Generate a HMAC Key
 
-**Kind**: static method of [<code>key</code>](#key)  
+**Kind**: inner method of [<code>key/hmac</code>](#module_key/hmac)  
 **Returns**: <code>Promise.&lt;(string\|Buffer)&gt;</code> - key  
 
 | Param | Type | Default | Description |
@@ -969,12 +986,12 @@ sk.key.generateHMACKey();
 
 * * *
 
-<a name="key.generateHMACKey"></a>
+<a name="module_key/hmac..generateHMACKey"></a>
 
-#### `key.generateHMACKey(secret, [encoding])` ⇒
+#### `key/hmac~generateHMACKey(secret, [encoding])` ⇒
 Calculate the bytes length of secret key
 
-**Kind**: static method of [<code>key</code>](#key)  
+**Kind**: inner method of [<code>key/hmac</code>](#module_key/hmac)  
 **Returns**: number  
 
 | Param | Type | Default | Description |
@@ -989,12 +1006,18 @@ sk.key.getSecretLength(secret);
 
 * * *
 
-<a name="key.generateRSAKeyPair"></a>
+<a name="module_key/rsa"></a>
 
-#### `key.generateRSAKeyPair([length])` ⇒ <code>Promise.&lt;object&gt;</code>
+### key/rsa
+
+* * *
+
+<a name="module_key/rsa..generateRSAKeyPair"></a>
+
+#### `key/rsa~generateRSAKeyPair([length])` ⇒ <code>Promise.&lt;object&gt;</code>
 Generate a RSA Key Pair
 
-**Kind**: static method of [<code>key</code>](#key)  
+**Kind**: inner method of [<code>key/rsa</code>](#module_key/rsa)  
 **Returns**: <code>Promise.&lt;object&gt;</code> - keypair - contains publicKey adn privateKey  
 
 | Param | Type | Default | Description |
@@ -1008,12 +1031,18 @@ sk.key.generateRSAKeyPair();
 
 * * *
 
-<a name="key.checkSecretLength"></a>
+<a name="module_key/validate-private-key"></a>
 
-#### `key.checkSecretLength(key, algorithm)` ⇒ <code>boolean</code>
+### key/validate-private-key
+
+* * *
+
+<a name="module_key/validate-private-key..checkSecretLength"></a>
+
+#### `key/validate-private-key~checkSecretLength(key, algorithm)` ⇒ <code>boolean</code>
 Checks if secret length is good enough
 
-**Kind**: static method of [<code>key</code>](#key)  
+**Kind**: inner method of [<code>key/validate-private-key</code>](#module_key/validate-private-key)  
 **Returns**: <code>boolean</code> - - isKeyLongEnough  
 
 | Param | Type |
@@ -1028,22 +1057,26 @@ sk.key.checkSecretLength();
 
 * * *
 
-<a name="kycc"></a>
+<a name="module_kycc/get-user-data-for-token"></a>
 
-### `kycc` : <code>object</code>
-KYCC Namespace
+### kycc/get-user-data-for-token
 
-**Kind**: global namespace  
+* [kycc/get-user-data-for-token](#module_kycc/get-user-data-for-token)
+    * [`~getUserDataForToken(token, options)`](#module_kycc/get-user-data-for-token..getUserDataForToken) ⇒ <code>Promise.&lt;KYCCUserObject&gt;</code>
+    * [`~FileProcessor`](#module_kycc/get-user-data-for-token..FileProcessor)
+    * [`~GetUserDataForTokenOptions`](#module_kycc/get-user-data-for-token..GetUserDataForTokenOptions)
+    * [`~KYCCUserObject`](#module_kycc/get-user-data-for-token..KYCCUserObject)
+
 
 * * *
 
-<a name="kycc.getUserDataForToken"></a>
+<a name="module_kycc/get-user-data-for-token..getUserDataForToken"></a>
 
-#### `kycc.getUserDataForToken(token, options)` ⇒ [<code>Promise.&lt;KYCCUserObject&gt;</code>](#KYCCUserObject)
+#### `kycc/get-user-data-for-token~getUserDataForToken(token, options)` ⇒ <code>Promise.&lt;KYCCUserObject&gt;</code>
 Fetch user data via token
 
-**Kind**: static method of [<code>kycc</code>](#kycc)  
-**Returns**: [<code>Promise.&lt;KYCCUserObject&gt;</code>](#KYCCUserObject) - user object  
+**Kind**: inner method of [<code>kycc/get-user-data-for-token</code>](#module_kycc/get-user-data-for-token)  
+**Returns**: <code>Promise.&lt;KYCCUserObject&gt;</code> - user object  
 **Throws**:
 
 - if no instanceUrl in options
@@ -1055,7 +1088,7 @@ Fetch user data via token
 | Param | Type | Description |
 | --- | --- | --- |
 | token | <code>string</code> | jwt token |
-| options | [<code>GetUserDataForTokenOptions</code>](#GetUserDataForTokenOptions) |  |
+| options | <code>GetUserDataForTokenOptions</code> |  |
 
 **Example**  
 ```js
@@ -1064,12 +1097,12 @@ async sk.kycc.getUserDataForToken(token, options);
 
 * * *
 
-<a name="FileProcessor"></a>
+<a name="module_kycc/get-user-data-for-token..FileProcessor"></a>
 
-### `FileProcessor`
+#### `kycc/get-user-data-for-token~FileProcessor`
 File Processor
 
-**Kind**: global typedef  
+**Kind**: inner typedef of [<code>kycc/get-user-data-for-token</code>](#module_kycc/get-user-data-for-token)  
 **Properties**
 
 | Name | Type |
@@ -1084,29 +1117,29 @@ File Processor
 
 * * *
 
-<a name="GetUserDataForTokenOptions"></a>
+<a name="module_kycc/get-user-data-for-token..GetUserDataForTokenOptions"></a>
 
-### `GetUserDataForTokenOptions`
+#### `kycc/get-user-data-for-token~GetUserDataForTokenOptions`
 Options used in getUserDataForToken function
 
-**Kind**: global typedef  
+**Kind**: inner typedef of [<code>kycc/get-user-data-for-token</code>](#module_kycc/get-user-data-for-token)  
 **Properties**
 
 | Name | Type |
 | --- | --- |
 | instanceUrl | <code>string</code> | 
 | templateId | <code>string</code> | 
-| fileProcessor | [<code>FileProcessor</code>](#FileProcessor) | 
+| fileProcessor | <code>FileProcessor</code> | 
 
 
 * * *
 
-<a name="KYCCUserObject"></a>
+<a name="module_kycc/get-user-data-for-token..KYCCUserObject"></a>
 
-### `KYCCUserObject`
+#### `kycc/get-user-data-for-token~KYCCUserObject`
 User Object
 
-**Kind**: global typedef  
+**Kind**: inner typedef of [<code>kycc/get-user-data-for-token</code>](#module_kycc/get-user-data-for-token)  
 **Properties**
 
 | Name | Type | Description |

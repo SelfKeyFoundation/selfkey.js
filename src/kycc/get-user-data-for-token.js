@@ -2,7 +2,9 @@ import request from 'request';
 import { createClient } from './kycc-internal-client';
 import { parseApplicationAttributes, createKyccFileProcessor } from './utils';
 import { resolveAttributeFiles, attributeMapBySchema } from '../identity/utils';
-
+/**
+ * @module kycc/get-user-data-for-token
+ */
 /**
  * File Processor
  * @typedef FileProcessor
@@ -64,7 +66,7 @@ import { resolveAttributeFiles, attributeMapBySchema } from '../identity/utils';
  * Fetch user data via token
  * @async
  * @function getUserDataForToken
- * @memberof kycc
+ *
  * @param {string} token - jwt token
  * @param {GetUserDataForTokenOptions} options
  * @returns {Promise<KYCCUserObject>} user object

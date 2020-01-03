@@ -1,8 +1,12 @@
 /**
+ * @module did/parse
+ */
+
+/**
  * Parses did string to components
  *
  * @function parse
- * @memberof did
+ *
  * @param {string} did
  * @throws if invalid did is provided
  * @returns {object} parsedDid

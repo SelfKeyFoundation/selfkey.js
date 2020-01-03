@@ -1,9 +1,12 @@
 /**
+ * @module jwt/constants
+ */
+/**
  * @constant
  * @private
  * @type object
  * @name JWT_ALGORITHMS
- * @memberof jwt
+ *
  * @property RSA - RSA algorithm name
  * @property HMAC - HMAC algorithm name
  */
