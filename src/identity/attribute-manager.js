@@ -99,17 +99,28 @@ export class AttributeManager {
 
 	validateAttributes(attributes, requirements) {
 		const zip = this.zipAttributesWithRequirements(attributes, requirements);
-		return zip.reduce(
-			(acc, curr) => {
+		return zip
+			.map(curr => {
 				const { attr, requirement } = curr;
 				const { valid, errors, required } = this.validateOneAttribute(attr, requirement);
-				acc.attributes.push({ attribute: attr, valid, errors, requirement });
-				acc.errors = acc.errors.concat(errors);
-				acc.valid = !acc.valid ? acc.valid : !valid && required;
-				return acc;
-			},
-			{ attributes: [], errors: [], valid: true }
-		);
+				return { attr, requirement, valid, errors, required };
+			})
+			.reduce(
+				(acc, curr) => {
+					const { attr, requirement, valid, errors, required } = curr;
+					acc.attributes.push({ ...attr, valid, errors, requirement });
+					if (errors) {
+						acc.errors = acc.errors.concat(errors);
+					}
+
+					if (!valid && required) {
+						acc.valid = false;
+					}
+
+					return acc;
+				},
+				{ attributes: [], errors: [], valid: true }
+			);
 	}
 }
 

@@ -230,10 +230,8 @@ export const dereferenceSchema = (schema, options) => {
 		async read(file) {
 			let url = file.url;
 			if (options.transformSchemaUrl) {
-				console.log('XXX dereferencing before transform', schema.$id, url, options);
 				url = options.transformSchemaUrl(url);
 			}
-			console.log('XXX dereferencing', schema.$id, url, options);
 			return fetchJson(url);
 		}
 	};

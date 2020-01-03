@@ -23,7 +23,7 @@ const verifiers = {
 
 export const verifyChallengeSignature = async (nonce, signature, did) => {
 	const { value, keyId } = signature;
-	const { authentication, publicKey } = await resolve(did);
+	const { authentication, publicKey } = (await resolve(did)) || {};
 	if (!authentication || !authentication.includes(keyId)) {
 		throw new Error('Invalid key usage');
 	}

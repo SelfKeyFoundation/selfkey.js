@@ -12,7 +12,7 @@ const verifyJWT = promisify(jwt.verify);
  * @param {string} token - jwt token
  * @param {string} requestedAlgorithm - algorithm name
  * @param {string} key - the key to validate the token against
- * @returns {object|null} decodedJwt
+ * @returns {Promise<object|null>} decodedJwt
  * @throws if unknown algorithm provided
  * @example
  *

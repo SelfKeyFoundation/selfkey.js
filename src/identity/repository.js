@@ -137,12 +137,14 @@ export class Repository {
 	}
 
 	getValidator() {
-		const ajv = new Ajv({ validateSchema: false });
+		const ajv = new Ajv({ validateSchema: false, loadSchema: utils.fetchJson });
 		ajv.addFormat('file', () => {});
 		if (this.identityAttributeSchema) {
 			ajv.addMetaSchema(this.identityAttributeSchema);
 		}
-		Object.keys(this.jsonSchemas).forEach(url => ajv.addSchema(this.jsonSchemas[url].schema));
+		Object.keys(this.jsonSchemas).forEach(url =>
+			ajv.addSchema(this.jsonSchemas[url].dereferenced)
+		);
 		return ajv;
 	}
 

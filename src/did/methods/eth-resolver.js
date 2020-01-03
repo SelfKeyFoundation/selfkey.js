@@ -7,7 +7,7 @@ const generateDocument = (did, address) => ({
 	publicKey: [
 		{
 			id: `${did}#keys-1`,
-			type: 'EcdsaSecp256k1VerificationKey2019',
+			type: 'Secp256k1VerificationKey2018',
 			controller: did,
 			ethereumAddress: address
 		}

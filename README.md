@@ -63,9 +63,9 @@ import sk from '@selfkey/node-lib';
     * [`.registerMethodResolver(method, resolver)`](#did.registerMethodResolver)
 * [`identity`](#identity) : <code>object</code>
 * [`jwt`](#jwt) : <code>object</code>
-    * [`.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)`](#jwt.issueJWT) ⇒ <code>string</code>
+    * [`.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)`](#jwt.issueJWT) ⇒ <code>Promise.&lt;string&gt;</code>
     * [`.parseJWT(token)`](#jwt.parseJWT) ⇒ <code>object</code>
-    * [`.validateJWT(token, requestedAlgorithm, key)`](#jwt.validateJWT) ⇒ <code>object</code> \| <code>null</code>
+    * [`.validateJWT(token, requestedAlgorithm, key)`](#jwt.validateJWT) ⇒ <code>Promise.&lt;(object\|null)&gt;</code>
 * [`key`](#key) : <code>object</code>
     * [`.generateHMACKey([length], [encoding])`](#key.generateHMACKey) ⇒ <code>Promise.&lt;(string\|Buffer)&gt;</code>
     * [`.generateHMACKey(secret, [encoding])`](#key.generateHMACKey) ⇒
@@ -371,20 +371,20 @@ JWT Namespace
 **Kind**: global namespace  
 
 * [`jwt`](#jwt) : <code>object</code>
-    * [`.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)`](#jwt.issueJWT) ⇒ <code>string</code>
+    * [`.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)`](#jwt.issueJWT) ⇒ <code>Promise.&lt;string&gt;</code>
     * [`.parseJWT(token)`](#jwt.parseJWT) ⇒ <code>object</code>
-    * [`.validateJWT(token, requestedAlgorithm, key)`](#jwt.validateJWT) ⇒ <code>object</code> \| <code>null</code>
+    * [`.validateJWT(token, requestedAlgorithm, key)`](#jwt.validateJWT) ⇒ <code>Promise.&lt;(object\|null)&gt;</code>
 
 
 * * *
 
 <a name="jwt.issueJWT"></a>
 
-#### `jwt.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)` ⇒ <code>string</code>
+#### `jwt.issueJWT(subject, requestedAlgorithm, secret, [expiresIn], additionalClaims)` ⇒ <code>Promise.&lt;string&gt;</code>
 Issue a new JWT token
 
 **Kind**: static method of [<code>jwt</code>](#jwt)  
-**Returns**: <code>string</code> - jwt  
+**Returns**: <code>Promise.&lt;string&gt;</code> - jwt  
 **Throws**:
 
 - if unknown algorithm provided
@@ -427,11 +427,11 @@ sk.jwt.parseJWT(token);
 
 <a name="jwt.validateJWT"></a>
 
-#### `jwt.validateJWT(token, requestedAlgorithm, key)` ⇒ <code>object</code> \| <code>null</code>
+#### `jwt.validateJWT(token, requestedAlgorithm, key)` ⇒ <code>Promise.&lt;(object\|null)&gt;</code>
 Validate a JWT token
 
 **Kind**: static method of [<code>jwt</code>](#jwt)  
-**Returns**: <code>object</code> \| <code>null</code> - decodedJwt  
+**Returns**: <code>Promise.&lt;(object\|null)&gt;</code> - decodedJwt  
 **Throws**:
 
 - if unknown algorithm provided

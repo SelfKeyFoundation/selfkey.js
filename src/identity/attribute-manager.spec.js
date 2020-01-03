@@ -97,9 +97,8 @@ describe('AttributeManager', () => {
 			expect(testManager.validateAttributes()).toEqual({
 				attributes: [
 					{
-						attribute: {
-							id: 1
-						},
+						id: 1,
+
 						valid: false,
 						errors: ['no schema id'],
 						requirement: {
@@ -107,7 +106,6 @@ describe('AttributeManager', () => {
 						}
 					},
 					{
-						attribute: null,
 						valid: false,
 						errors: ['no schema id'],
 						requirement: {
@@ -115,9 +113,8 @@ describe('AttributeManager', () => {
 						}
 					},
 					{
-						attribute: {
-							schemaId: 'test1'
-						},
+						schemaId: 'test1',
+
 						valid: true,
 						errors: [],
 						requirement: {
@@ -125,9 +122,8 @@ describe('AttributeManager', () => {
 						}
 					},
 					{
-						attribute: {
-							schemaId: 'test3'
-						},
+						schemaId: 'test3',
+
 						valid: true,
 						errors: [],
 						requirement: {
@@ -136,7 +132,6 @@ describe('AttributeManager', () => {
 						}
 					},
 					{
-						attribute: null,
 						valid: false,
 						errors: ['no schema id'],
 						requirement: {
@@ -144,25 +139,20 @@ describe('AttributeManager', () => {
 						}
 					},
 					{
-						attribute: {
-							id: 2
-						},
+						id: 2,
+
 						valid: false,
 						errors: ['no schema id'],
 						requirement: null
 					},
 					{
-						attribute: {
-							id: 3
-						},
+						id: 3,
 						valid: false,
 						errors: ['no schema id'],
 						requirement: null
 					},
 					{
-						attribute: {
-							schemaId: 'test2'
-						},
+						schemaId: 'test2',
 						valid: true,
 						errors: [],
 						requirement: null

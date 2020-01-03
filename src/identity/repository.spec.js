@@ -167,15 +167,15 @@ describe('Repository', () => {
 			const repo = new Repository();
 			repo.identityAttributeSchema = 'test-attribute';
 			repo.jsonSchemas = {
-				attr1: { schema: 'test1' },
-				attr2: { schema: 'test2' }
+				attr1: { schema: 'test1', dereferenced: 'test1-deref' },
+				attr2: { schema: 'test2', dereferenced: 'test2-deref' }
 			};
 
 			repo.getValidator();
 
 			expect(meta.calledWith(repo.identityAttributeSchema)).toBe(true);
-			expect(schema.calledWith(repo.jsonSchemas.attr1.schema)).toBe(true);
-			expect(schema.calledWith(repo.jsonSchemas.attr2.schema)).toBe(true);
+			expect(schema.calledWith(repo.jsonSchemas.attr1.dereferenced)).toBe(true);
+			expect(schema.calledWith(repo.jsonSchemas.attr2.dereferenced)).toBe(true);
 		});
 	});
 	describe('validateData', () => {
