@@ -1,11 +1,11 @@
 import { Repository } from './repository';
 
 /**
- * Attribute Manager, manages multiple repositories of attributes
+ * @classdesc Attribute Manager, manages multiple repositories of attributes
  *
- * @export
+ * Part of `identity` namespace
+ *
  * @class AttributeManager
- * @memberof identity
  */
 export class AttributeManager {
 	/**
@@ -14,7 +14,6 @@ export class AttributeManager {
 	 * @static
 	 * @param {object} options
 	 * @returns {AttributeManager}
-	 * @memberof identity.AttributeManager
 	 */
 	static async createWithSelfkeyRepository(options) {
 		const manager = new AttributeManager();
@@ -25,7 +24,6 @@ export class AttributeManager {
 
 	/**
 	 * Creates an instance of AttributeManager.
-	 * @memberof identity.AttributeManager
 	 */
 	constructor() {
 		this.repositories = [];
@@ -34,7 +32,6 @@ export class AttributeManager {
 	/**
 	 * Adds a new repository
 	 * @param {identity.Repository} repository
-	 * @memberof identity.AttributeManager
 	 */
 	addRepository(repository) {
 		this.repositories.push(repository);
@@ -44,7 +41,6 @@ export class AttributeManager {
 	 * Remove a repository
 	 *
 	 * @param {identity.Repository} repository
-	 * @memberof identity.AttributeManager
 	 */
 	removeRepository(repository) {
 		this.repositories.filter(repo => repository !== repo);
@@ -55,7 +51,6 @@ export class AttributeManager {
 	 *
 	 * @param {object|string} attr
 	 * @returns {identity.Repository|null}
-	 * @memberof identity.AttributeManager
 	 */
 	findRepositoryForAttribute(attr) {
 		if (typeof attr === 'string') {
@@ -70,7 +65,6 @@ export class AttributeManager {
 	 * @param {Array} attributes
 	 * @param {Array} [requirements=[]]
 	 * @returns {Array}
-	 * @memberof identity.AttributeManager
 	 */
 	zipAttributesWithRequirements(attributes, requirements = []) {
 		let { matchedAttributes, matchedRequirements } = requirements.reduce(
@@ -125,7 +119,6 @@ export class AttributeManager {
 	 * @param {object} attr
 	 * @param {object} requirement
 	 * @returns {object}
-	 * @memberof identity.AttributeManager
 	 */
 	validateOneAttribute(attr, requirement) {
 		const { required = true } = requirement || { required: false };
@@ -156,7 +149,6 @@ export class AttributeManager {
 	 * @param {Array} attributes
 	 * @param {Array} requirements
 	 * @returns {object}
-	 * @memberof identity.AttributeManager
 	 */
 	validateAttributes(attributes, requirements) {
 		const zip = this.zipAttributesWithRequirements(attributes, requirements);

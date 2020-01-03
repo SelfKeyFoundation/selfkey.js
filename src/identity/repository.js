@@ -14,17 +14,16 @@ export const SELFKEY_REPOSITORY_DEV = {
 	transformSchemaUrl: url => url.replace('/schema/', '/dev-schema/')
 };
 /**
- * Repository Class allows to load identity attribute repository and validate schemas
+ * @classdesc Repository Class allows to load identity attribute repository and validate schemas
  *
- * @export
+ * Part of `identity` namespace
+ *
  * @class Repository
- * @memberof identity
  */
 export class Repository {
 	/**
 	 * Creates an instance of Repository.
 	 * @param {object} [config={}]
-	 * @memberof identity.Repository
 	 */
 	constructor(config = {}) {
 		this.config = config;
@@ -40,7 +39,6 @@ export class Repository {
 	 * @static
 	 * @param {object} [options={}]
 	 * @returns {Repository}
-	 * @memberof identity.Repository
 	 */
 	static async createSelfkeyRepo(options = {}) {
 		let selfkeyRepo = SELFKEY_REPOSITORY;
@@ -58,7 +56,6 @@ export class Repository {
 	 * @param {object} config
 	 * @param {boolean} [ui=false]
 	 * @returns {Repository}
-	 * @memberof identity.Repository
 	 */
 	static async fromConfig(config, ui = false) {
 		if (typeof config === 'string') {
@@ -76,7 +73,6 @@ export class Repository {
 	 * @param {string} schemaId
 	 * @param {boolean} [ui=false]
 	 * @returns {Repository}
-	 * @memberof identity.Repository
 	 */
 	static async fromSchemaId(schemaId, ui = false) {
 		let schema;
@@ -94,7 +90,6 @@ export class Repository {
 	/**
 	 * Resolve all repository data
 	 *
-	 * @memberof identity.Repository
 	 */
 	async resolveAll() {
 		let resolvedRepository;
@@ -147,7 +142,6 @@ export class Repository {
 	 * @param {object|string} schema
 	 * @param {object} [config={}]
 	 * @returns {object}
-	 * @memberof identity.Repository
 	 */
 	async resolveJsonSchema(schema, config = {}) {
 		config = { ...this.config, ...config };
@@ -174,7 +168,6 @@ export class Repository {
 	 * @param {object|string} schema
 	 * @param {object} [config={}]
 	 * @returns {object}
-	 * @memberof identity.Repository
 	 */
 	async resolveUiSchema(schema, config = {}) {
 		config = { ...this.config, ...config };
@@ -199,7 +192,6 @@ export class Repository {
 	 * Creates an Ajv validator for the repository data
 	 *
 	 * @returns Ajv instance
-	 * @memberof identity.Repository
 	 */
 	getValidator() {
 		const ajv = new Ajv({ validateSchema: false, loadSchema: utils.fetchJson });
@@ -219,7 +211,6 @@ export class Repository {
 	 * @param {string} schemaId
 	 * @param {object} data
 	 * @returns {object} {valid:boolean, errors: array}
-	 * @memberof identity.Repository
 	 */
 	validateData(schemaId, data) {
 		if (!this.jsonSchemas[schemaId]) {

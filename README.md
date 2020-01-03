@@ -48,6 +48,34 @@ import sk from '@selfkey/node-lib';
 ## API
 ### 
 
+* [AttributeManager](#AttributeManager)
+    * _instance_
+        * [.AttributeManager](#AttributeManager+AttributeManager)
+            * [`new exports.AttributeManager()`](#new_AttributeManager+AttributeManager_new)
+        * [`.addRepository(repository)`](#AttributeManager+addRepository)
+        * [`.removeRepository(repository)`](#AttributeManager+removeRepository)
+        * [`.findRepositoryForAttribute(attr)`](#AttributeManager+findRepositoryForAttribute) ⇒ <code>identity.Repository</code> \| <code>null</code>
+        * [`.zipAttributesWithRequirements(attributes, [requirements])`](#AttributeManager+zipAttributesWithRequirements) ⇒ <code>Array</code>
+        * [`.validateOneAttribute(attr, requirement)`](#AttributeManager+validateOneAttribute) ⇒ <code>object</code>
+        * [`.validateAttributes(attributes, requirements)`](#AttributeManager+validateAttributes) ⇒ <code>object</code>
+    * _static_
+        * [`.createWithSelfkeyRepository(options)`](#AttributeManager.createWithSelfkeyRepository) ⇒ [<code>AttributeManager</code>](#AttributeManager)
+* [Repository](#Repository)
+    * _instance_
+        * [.Repository](#Repository+Repository)
+            * [`new exports.Repository([config])`](#new_Repository+Repository_new)
+        * [`.resolveAll()`](#Repository+resolveAll)
+        * [`.resolveJsonSchema(schema, [config])`](#Repository+resolveJsonSchema) ⇒ <code>object</code>
+        * [`.resolveUiSchema(schema, [config])`](#Repository+resolveUiSchema) ⇒ <code>object</code>
+        * [`.getValidator()`](#Repository+getValidator) ⇒
+        * [`.validateData(schemaId, data)`](#Repository+validateData) ⇒ <code>object</code>
+    * _static_
+        * [`.createSelfkeyRepo([options])`](#Repository.createSelfkeyRepo) ⇒ [<code>Repository</code>](#Repository)
+        * [`.fromConfig(config, [ui])`](#Repository.fromConfig) ⇒ [<code>Repository</code>](#Repository)
+        * [`.fromSchemaId(schemaId, [ui])`](#Repository.fromSchemaId) ⇒ [<code>Repository</code>](#Repository)
+
+### 
+
 * [`auth`](#auth) : <code>object</code>
     * [`.generateAccessToken(did, algorithm, secret, [expiresIn])`](#auth.generateAccessToken) ⇒ <code>Promise.&lt;string&gt;</code>
     * [`.generateChallengeToken(did, algorithm, secret, [expiresIn])`](#auth.generateChallengeToken) ⇒ <code>Promise.&lt;string&gt;</code>
@@ -62,25 +90,6 @@ import sk from '@selfkey/node-lib';
     * [`.resolve(did)`](#did.resolve) ⇒ <code>object</code>
     * [`.registerMethodResolver(method, resolver)`](#did.registerMethodResolver)
 * [`identity`](#identity) : <code>object</code>
-    * [.AttributeManager](#identity.AttributeManager)
-        * [`new AttributeManager()`](#new_identity.AttributeManager_new)
-        * [.exports.AttributeManager](#identity.AttributeManager.exports.AttributeManager)
-            * [`new exports.AttributeManager()`](#new_identity.AttributeManager.exports.AttributeManager_new)
-        * [`.AttributeManager#addRepository(repository)`](#identity.AttributeManager.AttributeManager+addRepository)
-        * [`.AttributeManager#removeRepository(repository)`](#identity.AttributeManager.AttributeManager+removeRepository)
-        * [`.AttributeManager#findRepositoryForAttribute(attr)`](#identity.AttributeManager.AttributeManager+findRepositoryForAttribute) ⇒ [<code>Repository</code>](#identity.Repository) \| <code>null</code>
-        * [`.AttributeManager#zipAttributesWithRequirements(attributes, [requirements])`](#identity.AttributeManager.AttributeManager+zipAttributesWithRequirements) ⇒ <code>Array</code>
-        * [`.AttributeManager#validateOneAttribute(attr, requirement)`](#identity.AttributeManager.AttributeManager+validateOneAttribute) ⇒ <code>object</code>
-        * [`.AttributeManager#validateAttributes(attributes, requirements)`](#identity.AttributeManager.AttributeManager+validateAttributes) ⇒ <code>object</code>
-    * [.Repository](#identity.Repository)
-        * [`new Repository()`](#new_identity.Repository_new)
-        * [.exports.Repository](#identity.Repository.exports.Repository)
-            * [`new exports.Repository([config])`](#new_identity.Repository.exports.Repository_new)
-        * [`.Repository#resolveAll()`](#identity.Repository.Repository+resolveAll)
-        * [`.Repository#resolveJsonSchema(schema, [config])`](#identity.Repository.Repository+resolveJsonSchema) ⇒ <code>object</code>
-        * [`.Repository#resolveUiSchema(schema, [config])`](#identity.Repository.Repository+resolveUiSchema) ⇒ <code>object</code>
-        * [`.Repository#getValidator()`](#identity.Repository.Repository+getValidator) ⇒
-        * [`.Repository#validateData(schemaId, data)`](#identity.Repository.Repository+validateData) ⇒ <code>object</code>
     * [`.utils`](#identity.utils) : <code>object</code>
         * [`.attributeMapBySchema(attributes)`](#identity.utils.attributeMapBySchema) ⇒ <code>object</code>
         * [`.resolveAttributeFiles(all, fileProcessor)`](#identity.utils.resolveAttributeFiles) ⇒ <code>object</code>
@@ -106,6 +115,302 @@ import sk from '@selfkey/node-lib';
 * [`FileProcessor`](#FileProcessor)
 * [`GetUserDataForTokenOptions`](#GetUserDataForTokenOptions)
 * [`KYCCUserObject`](#KYCCUserObject)
+
+<a name="AttributeManager"></a>
+
+### AttributeManager
+Attribute Manager, manages multiple repositories of attributes
+
+Part of `identity` namespace
+
+**Kind**: global class  
+
+* [AttributeManager](#AttributeManager)
+    * _instance_
+        * [.AttributeManager](#AttributeManager+AttributeManager)
+            * [`new exports.AttributeManager()`](#new_AttributeManager+AttributeManager_new)
+        * [`.addRepository(repository)`](#AttributeManager+addRepository)
+        * [`.removeRepository(repository)`](#AttributeManager+removeRepository)
+        * [`.findRepositoryForAttribute(attr)`](#AttributeManager+findRepositoryForAttribute) ⇒ <code>identity.Repository</code> \| <code>null</code>
+        * [`.zipAttributesWithRequirements(attributes, [requirements])`](#AttributeManager+zipAttributesWithRequirements) ⇒ <code>Array</code>
+        * [`.validateOneAttribute(attr, requirement)`](#AttributeManager+validateOneAttribute) ⇒ <code>object</code>
+        * [`.validateAttributes(attributes, requirements)`](#AttributeManager+validateAttributes) ⇒ <code>object</code>
+    * _static_
+        * [`.createWithSelfkeyRepository(options)`](#AttributeManager.createWithSelfkeyRepository) ⇒ [<code>AttributeManager</code>](#AttributeManager)
+
+
+* * *
+
+<a name="AttributeManager+AttributeManager"></a>
+
+#### attributeManager.AttributeManager
+**Kind**: instance class of [<code>AttributeManager</code>](#AttributeManager)  
+
+* * *
+
+<a name="new_AttributeManager+AttributeManager_new"></a>
+
+##### `new exports.AttributeManager()`
+Creates an instance of AttributeManager.
+
+
+* * *
+
+<a name="AttributeManager+addRepository"></a>
+
+#### `attributeManager.addRepository(repository)`
+Adds a new repository
+
+**Kind**: instance method of [<code>AttributeManager</code>](#AttributeManager)  
+
+| Param | Type |
+| --- | --- |
+| repository | <code>identity.Repository</code> | 
+
+
+* * *
+
+<a name="AttributeManager+removeRepository"></a>
+
+#### `attributeManager.removeRepository(repository)`
+Remove a repository
+
+**Kind**: instance method of [<code>AttributeManager</code>](#AttributeManager)  
+
+| Param | Type |
+| --- | --- |
+| repository | <code>identity.Repository</code> | 
+
+
+* * *
+
+<a name="AttributeManager+findRepositoryForAttribute"></a>
+
+#### `attributeManager.findRepositoryForAttribute(attr)` ⇒ <code>identity.Repository</code> \| <code>null</code>
+Finds a repository for a given attribute
+
+**Kind**: instance method of [<code>AttributeManager</code>](#AttributeManager)  
+
+| Param | Type |
+| --- | --- |
+| attr | <code>object</code> \| <code>string</code> | 
+
+
+* * *
+
+<a name="AttributeManager+zipAttributesWithRequirements"></a>
+
+#### `attributeManager.zipAttributesWithRequirements(attributes, [requirements])` ⇒ <code>Array</code>
+Given an array of attributes and requirements, tries to much between them
+
+**Kind**: instance method of [<code>AttributeManager</code>](#AttributeManager)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| attributes | <code>Array</code> |  | 
+| [requirements] | <code>Array</code> | <code>[]</code> | 
+
+
+* * *
+
+<a name="AttributeManager+validateOneAttribute"></a>
+
+#### `attributeManager.validateOneAttribute(attr, requirement)` ⇒ <code>object</code>
+Given an attribute and requirement validates the attribute
+
+**Kind**: instance method of [<code>AttributeManager</code>](#AttributeManager)  
+
+| Param | Type |
+| --- | --- |
+| attr | <code>object</code> | 
+| requirement | <code>object</code> | 
+
+
+* * *
+
+<a name="AttributeManager+validateAttributes"></a>
+
+#### `attributeManager.validateAttributes(attributes, requirements)` ⇒ <code>object</code>
+Given a list of attribute and requirements, validates all attributes
+
+**Kind**: instance method of [<code>AttributeManager</code>](#AttributeManager)  
+
+| Param | Type |
+| --- | --- |
+| attributes | <code>Array</code> | 
+| requirements | <code>Array</code> | 
+
+
+* * *
+
+<a name="AttributeManager.createWithSelfkeyRepository"></a>
+
+#### `AttributeManager.createWithSelfkeyRepository(options)` ⇒ [<code>AttributeManager</code>](#AttributeManager)
+Creates an AttributeManager and initializes it with selfkey repository
+
+**Kind**: static method of [<code>AttributeManager</code>](#AttributeManager)  
+
+| Param | Type |
+| --- | --- |
+| options | <code>object</code> | 
+
+
+* * *
+
+<a name="Repository"></a>
+
+### Repository
+Repository Class allows to load identity attribute repository and validate schemas
+
+Part of `identity` namespace
+
+**Kind**: global class  
+
+* [Repository](#Repository)
+    * _instance_
+        * [.Repository](#Repository+Repository)
+            * [`new exports.Repository([config])`](#new_Repository+Repository_new)
+        * [`.resolveAll()`](#Repository+resolveAll)
+        * [`.resolveJsonSchema(schema, [config])`](#Repository+resolveJsonSchema) ⇒ <code>object</code>
+        * [`.resolveUiSchema(schema, [config])`](#Repository+resolveUiSchema) ⇒ <code>object</code>
+        * [`.getValidator()`](#Repository+getValidator) ⇒
+        * [`.validateData(schemaId, data)`](#Repository+validateData) ⇒ <code>object</code>
+    * _static_
+        * [`.createSelfkeyRepo([options])`](#Repository.createSelfkeyRepo) ⇒ [<code>Repository</code>](#Repository)
+        * [`.fromConfig(config, [ui])`](#Repository.fromConfig) ⇒ [<code>Repository</code>](#Repository)
+        * [`.fromSchemaId(schemaId, [ui])`](#Repository.fromSchemaId) ⇒ [<code>Repository</code>](#Repository)
+
+
+* * *
+
+<a name="Repository+Repository"></a>
+
+#### repository.Repository
+**Kind**: instance class of [<code>Repository</code>](#Repository)  
+
+* * *
+
+<a name="new_Repository+Repository_new"></a>
+
+##### `new exports.Repository([config])`
+Creates an instance of Repository.
+
+
+| Param | Type | Default |
+| --- | --- | --- |
+| [config] | <code>object</code> | <code>{}</code> | 
+
+
+* * *
+
+<a name="Repository+resolveAll"></a>
+
+#### `repository.resolveAll()`
+Resolve all repository data
+
+**Kind**: instance method of [<code>Repository</code>](#Repository)  
+
+* * *
+
+<a name="Repository+resolveJsonSchema"></a>
+
+#### `repository.resolveJsonSchema(schema, [config])` ⇒ <code>object</code>
+Resolve one JSON schema
+
+**Kind**: instance method of [<code>Repository</code>](#Repository)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| schema | <code>object</code> \| <code>string</code> |  | 
+| [config] | <code>object</code> | <code>{}</code> | 
+
+
+* * *
+
+<a name="Repository+resolveUiSchema"></a>
+
+#### `repository.resolveUiSchema(schema, [config])` ⇒ <code>object</code>
+Resolve one ui schema
+
+**Kind**: instance method of [<code>Repository</code>](#Repository)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| schema | <code>object</code> \| <code>string</code> |  | 
+| [config] | <code>object</code> | <code>{}</code> | 
+
+
+* * *
+
+<a name="Repository+getValidator"></a>
+
+#### `repository.getValidator()` ⇒
+Creates an Ajv validator for the repository data
+
+**Kind**: instance method of [<code>Repository</code>](#Repository)  
+**Returns**: Ajv instance  
+
+* * *
+
+<a name="Repository+validateData"></a>
+
+#### `repository.validateData(schemaId, data)` ⇒ <code>object</code>
+Given schemaId and data, validates the data based on relevant schema
+
+**Kind**: instance method of [<code>Repository</code>](#Repository)  
+**Returns**: <code>object</code> - {valid:boolean, errors: array}  
+
+| Param | Type |
+| --- | --- |
+| schemaId | <code>string</code> | 
+| data | <code>object</code> | 
+
+
+* * *
+
+<a name="Repository.createSelfkeyRepo"></a>
+
+#### `Repository.createSelfkeyRepo([options])` ⇒ [<code>Repository</code>](#Repository)
+Creates a repository initialized with selfkey data
+
+**Kind**: static method of [<code>Repository</code>](#Repository)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| [options] | <code>object</code> | <code>{}</code> | 
+
+
+* * *
+
+<a name="Repository.fromConfig"></a>
+
+#### `Repository.fromConfig(config, [ui])` ⇒ [<code>Repository</code>](#Repository)
+Creates and preloads a Repository from a config object
+
+**Kind**: static method of [<code>Repository</code>](#Repository)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| config | <code>object</code> |  | 
+| [ui] | <code>boolean</code> | <code>false</code> | 
+
+
+* * *
+
+<a name="Repository.fromSchemaId"></a>
+
+#### `Repository.fromSchemaId(schemaId, [ui])` ⇒ [<code>Repository</code>](#Repository)
+Creates and preloads a Repository based on attribute schema id
+
+**Kind**: static method of [<code>Repository</code>](#Repository)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| schemaId | <code>string</code> |  | 
+| [ui] | <code>boolean</code> | <code>false</code> | 
+
+
+* * *
 
 <a name="auth"></a>
 
@@ -389,25 +694,6 @@ Identity Namespace
 **Kind**: global namespace  
 
 * [`identity`](#identity) : <code>object</code>
-    * [.AttributeManager](#identity.AttributeManager)
-        * [`new AttributeManager()`](#new_identity.AttributeManager_new)
-        * [.exports.AttributeManager](#identity.AttributeManager.exports.AttributeManager)
-            * [`new exports.AttributeManager()`](#new_identity.AttributeManager.exports.AttributeManager_new)
-        * [`.AttributeManager#addRepository(repository)`](#identity.AttributeManager.AttributeManager+addRepository)
-        * [`.AttributeManager#removeRepository(repository)`](#identity.AttributeManager.AttributeManager+removeRepository)
-        * [`.AttributeManager#findRepositoryForAttribute(attr)`](#identity.AttributeManager.AttributeManager+findRepositoryForAttribute) ⇒ [<code>Repository</code>](#identity.Repository) \| <code>null</code>
-        * [`.AttributeManager#zipAttributesWithRequirements(attributes, [requirements])`](#identity.AttributeManager.AttributeManager+zipAttributesWithRequirements) ⇒ <code>Array</code>
-        * [`.AttributeManager#validateOneAttribute(attr, requirement)`](#identity.AttributeManager.AttributeManager+validateOneAttribute) ⇒ <code>object</code>
-        * [`.AttributeManager#validateAttributes(attributes, requirements)`](#identity.AttributeManager.AttributeManager+validateAttributes) ⇒ <code>object</code>
-    * [.Repository](#identity.Repository)
-        * [`new Repository()`](#new_identity.Repository_new)
-        * [.exports.Repository](#identity.Repository.exports.Repository)
-            * [`new exports.Repository([config])`](#new_identity.Repository.exports.Repository_new)
-        * [`.Repository#resolveAll()`](#identity.Repository.Repository+resolveAll)
-        * [`.Repository#resolveJsonSchema(schema, [config])`](#identity.Repository.Repository+resolveJsonSchema) ⇒ <code>object</code>
-        * [`.Repository#resolveUiSchema(schema, [config])`](#identity.Repository.Repository+resolveUiSchema) ⇒ <code>object</code>
-        * [`.Repository#getValidator()`](#identity.Repository.Repository+getValidator) ⇒
-        * [`.Repository#validateData(schemaId, data)`](#identity.Repository.Repository+validateData) ⇒ <code>object</code>
     * [`.utils`](#identity.utils) : <code>object</code>
         * [`.attributeMapBySchema(attributes)`](#identity.utils.attributeMapBySchema) ⇒ <code>object</code>
         * [`.resolveAttributeFiles(all, fileProcessor)`](#identity.utils.resolveAttributeFiles) ⇒ <code>object</code>
@@ -416,246 +702,6 @@ Identity Namespace
         * [`.schemaContainsFile(schema, maxDepth)`](#identity.utils.schemaContainsFile) ⇒ <code>boolean</code>
         * [`.fetchJson(url, options)`](#identity.utils.fetchJson) ⇒ <code>Promise.&lt;object&gt;</code>
         * [`.dereferenceSchema(schema, options)`](#identity.utils.dereferenceSchema) ⇒ <code>Promise.&lt;object&gt;</code>
-
-
-* * *
-
-<a name="identity.AttributeManager"></a>
-
-#### identity.AttributeManager
-**Kind**: static class of [<code>identity</code>](#identity)  
-
-* [.AttributeManager](#identity.AttributeManager)
-    * [`new AttributeManager()`](#new_identity.AttributeManager_new)
-    * [.exports.AttributeManager](#identity.AttributeManager.exports.AttributeManager)
-        * [`new exports.AttributeManager()`](#new_identity.AttributeManager.exports.AttributeManager_new)
-    * [`.AttributeManager#addRepository(repository)`](#identity.AttributeManager.AttributeManager+addRepository)
-    * [`.AttributeManager#removeRepository(repository)`](#identity.AttributeManager.AttributeManager+removeRepository)
-    * [`.AttributeManager#findRepositoryForAttribute(attr)`](#identity.AttributeManager.AttributeManager+findRepositoryForAttribute) ⇒ [<code>Repository</code>](#identity.Repository) \| <code>null</code>
-    * [`.AttributeManager#zipAttributesWithRequirements(attributes, [requirements])`](#identity.AttributeManager.AttributeManager+zipAttributesWithRequirements) ⇒ <code>Array</code>
-    * [`.AttributeManager#validateOneAttribute(attr, requirement)`](#identity.AttributeManager.AttributeManager+validateOneAttribute) ⇒ <code>object</code>
-    * [`.AttributeManager#validateAttributes(attributes, requirements)`](#identity.AttributeManager.AttributeManager+validateAttributes) ⇒ <code>object</code>
-
-
-* * *
-
-<a name="new_identity.AttributeManager_new"></a>
-
-##### `new AttributeManager()`
-Attribute Manager, manages multiple repositories of attributes
-
-
-* * *
-
-<a name="identity.AttributeManager.exports.AttributeManager"></a>
-
-##### AttributeManager.exports.AttributeManager
-**Kind**: static class of [<code>AttributeManager</code>](#identity.AttributeManager)  
-
-* * *
-
-<a name="new_identity.AttributeManager.exports.AttributeManager_new"></a>
-
-###### `new exports.AttributeManager()`
-Creates an instance of AttributeManager.
-
-
-* * *
-
-<a name="identity.AttributeManager.AttributeManager+addRepository"></a>
-
-##### `AttributeManager.AttributeManager#addRepository(repository)`
-Adds a new repository
-
-**Kind**: static method of [<code>AttributeManager</code>](#identity.AttributeManager)  
-
-| Param | Type |
-| --- | --- |
-| repository | [<code>Repository</code>](#identity.Repository) | 
-
-
-* * *
-
-<a name="identity.AttributeManager.AttributeManager+removeRepository"></a>
-
-##### `AttributeManager.AttributeManager#removeRepository(repository)`
-Remove a repository
-
-**Kind**: static method of [<code>AttributeManager</code>](#identity.AttributeManager)  
-
-| Param | Type |
-| --- | --- |
-| repository | [<code>Repository</code>](#identity.Repository) | 
-
-
-* * *
-
-<a name="identity.AttributeManager.AttributeManager+findRepositoryForAttribute"></a>
-
-##### `AttributeManager.AttributeManager#findRepositoryForAttribute(attr)` ⇒ [<code>Repository</code>](#identity.Repository) \| <code>null</code>
-Finds a repository for a given attribute
-
-**Kind**: static method of [<code>AttributeManager</code>](#identity.AttributeManager)  
-
-| Param | Type |
-| --- | --- |
-| attr | <code>object</code> \| <code>string</code> | 
-
-
-* * *
-
-<a name="identity.AttributeManager.AttributeManager+zipAttributesWithRequirements"></a>
-
-##### `AttributeManager.AttributeManager#zipAttributesWithRequirements(attributes, [requirements])` ⇒ <code>Array</code>
-Given an array of attributes and requirements, tries to much between them
-
-**Kind**: static method of [<code>AttributeManager</code>](#identity.AttributeManager)  
-
-| Param | Type | Default |
-| --- | --- | --- |
-| attributes | <code>Array</code> |  | 
-| [requirements] | <code>Array</code> | <code>[]</code> | 
-
-
-* * *
-
-<a name="identity.AttributeManager.AttributeManager+validateOneAttribute"></a>
-
-##### `AttributeManager.AttributeManager#validateOneAttribute(attr, requirement)` ⇒ <code>object</code>
-Given an attribute and requirement validates the attribute
-
-**Kind**: static method of [<code>AttributeManager</code>](#identity.AttributeManager)  
-
-| Param | Type |
-| --- | --- |
-| attr | <code>object</code> | 
-| requirement | <code>object</code> | 
-
-
-* * *
-
-<a name="identity.AttributeManager.AttributeManager+validateAttributes"></a>
-
-##### `AttributeManager.AttributeManager#validateAttributes(attributes, requirements)` ⇒ <code>object</code>
-Given a list of attribute and requirements, validates all attributes
-
-**Kind**: static method of [<code>AttributeManager</code>](#identity.AttributeManager)  
-
-| Param | Type |
-| --- | --- |
-| attributes | <code>Array</code> | 
-| requirements | <code>Array</code> | 
-
-
-* * *
-
-<a name="identity.Repository"></a>
-
-#### identity.Repository
-**Kind**: static class of [<code>identity</code>](#identity)  
-
-* [.Repository](#identity.Repository)
-    * [`new Repository()`](#new_identity.Repository_new)
-    * [.exports.Repository](#identity.Repository.exports.Repository)
-        * [`new exports.Repository([config])`](#new_identity.Repository.exports.Repository_new)
-    * [`.Repository#resolveAll()`](#identity.Repository.Repository+resolveAll)
-    * [`.Repository#resolveJsonSchema(schema, [config])`](#identity.Repository.Repository+resolveJsonSchema) ⇒ <code>object</code>
-    * [`.Repository#resolveUiSchema(schema, [config])`](#identity.Repository.Repository+resolveUiSchema) ⇒ <code>object</code>
-    * [`.Repository#getValidator()`](#identity.Repository.Repository+getValidator) ⇒
-    * [`.Repository#validateData(schemaId, data)`](#identity.Repository.Repository+validateData) ⇒ <code>object</code>
-
-
-* * *
-
-<a name="new_identity.Repository_new"></a>
-
-##### `new Repository()`
-Repository Class allows to load identity attribute repository and validate schemas
-
-
-* * *
-
-<a name="identity.Repository.exports.Repository"></a>
-
-##### Repository.exports.Repository
-**Kind**: static class of [<code>Repository</code>](#identity.Repository)  
-
-* * *
-
-<a name="new_identity.Repository.exports.Repository_new"></a>
-
-###### `new exports.Repository([config])`
-Creates an instance of Repository.
-
-
-| Param | Type | Default |
-| --- | --- | --- |
-| [config] | <code>object</code> | <code>{}</code> | 
-
-
-* * *
-
-<a name="identity.Repository.Repository+resolveAll"></a>
-
-##### `Repository.Repository#resolveAll()`
-Resolve all repository data
-
-**Kind**: static method of [<code>Repository</code>](#identity.Repository)  
-
-* * *
-
-<a name="identity.Repository.Repository+resolveJsonSchema"></a>
-
-##### `Repository.Repository#resolveJsonSchema(schema, [config])` ⇒ <code>object</code>
-Resolve one JSON schema
-
-**Kind**: static method of [<code>Repository</code>](#identity.Repository)  
-
-| Param | Type | Default |
-| --- | --- | --- |
-| schema | <code>object</code> \| <code>string</code> |  | 
-| [config] | <code>object</code> | <code>{}</code> | 
-
-
-* * *
-
-<a name="identity.Repository.Repository+resolveUiSchema"></a>
-
-##### `Repository.Repository#resolveUiSchema(schema, [config])` ⇒ <code>object</code>
-Resolve one ui schema
-
-**Kind**: static method of [<code>Repository</code>](#identity.Repository)  
-
-| Param | Type | Default |
-| --- | --- | --- |
-| schema | <code>object</code> \| <code>string</code> |  | 
-| [config] | <code>object</code> | <code>{}</code> | 
-
-
-* * *
-
-<a name="identity.Repository.Repository+getValidator"></a>
-
-##### `Repository.Repository#getValidator()` ⇒
-Creates an Ajv validator for the repository data
-
-**Kind**: static method of [<code>Repository</code>](#identity.Repository)  
-**Returns**: Ajv instance  
-
-* * *
-
-<a name="identity.Repository.Repository+validateData"></a>
-
-##### `Repository.Repository#validateData(schemaId, data)` ⇒ <code>object</code>
-Given schemaId and data, validates the data based on relevant schema
-
-**Kind**: static method of [<code>Repository</code>](#identity.Repository)  
-**Returns**: <code>object</code> - {valid:boolean, errors: array}  
-
-| Param | Type |
-| --- | --- |
-| schemaId | <code>string</code> | 
-| data | <code>object</code> | 
 
 
 * * *
