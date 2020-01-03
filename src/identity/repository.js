@@ -13,7 +13,19 @@ export const SELFKEY_REPOSITORY_DEV = {
 	ui: true,
 	transformSchemaUrl: url => url.replace('/schema/', '/dev-schema/')
 };
+/**
+ * Repository Class allows to load identity attribute repository and validate schemas
+ *
+ * @export
+ * @class Repository
+ * @memberof identity
+ */
 export class Repository {
+	/**
+	 * Creates an instance of Repository.
+	 * @param {object} [config={}]
+	 * @memberof identity.Repository
+	 */
 	constructor(config = {}) {
 		this.config = config;
 		this.identityAttributeSchemaId = null;
@@ -22,6 +34,14 @@ export class Repository {
 		this.uiSchemas = {};
 	}
 
+	/**
+	 * Creates a repository initialized with selfkey data
+	 *
+	 * @static
+	 * @param {object} [options={}]
+	 * @returns {Repository}
+	 * @memberof identity.Repository
+	 */
 	static async createSelfkeyRepo(options = {}) {
 		let selfkeyRepo = SELFKEY_REPOSITORY;
 		if (options.env === 'development') {
@@ -31,6 +51,15 @@ export class Repository {
 		return repo;
 	}
 
+	/**
+	 * Creates and preloads a Repository from a config object
+	 *
+	 * @static
+	 * @param {object} config
+	 * @param {boolean} [ui=false]
+	 * @returns {Repository}
+	 * @memberof identity.Repository
+	 */
 	static async fromConfig(config, ui = false) {
 		if (typeof config === 'string') {
 			config = { repository: config };
@@ -40,6 +69,15 @@ export class Repository {
 		return repo;
 	}
 
+	/**
+	 * Creates and preloads a Repository based on attribute schema id
+	 *
+	 * @static
+	 * @param {string} schemaId
+	 * @param {boolean} [ui=false]
+	 * @returns {Repository}
+	 * @memberof identity.Repository
+	 */
 	static async fromSchemaId(schemaId, ui = false) {
 		let schema;
 		try {
@@ -53,6 +91,11 @@ export class Repository {
 		return this.fromConfig(schema.identityAttributeRepository, ui);
 	}
 
+	/**
+	 * Resolve all repository data
+	 *
+	 * @memberof identity.Repository
+	 */
 	async resolveAll() {
 		let resolvedRepository;
 		if (this.config.resolved) {
@@ -98,6 +141,14 @@ export class Repository {
 		this.uiSchemas = resolvedRepository.uiSchemas || {};
 	}
 
+	/**
+	 * Resolve one JSON schema
+	 *
+	 * @param {object|string} schema
+	 * @param {object} [config={}]
+	 * @returns {object}
+	 * @memberof identity.Repository
+	 */
 	async resolveJsonSchema(schema, config = {}) {
 		config = { ...this.config, ...config };
 		if (typeof schema === 'string') {
@@ -117,6 +168,14 @@ export class Repository {
 		return resolved;
 	}
 
+	/**
+	 * Resolve one ui schema
+	 *
+	 * @param {object|string} schema
+	 * @param {object} [config={}]
+	 * @returns {object}
+	 * @memberof identity.Repository
+	 */
 	async resolveUiSchema(schema, config = {}) {
 		config = { ...this.config, ...config };
 		if (typeof schema === 'string') {
@@ -136,6 +195,12 @@ export class Repository {
 		return resolved;
 	}
 
+	/**
+	 * Creates an Ajv validator for the repository data
+	 *
+	 * @returns Ajv instance
+	 * @memberof identity.Repository
+	 */
 	getValidator() {
 		const ajv = new Ajv({ validateSchema: false, loadSchema: utils.fetchJson });
 		ajv.addFormat('file', () => {});
@@ -148,6 +213,14 @@ export class Repository {
 		return ajv;
 	}
 
+	/**
+	 * Given schemaId and data, validates the data based on relevant schema
+	 *
+	 * @param {string} schemaId
+	 * @param {object} data
+	 * @returns {object} {valid:boolean, errors: array}
+	 * @memberof identity.Repository
+	 */
 	validateData(schemaId, data) {
 		if (!this.jsonSchemas[schemaId]) {
 			return {

@@ -1,6 +1,21 @@
 import { Repository } from './repository';
 
+/**
+ * Attribute Manager, manages multiple repositories of attributes
+ *
+ * @export
+ * @class AttributeManager
+ * @memberof identity
+ */
 export class AttributeManager {
+	/**
+	 * Creates an AttributeManager and initializes it with selfkey repository
+	 *
+	 * @static
+	 * @param {object} options
+	 * @returns {AttributeManager}
+	 * @memberof identity.AttributeManager
+	 */
 	static async createWithSelfkeyRepository(options) {
 		const manager = new AttributeManager();
 		const skRepo = await Repository.createSelfkeyRepo(options);
@@ -8,18 +23,40 @@ export class AttributeManager {
 		return manager;
 	}
 
+	/**
+	 * Creates an instance of AttributeManager.
+	 * @memberof identity.AttributeManager
+	 */
 	constructor() {
 		this.repositories = [];
 	}
 
+	/**
+	 * Adds a new repository
+	 * @param {identity.Repository} repository
+	 * @memberof identity.AttributeManager
+	 */
 	addRepository(repository) {
 		this.repositories.push(repository);
 	}
 
+	/**
+	 * Remove a repository
+	 *
+	 * @param {identity.Repository} repository
+	 * @memberof identity.AttributeManager
+	 */
 	removeRepository(repository) {
 		this.repositories.filter(repo => repository !== repo);
 	}
 
+	/**
+	 * Finds a repository for a given attribute
+	 *
+	 * @param {object|string} attr
+	 * @returns {identity.Repository|null}
+	 * @memberof identity.AttributeManager
+	 */
 	findRepositoryForAttribute(attr) {
 		if (typeof attr === 'string') {
 			attr = { schemaId: attr };
@@ -27,6 +64,14 @@ export class AttributeManager {
 		return this.repositories.find(repo => !!repo.jsonSchemas[attr.schemaId]) || null;
 	}
 
+	/**
+	 * Given an array of attributes and requirements, tries to much between them
+	 *
+	 * @param {Array} attributes
+	 * @param {Array} [requirements=[]]
+	 * @returns {Array}
+	 * @memberof identity.AttributeManager
+	 */
 	zipAttributesWithRequirements(attributes, requirements = []) {
 		let { matchedAttributes, matchedRequirements } = requirements.reduce(
 			(acc, curr) => {
@@ -74,6 +119,14 @@ export class AttributeManager {
 		return matchedRequirements;
 	}
 
+	/**
+	 * Given an attribute and requirement validates the attribute
+	 *
+	 * @param {object} attr
+	 * @param {object} requirement
+	 * @returns {object}
+	 * @memberof identity.AttributeManager
+	 */
 	validateOneAttribute(attr, requirement) {
 		const { required = true } = requirement || { required: false };
 		if (!attr && requirement) {
@@ -97,6 +150,14 @@ export class AttributeManager {
 		return { valid, errors, required };
 	}
 
+	/**
+	 * Given a list of attribute and requirements, validates all attributes
+	 *
+	 * @param {Array} attributes
+	 * @param {Array} requirements
+	 * @returns {object}
+	 * @memberof identity.AttributeManager
+	 */
 	validateAttributes(attributes, requirements) {
 		const zip = this.zipAttributesWithRequirements(attributes, requirements);
 		return zip

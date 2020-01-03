@@ -2,6 +2,19 @@ import _ from 'lodash';
 import rp from 'request-promise-native';
 import RefParser from 'json-schema-ref-parser';
 
+/**
+ * Identity utils
+ * @namespace identity.utils
+ */
+
+/**
+ * Map list of attributes to schema name
+ * @async
+ * @function attributeMapBySchema
+ * @memberof identity.utils
+ * @param {Array} attributes - array of identity attributes
+ * @returns {object} an object with attribute name as keys
+ */
 export const attributeMapBySchema = (attributes = []) =>
 	attributes.reduce((acc, curr) => {
 		const { schemaId } = curr;
@@ -17,6 +30,15 @@ export const attributeMapBySchema = (attributes = []) =>
 		return acc;
 	}, {});
 
+/**
+ * Given a attribute data object and a file processor, process all files in the data object
+ * @async
+ * @function resolveAttributeFiles
+ * @memberof identity.utils
+ * @param {data} all or part of the attribute data object
+ * @param {function} fileProcessor
+ * @returns {object} a new attribute data object with processed files
+ */
 export const resolveAttributeFiles = async (data, fileProcessor) => {
 	if (!data) {
 		return data;
@@ -52,6 +74,18 @@ export const resolveAttributeFiles = async (data, fileProcessor) => {
 	}, {});
 };
 
+/**
+ * Given a attribute data object and an array of documents, insert the documents
+ * into the data object where they are referenced from
+ *
+ * @function denormalizeDocumentsSchema
+ * @memberof identity.utils
+ * @param {object} typeSchema a json schema object
+ * @param {object} value an attribute data object
+ * @param {array} documents an array of documents
+ * @param {integer} maxDepth max search depth in attribute data object
+ * @returns {object}
+ */
 export const denormalizeDocumentsSchema = (typeSchema, value, documents = [], maxDepth = 10) => {
 	if (maxDepth < 0) {
 		return { value, documents };
@@ -122,6 +156,19 @@ export const denormalizeDocumentsSchema = (typeSchema, value, documents = [], ma
 	return { value, documents };
 };
 
+/**
+ * Given a attribute data object
+ * export all documents from the object to a separate array, leaving documnent
+ * references behind
+ *
+ * @function normalizeDocumentsSchema
+ * @memberof identity.utils
+ * @param {object} typeSchema a json schema object
+ * @param {object} value an attribute data object
+ * @param {array} documents an array of documents
+ * @param {integer} maxDepth max search depth in attribute data object
+ * @returns {object}
+ */
 export const normalizeDocumentsSchema = (typeSchema, value, documents = [], maxDepth = 10) => {
 	if (maxDepth < 0) {
 		return { value, documents };
@@ -186,6 +233,15 @@ export const normalizeDocumentsSchema = (typeSchema, value, documents = [], maxD
 	return { value, documents };
 };
 
+/**
+ * Check if schema contains a file
+ *
+ * @function schemaContainsFile
+ * @memberof identity.utils
+ * @param {object} schema json schema object
+ * @param {integer} maxDepth maximum depth to search for in the object tree
+ * @returns {boolean}
+ */
 export const schemaContainsFile = (schema, maxDepth = 10) => {
 	if (maxDepth < 0) {
 		return false;
@@ -206,6 +262,22 @@ export const schemaContainsFile = (schema, maxDepth = 10) => {
 	return false;
 };
 
+/**
+ * Fetch json from remote server.
+ * Optionally specify max number of attempts to do on failure (3 by default)
+ *
+ * @async
+ * @function fetchJson
+ * @memberof identity.utils
+ * @param {string} url
+ * @param {object} options
+ * @returns {Promise<object>} json loaded from server
+ * @example
+ *
+ * ```js
+ * async sk.identity.utils.fetchJson('http://platform.selfkey.org/schema/attribute/first-name.json', {maxAttempts: 10});
+ * ```
+ */
 export const fetchJson = async (url, options = {}) => {
 	options = { maxAttempts: 3, attempt: 1, ...options };
 	try {
@@ -223,6 +295,17 @@ export const fetchJson = async (url, options = {}) => {
 	}
 };
 
+/**
+ * Given a scheme object, load all references from the schema
+ * And combine into one json schema object
+ *
+ * @async
+ * @function dereferenceSchema
+ * @memberof identity.utils
+ * @param {object} schema
+ * @param {object} options
+ * @returns {Promise<object>} dereferences json schema object
+ */
 export const dereferenceSchema = (schema, options) => {
 	const resolver = {
 		order: 1,
