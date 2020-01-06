@@ -58,7 +58,7 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
           name: Install Package
-          command: npm
+          command: npm install
       - run:
           name: Build Package
           command: npm run build
