@@ -4,10 +4,28 @@ import { verifier as secp256k1 } from './crypto/secp256k1-2018';
 const verifiers = {
 	Secp256k1VerificationKey2018: secp256k1()
 };
+/**
+ * @module auth/verify-challenge-signature
+ */
+
+/**
+ * Validates challenge Signature
+ *
+ * @async
+ * @function verifyChallengeSignature
+ * @param {string} nonce
+ * @param {object} signature
+ * @param {string} did
+ * @returns {Promise<boolean>} is valid signature
+ * @throws key not found in resolved did document
+ * @throws if no registered verifier for that key type
+ * @example
+ * await sk.auth.verifyChallengeSignature(nonce, signature, did);
+ */
 
 export const verifyChallengeSignature = async (nonce, signature, did) => {
 	const { value, keyId } = signature;
-	const { authentication, publicKey } = await resolve(did);
+	const { authentication, publicKey } = (await resolve(did)) || {};
 	if (!authentication || !authentication.includes(keyId)) {
 		throw new Error('Invalid key usage');
 	}

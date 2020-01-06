@@ -17,13 +17,13 @@ aliases:
     restore_cache:
       name: Restore Yarn Package Cache
       keys:
-        - yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}
-        - yarn-packages-{{ checksum "/tmp/cache_buster" }}-master
-        - yarn-packages-{{ checksum "/tmp/cache_buster" }}-
+        - npm-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}
+        - npm-packages-{{ checksum "/tmp/cache_buster" }}-master
+        - npm-packages-{{ checksum "/tmp/cache_buster" }}-
   - &step_save_cache
     save_cache:
       name: Save Yarn Package Cache
-      key: yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      key: npm-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
       paths:
         - node_modules/
 
@@ -39,10 +39,10 @@ jobs:
       - *step_setup_nvm
       - run:
           name: Install Node Packages
-          command: yarn
+          command: npm install
       - run:
           name: Unit Tests
-          command: yarn test
+          command: npm test
       - *step_save_cache
 
   'publish':
@@ -58,10 +58,10 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
           name: Install Package
-          command: yarn
+          command: npm
       - run:
           name: Build Package
-          command: yarn
+          command: npm run build
       - run:
           name: Publish package
           command: npm publish --access public

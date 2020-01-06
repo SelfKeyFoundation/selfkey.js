@@ -37,7 +37,7 @@ describe('verify', () => {
 		try {
 			verify(message, 'invalid', authKey);
 		} catch (err) {
-			expect(err.message).toBe('Invalid signature length');
+			expect(err.message).toBe('Invalid signature');
 		}
 	});
 

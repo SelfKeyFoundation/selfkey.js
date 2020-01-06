@@ -7,7 +7,7 @@ import applicationDetails from './__fixtures__/application-details';
 
 import { getUserDataForToken } from './get-user-data-for-token';
 
-describe('getUserDataForToken', () => {
+xdescribe('getUserDataForToken', () => {
 	afterEach(() => {
 		sinon.restore();
 	});

@@ -1,6 +1,27 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
 version: v1.13.5
-ignore: {}
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JS-ELLIPTIC-511941:
+    - web3 > web3-eth > web3-eth-ens > web3-eth-contract > web3-eth-abi > ethers > elliptic:
+        reason: ''
+        expires: '2020-01-29T12:15:07.123Z'
+      web3 > web3-eth > web3-eth-abi > ethers > elliptic:
+        reason: no patch available
+        expires: '2020-01-29T12:44:29.464Z'
+    - web3 > web3-eth > web3-eth-contract > web3-eth-abi > ethers > elliptic:
+        reason: no patch available
+        expires: '2020-01-29T12:44:29.466Z'
+    - web3 > web3-eth > web3-eth-ens > web3-eth-abi > ethers > elliptic:
+        reason: no patch available
+        expires: '2020-01-29T12:44:29.466Z'
+    - web3 > web3-eth > web3-eth-ens > web3-eth-contract > web3-eth-abi > ethers > elliptic:
+        reason: np patch available
+        expires: '2020-01-29T12:44:29.467Z'
+  SNYK-JS-WEB3-174533:
+    - web3:
+        reason: no patch available
+        expires: '2020-01-29T12:44:29.467Z'
 # patches apply the minimum changes required to fix a vulnerability
 patch:
   SNYK-JS-LODASH-450202:

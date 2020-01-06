@@ -17,6 +17,6 @@ export const getControllerAddress = async (idString, chain) => {
 	if (!contractConfig) throw new Error('Not a valid Chain');
 	const web3 = new Web3(contractConfig.url);
 	const ledger = new web3.eth.Contract(ledgerABI, contractConfig.address);
-	const address = ledger.methods.getController(idString).call();
+	const address = await ledger.methods.getController(idString).call();
 	return address !== '0x0000000000000000000000000000000000000000' ? address : null;
 };

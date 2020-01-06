@@ -1,6 +1,6 @@
 {
   "hooks": {
-    "pre-commit": "npm run check-deps-precommit && pretty-quick --staged && lint-staged",
+    "pre-commit": "yarn check-deps-precommit && pretty-quick --staged && npm run build && git add -A ./lib && npm run generate-readme && git add README.md && lint-staged",
     "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
   }
 }
