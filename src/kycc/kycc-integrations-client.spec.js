@@ -93,7 +93,8 @@ describe('kycc-integrations-client', () => {
 					url: `${client.options.endpoint}/files/${fileId}`,
 					headers: {
 						apiKey: client.options.apiKey
-					}
+					},
+					encoding: null
 				}
 			]);
 		});
@@ -115,7 +116,8 @@ describe('kycc-integrations-client', () => {
 					url: `${client.options.endpoint}/files/${fileId}`,
 					headers: {
 						apiKey: client.options.apiKey
-					}
+					},
+					encoding: null
 				}
 			]);
 		});

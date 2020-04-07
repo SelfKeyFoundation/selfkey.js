@@ -16,6 +16,6 @@ export const parseApplicationAttributes = applicationAttributes =>
 
 export const createKyccFileProcessor = (client, fileProcessor) => async fileObj => {
 	const file = client.files.get(fileObj.content, { stream: !!fileProcessor.stream });
-	const newContent = await fileProcessor.process(file, fileObj.content);
+	const newContent = await fileProcessor.process(file, fileObj.content, fileObj.mimeType);
 	return { ...fileObj, content: newContent };
 };
