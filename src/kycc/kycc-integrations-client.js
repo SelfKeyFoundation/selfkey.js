@@ -82,7 +82,7 @@ export const applicationChangeStatus = client => async (applicationId, code, not
 		body.note = note;
 	}
 	const res = await rp.post({
-		url: `${client.options.endpoint}/applications/${applicationId}/change_status`,
+		url: `${client.options.endpoint}/applications/${applicationId}/status_changes`,
 		headers: {
 			apiKey: client.options.apiKey
 		},
