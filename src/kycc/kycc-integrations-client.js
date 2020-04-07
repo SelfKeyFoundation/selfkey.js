@@ -1,5 +1,6 @@
 import rp from 'request-promise-native';
 import request from 'request';
+import KYCC_STATUSES from './kycc-statuses';
 /**
  * @module kycc/kycc-integrations-client
  */
@@ -329,6 +330,7 @@ export const createClient = (options = {}) => {
 	client.files = {
 		get: fileGet(client)
 	};
+	client.statuses = KYCC_STATUSES;
 	return client;
 };
 
