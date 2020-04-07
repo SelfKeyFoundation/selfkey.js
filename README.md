@@ -82,6 +82,8 @@ import sk from '@selfkey/node-lib';
 <dd></dd>
 <dt><a href="#module_kycc/get-user-data-for-token">kycc/get-user-data-for-token</a></dt>
 <dd></dd>
+<dt><a href="#module_kycc/kycc-integrations-client">kycc/kycc-integrations-client</a></dt>
+<dd></dd>
 </dl>
 
 <a name="module_auth/generate-access-token"></a>
@@ -1176,6 +1178,313 @@ User Object
 
 * * *
 
+<a name="module_kycc/kycc-integrations-client"></a>
+
+### kycc/kycc-integrations-client
+
+* [kycc/kycc-integrations-client](#module_kycc/kycc-integrations-client)
+    * [`~listApplicationsFn(filters, fields)`](#module_kycc/kycc-integrations-client..listApplicationsFn) ⇒ <code>Promise.&lt;Array.&lt;KYCCApplication&gt;&gt;</code>
+    * [`~getApplicationFn(applicationID, fields)`](#module_kycc/kycc-integrations-client..getApplicationFn) ⇒ <code>Promise.&lt;KYCCApplication&gt;</code>
+    * [`~changeApplicationStatusFn(applicationID, statusCode, note)`](#module_kycc/kycc-integrations-client..changeApplicationStatusFn) ⇒ <code>Promise.&lt;KYCCApplication&gt;</code>
+    * [`~invalidateApplicationAttributesFn(applicationID, attributes)`](#module_kycc/kycc-integrations-client..invalidateApplicationAttributesFn) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [`~invalidateApplicationQuestionsFn(applicationID, questions)`](#module_kycc/kycc-integrations-client..invalidateApplicationQuestionsFn) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [`~addApplicationQuestionFn(applicationID, question)`](#module_kycc/kycc-integrations-client..addApplicationQuestionFn) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [`~addApplicationAttributeFn(applicationID, attribute)`](#module_kycc/kycc-integrations-client..addApplicationAttributeFn) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [`~updateApplicationFn(applicationID, update)`](#module_kycc/kycc-integrations-client..updateApplicationFn) ⇒ <code>Promise.&lt;KYCCApplication&gt;</code>
+    * [`~getFileFn(fileId, options)`](#module_kycc/kycc-integrations-client..getFileFn) ⇒ <code>Promise.&lt;KYCCApplicationFile&gt;</code>
+    * [`~createClient(options)`](#module_kycc/kycc-integrations-client..createClient) ⇒ <code>KYCCIntegrationsApiClient</code>
+    * [`~KYCCQuestion`](#module_kycc/kycc-integrations-client..KYCCQuestion)
+    * [`~KYCCAttribute`](#module_kycc/kycc-integrations-client..KYCCAttribute)
+    * [`~KYCCApplication`](#module_kycc/kycc-integrations-client..KYCCApplication)
+    * [`~KYCCIntegrationsApiClient`](#module_kycc/kycc-integrations-client..KYCCIntegrationsApiClient) ⇒ <code>Array.&lt;KYCCApplication&gt;</code>
+    * [`~KYCCIntegrationsApiOptions`](#module_kycc/kycc-integrations-client..KYCCIntegrationsApiOptions) : <code>Object</code>
+
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..listApplicationsFn"></a>
+
+#### `kycc/kycc-integrations-client~listApplicationsFn(filters, fields)` ⇒ <code>Promise.&lt;Array.&lt;KYCCApplication&gt;&gt;</code>
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Returns**: <code>Promise.&lt;Array.&lt;KYCCApplication&gt;&gt;</code> - applications  
+
+| Param | Type |
+| --- | --- |
+| filters | <code>object</code> | 
+| fields | <code>Array.&lt;string&gt;</code> | 
+
+**Example**  
+```js
+const applications = await kyccClient.applications.list({templateId: 'sdasdasdsaa'}, ['managers', 'currentStatus']);
+```
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..getApplicationFn"></a>
+
+#### `kycc/kycc-integrations-client~getApplicationFn(applicationID, fields)` ⇒ <code>Promise.&lt;KYCCApplication&gt;</code>
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Returns**: <code>Promise.&lt;KYCCApplication&gt;</code> - application  
+
+| Param | Type |
+| --- | --- |
+| applicationID | <code>string</code> | 
+| fields | <code>Array.&lt;string&gt;</code> | 
+
+**Example**  
+```js
+const application = await kyccClient.applications.get("asdasdasdas");
+```
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..changeApplicationStatusFn"></a>
+
+#### `kycc/kycc-integrations-client~changeApplicationStatusFn(applicationID, statusCode, note)` ⇒ <code>Promise.&lt;KYCCApplication&gt;</code>
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Returns**: <code>Promise.&lt;KYCCApplication&gt;</code> - updated application  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| applicationID | <code>string</code> |  |
+| statusCode | <code>integer</code> |  |
+| note | <code>string</code> | (optional) |
+
+**Example**  
+```js
+const application = await kyccClient.applications.changeStatus("asdasdasdas", 8, 'testing status change');
+```
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..invalidateApplicationAttributesFn"></a>
+
+#### `kycc/kycc-integrations-client~invalidateApplicationAttributesFn(applicationID, attributes)` ⇒ <code>Promise.&lt;string&gt;</code>
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Returns**: <code>Promise.&lt;string&gt;</code> - OK/Error  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| applicationID | <code>string</code> |  |
+| attributes | <code>Array.&lt;string&gt;</code> | a list of attribute ids |
+
+**Example**  
+```js
+await kyccClient.applications.attributes.invalidate("asdasdasdas", ["sdasdasdsa", "dsadasdasdasd"]);
+```
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..invalidateApplicationQuestionsFn"></a>
+
+#### `kycc/kycc-integrations-client~invalidateApplicationQuestionsFn(applicationID, questions)` ⇒ <code>Promise.&lt;string&gt;</code>
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Returns**: <code>Promise.&lt;string&gt;</code> - OK/Error  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| applicationID | <code>string</code> |  |
+| questions | <code>Array.&lt;string&gt;</code> | a list of question ids |
+
+**Example**  
+```js
+await kyccClient.applications.questions.invalidate("asdasdasdas", ["sdasdasdsa", "dsadasdasdasd"]);
+```
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..addApplicationQuestionFn"></a>
+
+#### `kycc/kycc-integrations-client~addApplicationQuestionFn(applicationID, question)` ⇒ <code>Promise.&lt;string&gt;</code>
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Returns**: <code>Promise.&lt;string&gt;</code> - Created/Error  
+
+| Param | Type |
+| --- | --- |
+| applicationID | <code>string</code> | 
+| question | <code>KYCCQuestion</code> | 
+
+**Example**  
+```js
+await kyccClient.applications.questions.add("asdasdasdas", {
+ description: "test question",
+ label: 'test',
+ question: 'what would you say about test?'
+ optional: false
+});
+```
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..addApplicationAttributeFn"></a>
+
+#### `kycc/kycc-integrations-client~addApplicationAttributeFn(applicationID, attribute)` ⇒ <code>Promise.&lt;string&gt;</code>
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Returns**: <code>Promise.&lt;string&gt;</code> - Created/Error  
+
+| Param | Type |
+| --- | --- |
+| applicationID | <code>string</code> | 
+| attribute | <code>KYCCAttribute</code> | 
+
+**Example**  
+```js
+await kyccClient.applications.attributes.add("asdasdasdas", {
+ description: "test attribute",
+ label: 'test',
+ schema: 'http://platform.selfkey.org/schema/attribute/fingerprint.json'
+ optional: false
+});
+```
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..updateApplicationFn"></a>
+
+#### `kycc/kycc-integrations-client~updateApplicationFn(applicationID, update)` ⇒ <code>Promise.&lt;KYCCApplication&gt;</code>
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Returns**: <code>Promise.&lt;KYCCApplication&gt;</code> - updated application  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| applicationID | <code>string</code> |  |
+| update | <code>object</code> | application update object |
+
+**Example**  
+```js
+await kyccClient.applications.update("asdasdasdas", {
+ attributes: {
+		"sdasdasdsa": { value: 'updated value' }
+	}
+});
+```
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..getFileFn"></a>
+
+#### `kycc/kycc-integrations-client~getFileFn(fileId, options)` ⇒ <code>Promise.&lt;KYCCApplicationFile&gt;</code>
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Returns**: <code>Promise.&lt;KYCCApplicationFile&gt;</code> - file contents  
+
+| Param | Type |
+| --- | --- |
+| fileId | <code>string</code> | 
+| options | <code>object</code> | 
+
+**Example**  
+```js
+await kyccClient.files.get("asdasdasdas");
+```
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..createClient"></a>
+
+#### `kycc/kycc-integrations-client~createClient(options)` ⇒ <code>KYCCIntegrationsApiClient</code>
+Create KYC-Chain integrations api client
+
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+
+| Param | Type |
+| --- | --- |
+| options | <code>KYCCIntegrationsApiOptions</code> | 
+
+**Example**  
+```js
+const kyccClient = async sk.kycc.createKYCCIntegrationsClient(options);
+```
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..KYCCQuestion"></a>
+
+#### `kycc/kycc-integrations-client~KYCCQuestion`
+**Kind**: inner typedef of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| description | <code>string</code> |  |
+| label | <code>string</code> |  |
+| question | <code>string</code> |  |
+| optional | <code>boolean</code> |  |
+| options | <code>Array.&lt;string&gt;</code> | for select |
+| type | <code>string</code> | one of: input, checkbox, select, date |
+
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..KYCCAttribute"></a>
+
+#### `kycc/kycc-integrations-client~KYCCAttribute`
+**Kind**: inner typedef of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| description | <code>string</code> |  |
+| label | <code>string</code> |  |
+| optional | <code>boolean</code> |  |
+| schema | <code>string</code> | json schema id, one of https://platform.selfkey.org/repository.json |
+
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..KYCCApplication"></a>
+
+#### `kycc/kycc-integrations-client~KYCCApplication`
+KYC-Chain application object
+
+**Kind**: inner typedef of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..KYCCIntegrationsApiClient"></a>
+
+#### `kycc/kycc-integrations-client~KYCCIntegrationsApiClient` ⇒ <code>Array.&lt;KYCCApplication&gt;</code>
+KYC-Chain integrations api client
+
+**Kind**: inner typedef of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| applications.list | <code>listApplicationsFn</code> | 
+| applications.get | <code>getApplicationFn</code> | 
+| applications.update | <code>updateApplicationFn</code> | 
+| applications.changeStatus | <code>changeApplicationStatusFn</code> | 
+| applications.attributes.add | <code>addApplicationAttributeFn</code> | 
+| applications.attributes.invalidate | <code>invalidateApplicationAttributesFn</code> | 
+| applications.questions.add | <code>addApplicationQuestionFn</code> | 
+| applications.questions.invalidate | <code>invalidateApplicationQuestionsFn</code> | 
+| files.get | <code>getFileFn</code> | 
+
+**Example**  
+```js
+const applicationId = "some application id";
+const application = await kyccClient.applications.get(applicationId);
+await kyccClient.applications.changeStatus(applicationId, kyccClient.statuses.APPROVED);
+```
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..KYCCIntegrationsApiOptions"></a>
+
+#### `kycc/kycc-integrations-client~KYCCIntegrationsApiOptions` : <code>Object</code>
+Options used in createKYCCIntegrationsClient function
+
+**Kind**: inner typedef of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| instanceUrl | <code>string</code> | 
+| apiKey | <code>string</code> | 
+
+
+* * *
+
 
 <a name="examples"></a>
 
@@ -1183,6 +1492,7 @@ User Object
 
 - Login with Selfkey for kycc user https://github.com/SelfKeyFoundation/relying-party-kycc-demo
 - Login with Selfkey for direct integrations https://github.com/SelfKeyFoundation/relying-party-direct-demo
+- Marketplace integrations with kycc as middleware https://github.com/SelfKeyFoundation/relying-party-mp-kycc-demo
 
 <a name="license"></a>
 ## License
