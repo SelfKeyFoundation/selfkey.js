@@ -1,6 +1,7 @@
 import rp from 'request-promise-native';
 import request from 'request';
 import * as JWT from '../jwt';
+import KYCC_STATUSES from './kycc-statuses';
 
 export const authValidateUserToken = client => (jwt, user) => {
 	const parsed = JWT.parseJWT(jwt);
@@ -53,7 +54,7 @@ export const applicationGet = client => async (applicationId, fields = null, opt
 };
 
 export const fileGet = client => (fileId, options = {}) => {
-	let r = client.options.streamFile || options.stream ? request : rp;
+	const r = client.options.streamFile || options.stream ? request : rp;
 	return r.get({
 		url: `${client.options.endpoint}/files/${fileId}`,
 		jar: options.jar || client.options.jar
@@ -80,6 +81,7 @@ export const createClient = (options = {}) => {
 	client.files = {
 		get: fileGet(client)
 	};
+	client.statuses = KYCC_STATUSES;
 	return client;
 };
 
