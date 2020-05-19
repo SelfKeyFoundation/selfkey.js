@@ -19,7 +19,7 @@
 
 ## Install
 
-Requires [Node](https://nodejs.org/en/) version 10 or abow
+Requires [Node](https://nodejs.org/en/) version 10 or above
 
 ```sh
 npm install --save @selfkey/node-lib
