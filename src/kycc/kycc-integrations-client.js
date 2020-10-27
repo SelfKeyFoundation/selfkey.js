@@ -6,6 +6,65 @@ import KYCC_STATUSES from './kycc-statuses';
  */
 
 /**
+ * @function listUsersFn
+ * @async
+ * @param {object} filters
+ * @param {string[]} fields
+ * @returns {Promise<KYCCUser[]>} users
+ * @example
+ *  ```js
+ * const users = await kyccClient.users.list();
+ * ```
+ */
+export const usersList = client => async (filters = {}, fields = null) => {
+	const qs = {
+		...filters
+	};
+
+	if (Array.isArray(fields) && fields.length) {
+		fields = fields.join(',');
+		qs.fields = fields;
+	}
+	const res = await rp.get({
+		url: `${client.options.endpoint}/users`,
+		headers: {
+			apiKey: client.options.apiKey
+		},
+		qs,
+		json: true
+	});
+	return res.items;
+};
+
+/**
+ * @function getUserFn
+ * @async
+ * @param {string} userId
+ * @param {string[]} fields
+ * @returns {Promise<KYCCUser>} user
+ * @example
+ *  ```js
+ * const user = await kyccClient.users.get("asdasdasdas");
+ * ```
+ */
+export const userGet = client => async (userId, fields = null) => {
+	const qs = {};
+	if (Array.isArray(fields) && fields.length) {
+		fields = fields.join(',');
+		qs.fields = fields;
+	}
+	const res = await rp.get({
+		url: `${client.options.endpoint}/users/${userId}`,
+		headers: {
+			apiKey: client.options.apiKey
+		},
+		qs,
+		json: true
+	});
+	return res;
+};
+
+/**
  * @function listApplicationsFn
  * @async
  * @param {object} filters
@@ -326,6 +385,10 @@ export const createClient = (options = {}) => {
 			add: applicationCreateQuestion(client),
 			invalidate: applicationInvalidateQuestions(client)
 		}
+	};
+	client.users = {
+		list: usersList(client),
+		get: userGet(client)
 	};
 	client.files = {
 		get: fileGet(client)

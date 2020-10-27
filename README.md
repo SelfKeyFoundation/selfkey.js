@@ -1183,6 +1183,8 @@ User Object
 ### kycc/kycc-integrations-client
 
 * [kycc/kycc-integrations-client](#module_kycc/kycc-integrations-client)
+    * [`~listUsersFn(filters, fields)`](#module_kycc/kycc-integrations-client..listUsersFn) ⇒ <code>Promise.&lt;Array.&lt;KYCCUser&gt;&gt;</code>
+    * [`~getUserFn(userId, fields)`](#module_kycc/kycc-integrations-client..getUserFn) ⇒ <code>Promise.&lt;KYCCUser&gt;</code>
     * [`~listApplicationsFn(filters, fields)`](#module_kycc/kycc-integrations-client..listApplicationsFn) ⇒ <code>Promise.&lt;Array.&lt;KYCCApplication&gt;&gt;</code>
     * [`~getApplicationFn(applicationID, fields)`](#module_kycc/kycc-integrations-client..getApplicationFn) ⇒ <code>Promise.&lt;KYCCApplication&gt;</code>
     * [`~changeApplicationStatusFn(applicationID, statusCode, note)`](#module_kycc/kycc-integrations-client..changeApplicationStatusFn) ⇒ <code>Promise.&lt;KYCCApplication&gt;</code>
@@ -1199,6 +1201,42 @@ User Object
     * [`~KYCCIntegrationsApiClient`](#module_kycc/kycc-integrations-client..KYCCIntegrationsApiClient) ⇒ <code>Array.&lt;KYCCApplication&gt;</code>
     * [`~KYCCIntegrationsApiOptions`](#module_kycc/kycc-integrations-client..KYCCIntegrationsApiOptions) : <code>Object</code>
 
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..listUsersFn"></a>
+
+#### `kycc/kycc-integrations-client~listUsersFn(filters, fields)` ⇒ <code>Promise.&lt;Array.&lt;KYCCUser&gt;&gt;</code>
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Returns**: <code>Promise.&lt;Array.&lt;KYCCUser&gt;&gt;</code> - users  
+
+| Param | Type |
+| --- | --- |
+| filters | <code>object</code> | 
+| fields | <code>Array.&lt;string&gt;</code> | 
+
+**Example**  
+```js
+const users = await kyccClient.users.list();
+```
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..getUserFn"></a>
+
+#### `kycc/kycc-integrations-client~getUserFn(userId, fields)` ⇒ <code>Promise.&lt;KYCCUser&gt;</code>
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Returns**: <code>Promise.&lt;KYCCUser&gt;</code> - user  
+
+| Param | Type |
+| --- | --- |
+| userId | <code>string</code> | 
+| fields | <code>Array.&lt;string&gt;</code> | 
+
+**Example**  
+```js
+const user = await kyccClient.users.get("asdasdasdas");
+```
 
 * * *
 

@@ -23,6 +23,56 @@ describe('kycc-integrations-client', () => {
 			expect(client.options.apiKey).toBe('testKey');
 		});
 	});
+
+	describe('users', () => {
+		it('list', async () => {
+			const users = ['user1', 'user2'];
+			const clientOpt = { instanceUrl: 'test', apiKey: 'testKey' };
+			const fields = ['field1', 'fields2'];
+			const filters = { did: 'asdasdasdsasd' };
+			const client = createClient(clientOpt);
+			sinon.stub(rp, 'get').resolves({ items: users });
+			const res = await client.users.list(filters, fields);
+			expect(res).toEqual(users);
+			expect(rp.get.calledOnce).toBe(true);
+			expect(rp.get.getCall(0).args).toEqual([
+				{
+					url: `${client.options.endpoint}/users`,
+					headers: {
+						apiKey: client.options.apiKey
+					},
+					qs: {
+						fields: 'field1,fields2',
+						did: 'asdasdasdsasd'
+					},
+					json: true
+				}
+			]);
+		});
+		it('get', async () => {
+			const user = 'test';
+			const userId = 'app-id';
+			const clientOpt = { instanceUrl: 'test', apiKey: 'testKey' };
+			const fields = ['field1', 'fields2'];
+			const client = createClient(clientOpt);
+			sinon.stub(rp, 'get').resolves(user);
+			const res = await client.users.get(userId, fields);
+			expect(res).toEqual(user);
+			expect(rp.get.calledOnce).toBe(true);
+			expect(rp.get.getCall(0).args).toEqual([
+				{
+					url: `${client.options.endpoint}/users/${userId}`,
+					headers: {
+						apiKey: client.options.apiKey
+					},
+					qs: {
+						fields: 'field1,fields2'
+					},
+					json: true
+				}
+			]);
+		});
+	});
 	describe('applications', () => {
 		it('list', async () => {
 			const applications = ['app1', 'app2'];
