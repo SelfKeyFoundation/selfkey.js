@@ -1192,11 +1192,13 @@ User Object
     * [`~invalidateApplicationQuestionsFn(applicationID, questions)`](#module_kycc/kycc-integrations-client..invalidateApplicationQuestionsFn) ⇒ <code>Promise.&lt;string&gt;</code>
     * [`~addApplicationQuestionFn(applicationID, question)`](#module_kycc/kycc-integrations-client..addApplicationQuestionFn) ⇒ <code>Promise.&lt;string&gt;</code>
     * [`~addApplicationAttributeFn(applicationID, attribute)`](#module_kycc/kycc-integrations-client..addApplicationAttributeFn) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [`~applicationAddAttachment(applicationId, attachmentType, attachment)`](#module_kycc/kycc-integrations-client..applicationAddAttachment) ⇒ <code>Promise.&lt;string&gt;</code>
     * [`~updateApplicationFn(applicationID, update)`](#module_kycc/kycc-integrations-client..updateApplicationFn) ⇒ <code>Promise.&lt;KYCCApplication&gt;</code>
     * [`~getFileFn(fileId, options)`](#module_kycc/kycc-integrations-client..getFileFn) ⇒ <code>Promise.&lt;KYCCApplicationFile&gt;</code>
     * [`~createClient(options)`](#module_kycc/kycc-integrations-client..createClient) ⇒ <code>KYCCIntegrationsApiClient</code>
     * [`~KYCCQuestion`](#module_kycc/kycc-integrations-client..KYCCQuestion)
     * [`~KYCCAttribute`](#module_kycc/kycc-integrations-client..KYCCAttribute)
+    * [`~Document`](#module_kycc/kycc-integrations-client..Document)
     * [`~KYCCApplication`](#module_kycc/kycc-integrations-client..KYCCApplication)
     * [`~KYCCIntegrationsApiClient`](#module_kycc/kycc-integrations-client..KYCCIntegrationsApiClient) ⇒ <code>Array.&lt;KYCCApplication&gt;</code>
     * [`~KYCCIntegrationsApiOptions`](#module_kycc/kycc-integrations-client..KYCCIntegrationsApiOptions) : <code>Object</code>
@@ -1377,6 +1379,29 @@ await kyccClient.applications.attributes.add("asdasdasdas", {
 
 * * *
 
+<a name="module_kycc/kycc-integrations-client..applicationAddAttachment"></a>
+
+#### `kycc/kycc-integrations-client~applicationAddAttachment(applicationId, attachmentType, attachment)` ⇒ <code>Promise.&lt;string&gt;</code>
+**Kind**: inner method of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Returns**: <code>Promise.&lt;string&gt;</code> - Created/Error  
+
+| Param | Type |
+| --- | --- |
+| applicationId | <code>string</code> | 
+| attachmentType | <code>string</code> | 
+| attachment | <code>Document</code> | 
+
+**Example**  
+```js
+await kyccClient.applications.attachments.add("sdasdasda", "credential", {
+  buffer: Buffer.from('text file value', 'utf8'),
+  mimeType: 'text/plain',
+  filename: 'credential.txt'
+});
+```
+
+* * *
+
 <a name="module_kycc/kycc-integrations-client..updateApplicationFn"></a>
 
 #### `kycc/kycc-integrations-client~updateApplicationFn(applicationID, update)` ⇒ <code>Promise.&lt;KYCCApplication&gt;</code>
@@ -1465,6 +1490,21 @@ const kyccClient = async sk.kycc.createKYCCIntegrationsClient(options);
 | label | <code>string</code> |  |
 | optional | <code>boolean</code> |  |
 | schema | <code>string</code> | json schema id, one of https://platform.selfkey.org/repository.json |
+
+
+* * *
+
+<a name="module_kycc/kycc-integrations-client..Document"></a>
+
+#### `kycc/kycc-integrations-client~Document`
+**Kind**: inner typedef of [<code>kycc/kycc-integrations-client</code>](#module_kycc/kycc-integrations-client)  
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| buffer | <code>binary</code> | 
+| mimeType | <code>string</code> | 
+| filename | <code>string</code> | 
 
 
 * * *

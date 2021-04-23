@@ -273,6 +273,53 @@ export const applicationCreateAttribute = client => async (applicationId, attrib
 };
 
 /**
+ * @typedef Document
+ * @property {binary} buffer
+ * @property {string} mimeType
+ * @property {string} filename
+ */
+/**
+ * @function applicationAddAttachment
+ * @async
+ * @param {string} applicationId
+ * @param {string} attachmentType
+ * @param {Document} attachment
+ * @returns {Promise<string>} Created/Error
+ * @example
+ *  ```js
+ * await kyccClient.applications.attachments.add("sdasdasda", "credential", {
+ *   buffer: Buffer.from('text file value', 'utf8'),
+ *   mimeType: 'text/plain',
+ *   filename: 'credential.txt'
+ * });
+ * ```
+ */
+export const applicationAddAttachment = client => async (
+	applicationId,
+	attachmentType,
+	attachment
+) => {
+	const formData = {
+		type: attachmentType,
+		file: {
+			value: attachment.buffer,
+			options: {
+				contentType: attachment.mimeType,
+				filename: attachment.filename || 'document'
+			}
+		}
+	};
+	const res = await rp.post({
+		url: `${client.options.endpoint}/applications/${applicationId}/attachments`,
+		headers: {
+			apiKey: client.options.apiKey
+		},
+		formData
+	});
+	return res;
+};
+
+/**
  * @function updateApplicationFn
  * @async
  * @param {string} applicationID
@@ -380,6 +427,9 @@ export const createClient = (options = {}) => {
 		attributes: {
 			add: applicationCreateAttribute(client),
 			invalidate: applicationInvalidateAttributes(client)
+		},
+		attachments: {
+			add: applicationAddAttachment(client)
 		},
 		questions: {
 			add: applicationCreateQuestion(client),
